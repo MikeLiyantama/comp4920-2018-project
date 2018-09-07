@@ -13,5 +13,5 @@
     </div>
 </div>
 
-<app-taskdisplay *ngIf="showCurTasks"></app-taskdisplay>
-<app-taskform *ngIf="showTaskForm"></app-taskform>
+<app-taskdisplay *ngIf="showCurTasks" [receivedTask]="createdTask"></app-taskdisplay>
+<app-taskform *ngIf="showTaskForm" (taskEmitter)="receiveNewTask($event)"></app-taskform>

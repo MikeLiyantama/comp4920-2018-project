@@ -9,7 +9,19 @@ import { Output, EventEmitter } from '@angular/core';
 
 export class TaskFormComponent {
     @Output () taskEmitter = new EventEmitter <Task>();
-    taskField: string;
-    descriptionField: string;
+    nameField: string = "";
+    descriptionField: string = "";
+
+    
+    giveNewTask () {
+        if (this.nameField && this.descriptionField) {
+            var task = new Task (this.nameField, this.descriptionField);
+            // Pass to controller
+            this.taskEmitter.emit (task);
+            this.nameField = "";
+            this.descriptionField = "";
+            // Write to DB here
+        }
+    }
 
 }

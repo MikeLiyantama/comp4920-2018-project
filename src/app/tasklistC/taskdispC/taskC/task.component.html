@@ -1,12 +1,20 @@
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <!--
-            <p><b> {{ task.name }} </b></p>
-            <p><i> {{ task.description }} </i></p>
-            <hr> -->
+        <div class="col-md-6 col-md-offset-3" 
+             (mouseover)="showOptions=true"
+            (mouseout)="showOptions=false">
             <a href="#" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ task.name }}</h4>
-                <p class="list-group-item-text">{{ task.description }}</p>
+                <span *ngIf="showOptions" class="badge">
+                    <span class="glyphicon glyphicon-trash"
+                        (click)="deleteTask()"></span>
+                </span>
+                <span *ngIf="showOptions" class="badge">
+                    <span class="glyphicon glyphicon-ok"
+                        (click)="taskChecked=!taskChecked"></span>
+                </span>
+                <h4 class="list-group-item-heading" 
+                    [ngClass]="{checked:taskChecked}">{{ task.name }}</h4>
+                <p class="list-group-item-text"
+                    [ngClass]="{checked:taskChecked}"><i>{{ task.description }}</i></p>
             </a>
         </div>
     </div>

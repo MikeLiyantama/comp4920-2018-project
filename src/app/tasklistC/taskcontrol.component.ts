@@ -9,6 +9,7 @@ import { Task } from './task.model';
 export class TaskControlComponent {
     showCurTasks: boolean = true;
     showTaskForm: boolean = false;
+    createdTask: Task;
     
     switchToCurTasks () {
         this.showCurTasks = true;
@@ -19,4 +20,10 @@ export class TaskControlComponent {
         this.showCurTasks = false;
         this.showTaskForm = true;
     }
+
+    receiveNewTask (newTask: Task) {
+        this.createdTask = newTask; 
+    }
+
+        
 }

@@ -1,6 +1,45 @@
 <br>
+<!--
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <p> Look, its a form! </p>
     </div>
 </div>
+-->
+
+<form class="form-horizontal">
+    <!-- task name -->
+    <div class="form-group">
+        <label for="taskname" 
+            class="col-md-1 col-md-offset-3 control-label"> Name </label>
+        <div class="col-md-5">
+            <input type="text" [(ngModel)]="nameField"
+                   class="form-control" 
+                   id="taskname"
+                   name="name"
+                    placeholder="Task Name">
+        </div>
+    </div>
+    <!-- task description -->
+    <div class="form-group">
+        <label for="taskdesc" 
+            class="col-md-1 col-md-offset-3 control-label"> Description </label>
+        <div class="col-md-5">
+            <textarea [(ngModel)]="descriptionField"
+                     class="form-control"
+                      id="taskdesc"
+                      name="description"
+                      placeholder="Task Description..."></textarea>
+        </div>
+    </div>
+    <!-- form control elements -->
+    <div class="row">
+        <div class="col-md-offset-5">
+            <button type="button" 
+                    (click)="giveNewTask()"
+                    class="btn btn-primary"
+                >Submit</button>
+            <button type="button" class="btn btn-danger">Clear</button>
+        </div>
+    </div>
+</form>
