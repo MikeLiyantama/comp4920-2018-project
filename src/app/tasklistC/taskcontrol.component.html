@@ -1,0 +1,24 @@
+<!-- The tab menu row -->
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <ul class="nav nav-tabs">
+            <!--li class="active"><a href="#">Current Tasks</a></li-->
+            <li [ngClass]="{active: showCurTasks}" (click)="switchToCurTasks()">
+                <a href="#">Current Tasks</a>
+            </li>
+            <li [ngClass]="{active: showTaskForm}" (click)="switchToTaskForm()">
+                <a href="#">Create a New Task</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- task item rows -->
+<!-- move this into its own component later? -->
+<div id="taskitems">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <p> hey hey hey </p>
+        </div>
+    </div>
+</div>

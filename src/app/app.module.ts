@@ -2,12 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { TaskListComponent } from './tasklistC/tasklist.component';
+import { TaskControlComponent } from './tasklistC/taskcontrol.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TaskListComponent
+    TaskControlComponent
   ],
   imports: [
     BrowserModule
