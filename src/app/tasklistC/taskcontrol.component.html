@@ -13,12 +13,5 @@
     </div>
 </div>
 
-<!-- task item rows -->
-<!-- move this into its own component later? -->
-<div id="taskitems">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <p> hey hey hey </p>
-        </div>
-    </div>
-</div>
+<app-taskdisplay *ngIf="showCurTasks"></app-taskdisplay>
+<app-taskform *ngIf="showTaskForm"></app-taskform>
