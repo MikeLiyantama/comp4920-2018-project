@@ -7,7 +7,17 @@ import { Task } from '../task.model';
 })
 
 export class TaskDisplayComponent {
-    // This shit needs to be connected to the db.
+    // Populate this array from the DB for that user   
+    // Chucking garbage in for now 
+    tasks = [
+    new Task (
+        "Walk dog", 
+        "Fido has been waiting for a little while. Lets go to the park."
+    ),
+    new Task (
+        "Buy lotto", 
+        "I hate my job. Time to GTFOOOOOOOOOOOOOOO"
+    )
+    ];    
     
-
 }
