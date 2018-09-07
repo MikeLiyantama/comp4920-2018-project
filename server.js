@@ -37,18 +37,26 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
 
 //Basic authentication
 router.post('/auth', function(req, res) {
-    if(req.body.email && req.body.password){   //Field Check
+    if(req.body.email && req.body.password){ //Field Check
         db.collection('users').findOne({email: req.body.email}, function (err, result) {
             if (result) {
-                //console.log("Email Found");
                 if(req.body.password == result.password){
-                    res.status(200).json({success: true});
-                } else res.json({success: false});
+                    res.status(200).json({success: true , message: "authentication successful"});
+                } else res.status(200).json({success: false , message: "invalid password"});
             }
             else {
-                //console.log("Email Not Found");
-                res.status(200).json({success: false});
+                res.status(200).json({success: false, message: "id not found"});
             }
         });
-    } else res.status(400).json({success: false}); //Bad request, incomplete field
+    } else res.status(400).json({success: false, message: "bad request"});
+});
+
+router.post('/register', function(req, res) {
+    if(req.body.email && req.body.password) {
+        var obj = {email: req.body.email, password: req.body.password};
+        db.collection('users').insertOne(obj, function (err, res) {
+            if (err) res.status(200).json({success: false, message: "database error"});        //DB Error
+            else res.status(200).json({success: true, message: "registration successful"});
+        });
+    } else res.status(400).json({success: false, message: "bad request"});
 });
