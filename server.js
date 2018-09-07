@@ -54,7 +54,7 @@ router.post('/auth', function(req, res) {
 router.post('/register', function(req, res) {
     if(req.body.email && req.body.password) {
         var obj = {email: req.body.email, password: req.body.password};
-        db.collection('users').insertOne(obj, function (err, res) {
+        db.collection('users').insertOne(obj, function (err, result) {
             if (err) res.status(200).json({success: false, message: "database error"});        //DB Error
             else res.status(200).json({success: true, message: "registration successful"});
         });
