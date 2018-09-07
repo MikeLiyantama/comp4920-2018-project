@@ -38,12 +38,8 @@ export class TaskDisplayComponent implements OnInit {
 
     // Note for later: removed != completed. 
     removeTask (task : Task) {
-        console.log ("Before removing, the tasks are: ");
-        console.log (this.tasks);
         var n = this.tasks.indexOf (task);
         this.tasks.splice(n, 1);
-        console.log ("After removing, the tasks are: ");
-        console.log (this.tasks);
         // delete from db
     }
     

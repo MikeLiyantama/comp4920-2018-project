@@ -24,4 +24,9 @@ export class TaskFormComponent {
         }
     }
 
+    clearFields () {
+        this.nameField = "";
+        this.descriptionField = "";
+    }
+
 }
