@@ -4,13 +4,11 @@ var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
 var app = express();
-var router = express.Router();
 app.use(bodyParser.json());
 
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
-app.use('/api', router);
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
@@ -47,7 +45,7 @@ function returnError(res, reason, message, code) {
 
 var USERS_COLLECTION = 'USERS';
 
-router.post('/api/auth', function(req, res) {
+app.post('/api/auth', function(req, res) {
     if (req.body.email && req.body.password) { // Field Check
         db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
             if (result) {
