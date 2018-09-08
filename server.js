@@ -87,3 +87,20 @@ app.post('/api/task', function (req, res) {
     });
   }
 });
+
+app.get('/api/task', function (req, res) {
+  var newTask = req.body;
+  newTask.createdAt = new Date();
+
+  if (!req.body.title) {
+    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+  } else {
+    db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve tasks");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
+  }
+});
