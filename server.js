@@ -1,10 +1,15 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+var cors = require('cors');
+
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
 var app = express();
+
+// Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/";
