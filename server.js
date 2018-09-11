@@ -9,7 +9,12 @@ var app = express();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://comp4920-organiser.herokuapp.com',
+    'localhost',
+  ],
+}));
 
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/";
