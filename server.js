@@ -9,10 +9,11 @@ var app = express();
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors({ origin: '*' }));
 app.use(cors({
   origin: [
     'https://comp4920-organiser.herokuapp.com',
-    'localhost',
+    'http://localhost:4200',
   ],
 }));
 
