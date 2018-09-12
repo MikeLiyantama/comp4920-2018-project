@@ -1,16 +1,24 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+var cors = require('cors');
+
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
 var app = express();
-var router = express.Router();
+
+// Middleware
 app.use(bodyParser.json());
+app.use(cors({
+  origin: [
+    'https://comp4920-organiser.herokuapp.com',
+    'localhost',
+  ],
+}));
 
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
-app.use('/api', router);
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
@@ -35,28 +43,66 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
 
 // API Routers
 
-//Basic authentication
-router.post('/auth', function(req, res) {
-    if(req.body.email && req.body.password){ //Field Check
-        db.collection('users').findOne({email: req.body.email}, function (err, result) {
+
+// error handler
+function returnError(res, reason, message, code) {
+  console.log("ERROR: " + reason);
+  res.status(code || 500).json({ "error": message });
+}
+
+/**
+  USERS
+ */
+
+var USERS_COLLECTION = 'USERS';
+
+app.post('/api/auth', function(req, res) {
+    if (req.body.email && req.body.password) { // Field Check
+        db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
             if (result) {
-                if(req.body.password == result.password){
-                    res.status(200).json({success: true , message: "authentication successful"});
-                } else res.status(200).json({success: false , message: "invalid password"});
-            }
-            else {
-                res.status(200).json({success: false, message: "id not found"});
+                if (req.body.password == result.password) {
+                  res.status(200).json({ success: true });
+                } else {
+                  res.json({ success: false });
+                }
+            } else {
+                res.status(200).json({success: false});
             }
         });
-    } else res.status(400).json({success: false, message: "bad request"});
+    } else {
+      returnError(res, 'Invalid user input', 'Must provide email and password', 400);
+    }
 });
 
-router.post('/register', function(req, res) {
-    if(req.body.email && req.body.password) {
-        var obj = {email: req.body.email, password: req.body.password};
-        db.collection('users').insertOne(obj, function (err, result) {
-            if (err) res.status(200).json({success: false, message: "database error"});        //DB Error
-            else res.status(200).json({success: true, message: "registration successful"});
-        });
-    } else res.status(400).json({success: false, message: "bad request"});
+/**
+  TASKS
+ */
+
+var TASKS_COLLECTION = 'TASKS';
+
+app.post('/api/task', function (req, res) {
+  var newTask = req.body;
+  newTask.createdAt = new Date();
+
+  if (!req.body.title) {
+    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+  } else {
+    db.collection(TASKS_COLLECTION).insertOne(newTask, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to create new task");
+      } else {
+        res.status(201).json(doc.ops[0]);
+      }
+    });
+  }
+});
+
+app.get('/api/task', function (req, res) {
+  db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve tasks");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
 });
