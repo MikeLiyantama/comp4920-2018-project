@@ -104,7 +104,8 @@ app.post('/api/auth', function(req, res) {
         db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
             if (result) {
                 if (req.body.password == result.password) {
-                  res.status(200).json({ success: true });
+                  var token = jwt.sign(result, 'Johnson4920');
+                  res.status(200).json({ success: true, token: 'token' + token});
                 } else {
                   res.json({ success: false });
                 }
@@ -123,29 +124,55 @@ app.post('/api/auth', function(req, res) {
 
 var TASKS_COLLECTION = 'TASKS';
 
-app.post('/api/task', function (req, res) {
-  var newTask = req.body;
-  newTask.createdAt = new Date();
+app.post('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
+  let token = parseToken(req.headers);
+  if (token){
+    var newTask = req.body;
+    newTask.createdAt = new Date();
 
-  if (!req.body.title) {
-    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+    if (!req.body.title) {
+      returnError(res, 'Invalid user input', 'Must provide a title', 400);
+    } else {
+      db.collection(TASKS_COLLECTION).insertOne(newTask, function (err, doc) {
+        if (err) {
+          returnError(res, err.message, "Failed to create new task");
+        } else {
+          res.status(201).json(doc.ops[0]);
+        }
+      });
+    }
   } else {
-    db.collection(TASKS_COLLECTION).insertOne(newTask, function (err, doc) {
-      if (err) {
-        returnError(res, err.message, "Failed to create new task");
-      } else {
-        res.status(201).json(doc.ops[0]);
-      }
-    });
+    returnError(res, 'Unauthorized request', 'Unauthorized', 403);
   }
 });
 
-app.get('/api/task', function (req, res) {
-  db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve tasks");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
+app.get('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
+  let token = parseToken(req.headers);
+  if (token){
+    db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve tasks");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
+  } else {
+    returnError(res, 'Unauthorized request', 'Unauthorized', 403);
+  }
 });
+
+
+//Helper function
+
+parseToken = function (header){
+  if(header && header.authorization){
+    var parted = headers.authorization.split(' ');
+    if(parted.length === 2){
+      return parted[1];
+    }else {
+      return null;
+    }
+  }else {
+    return null;
+  }
+}
