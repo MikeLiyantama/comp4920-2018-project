@@ -32,19 +32,20 @@ passport.use(new LocalStrategy({
   }
 ))
 
-passport.use( new JwtStrategy({
-  jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey = 'Johnson4920'
-  }, function(jwt_payload, done){
-      return db.collection(USERS_COLLECTION).findOne({ id : jwt_payload.id}, function(err, user){
-        if (err){
-          return done(err, false);
-        } if (user){
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      });
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = 'Johnson4920';
+
+passport.use( new JwtStrategy(opts, function(jwt_payload, done){
+  return db.collection(USERS_COLLECTION).findOne({ id : jwt_payload.id}, function(err, user){
+    if (err){
+      return done(err, false);
+    } if (user){
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  });
 }));
 
 
