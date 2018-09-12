@@ -5,7 +5,49 @@ var cors = require('cors');
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var jwt = require('jsonwebtoken');
+
 var app = express();
+
+//Passport middleware configuration
+
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+  },
+  function(username, password, done){
+    return db.collection(USERS_COLLECTION).findOne({email, password}, function(err, user){
+      if (err){
+        return done(err, false, {success: false, message : 'Wrong email or password'});
+      } if (user){
+        return done(null, user, {success: true});
+      } else {
+        return done(null, false, {success: false, message: 'Must provide email and password'});
+      }
+    });
+  }
+))
+
+passport.use( new JwtStrategy({
+  jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey = 'Johnson4920'
+  }, function(jwt_payload, done){
+      return db.collection(USERS_COLLECTION).findOne({ id : jwt_payload.id}, function(err, user){
+        if (err){
+          return done(err, false);
+        } if (user){
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      });
+}));
+
+
 
 // Middleware
 app.use(bodyParser.json());
