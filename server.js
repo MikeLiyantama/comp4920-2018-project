@@ -43,6 +43,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
 
 // API Routers
 
+
 // error handler
 function returnError(res, reason, message, code) {
   console.log("ERROR: " + reason);
