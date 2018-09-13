@@ -76,7 +76,7 @@ app.post('/api/auth', function(req, res) {
 });
 
 /**
-  TASKS
+ * TASKS
  */
 
 var TASKS_COLLECTION = 'TASKS';
@@ -106,4 +106,42 @@ app.get('/api/task', function (req, res) {
       res.status(200).json(docs);
     }
   });
+});
+
+/**
+ * TASK
+ */
+
+app.get('/api/task/:id', function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve task");
+      } else {
+        if (doc) {
+          res.status(200).json(doc);
+        } else {
+          returnError(res, 'No task found', 'No task found', 404);
+        }
+      }
+    });
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+  }
+});
+
+app.put('/api/task/:id', function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
+      if (err) {
+        returnError(res, err.message, "Failed to update task");
+      } else if (result.result.n === 1) {
+        res.status(204).send({});
+      } else {
+        returnError(res, 'No task found', 'No task found', 404);
+      }
+    });
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+  }
 });
