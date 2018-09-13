@@ -16,13 +16,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { LoginComponent } from './login/login.component';
 import { TaskControlComponent } from './tasklistC/taskcontrol.component';
 import { TaskDisplayComponent } from './tasklistC/taskdispC/taskdisplay.component';
 import { TaskFormComponent } from './tasklistC/taskformC/taskform.component';
 import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LayoutModule } from '@angular/cdk/layout';
-
 
 @NgModule({
   declarations: [
@@ -32,31 +33,38 @@ import { LayoutModule } from '@angular/cdk/layout';
     TaskFormComponent,
     TaskComponent,
     NavbarComponent,
+    LoginComponent
   ],
   imports: [
-  BrowserModule,
-  FormsModule,
-  HttpModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  MatButtonModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSlideToggleModule,
-  MatExpansionModule,
-  MatIconModule,
-  MatTabsModule,
-  MatTooltipModule,
-  MatDividerModule,
-  LayoutModule,
-  MatToolbarModule,
-  MatSidenavModule,
-  MatListModule,
-  MatSelectModule,
-  MatSnackBarModule
+    AppRoutingModule,
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatTabsModule,
+    MatTooltipModule,
+    MatDividerModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatSelectModule,
+    MatSnackBarModule
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
