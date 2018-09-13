@@ -26,15 +26,10 @@ export class LoginComponent implements OnInit {
     var pass = info[1];
 
     var loginSuccess: number = 0;
-    this.authService.authenticate(user, pass)
-    .subscribe(
-      (val) => {
-        loginSuccess = val
-      }
-    );
+    loginSuccess = this.authService.authenticate(user, pass);
 
     if (loginSuccess) {
-      
+
       this.router.navigate(['/', user]);
       this.wrongpass = undefined;
     } 
