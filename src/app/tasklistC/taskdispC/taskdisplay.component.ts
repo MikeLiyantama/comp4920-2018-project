@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { Input } from '@angular/core';
 import { OnInit, OnChanges } from '@angular/core';
 import { Task } from '../task.model';
+import { TaskService } from '../task.service';
 
 
 @Component({
     selector: 'app-taskdisplay',
-    templateUrl: './taskdisplay.component.html'
+    templateUrl: './taskdisplay.component.html',
+    providers: [TaskService]
 })
 
 export class TaskDisplayComponent implements OnInit {
@@ -16,11 +18,14 @@ export class TaskDisplayComponent implements OnInit {
     @Input() receivedTask: Task;
     @Input() toRemove: Task;
 
+    constructor (private taskService: TaskService) {}
+
     ngOnInit() {
-        this.tasks.push (new Task ("Walk dog", 
-            "Fido has been waiting for a little while. Lets go to the park."));
-        this.tasks.push (new Task ("Buy lotto", 
-            "I hate my job. Time to GTFOOOOOOOOOOOOOOO"));
+        this.taskService
+            .getTasks()
+            .then ((tasks: Task []) => {
+                this.tasks = tasks;
+            });
     }
 
     ngOnChanges (changes) {

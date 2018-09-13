@@ -12,7 +12,7 @@
                         (click)="taskChecked=!taskChecked"></span>
                 </span>
                 <h4 class="list-group-item-heading" 
-                    [ngClass]="{checked:taskChecked}">{{ task.name }}</h4>
+                    [ngClass]="{checked:taskChecked}">{{ task.title }}</h4>
                 <p class="list-group-item-text"
                     [ngClass]="{checked:taskChecked}"><i>{{ task.description }}</i></p>
             </a>

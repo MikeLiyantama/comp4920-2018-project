@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { Task } from '../task.model';
 import { Output, EventEmitter } from '@angular/core';
+import { TaskService } from '../task.service';
+
 
 @Component({
     selector: 'app-taskform',
-    templateUrl: './taskform.component.html'
+    templateUrl: './taskform.component.html',
+    providers: [TaskService]
 })
 
 export class TaskFormComponent {
@@ -12,6 +15,7 @@ export class TaskFormComponent {
     nameField: string = "";
     descriptionField: string = "";
 
+    constructor (private taskService: TaskService) {}
     
     giveNewTask () {
         if (this.nameField && this.descriptionField) {
@@ -21,6 +25,9 @@ export class TaskFormComponent {
             this.nameField = "";
             this.descriptionField = "";
             // Write to DB here
+            console.log ("Writing to DB");
+            this.taskService.writeTask (task);
+            console.log ("Done writing to DB");
         }
     }
 

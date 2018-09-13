@@ -1,9 +1,9 @@
 export class Task {
-    public name;
+    public title;
     public description;
 
-    constructor (name, description) {
-        this.name = name;
+    constructor (title, description) {
+        this.title = title;
         this.description = description;
     }
 
