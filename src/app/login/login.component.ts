@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,10 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor() { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) {}
 
   ngOnInit() {
   }
@@ -20,9 +25,22 @@ export class LoginComponent implements OnInit {
     var user = info[0];
     var pass = info[1];
 
-    //check for valid login
-    //set wrongpass to non-undefined if not valid
-    this.wrongpass = user + pass;
+    var loginSuccess: number = 0;
+    this.authService.authenticate(user, pass)
+    .subscribe(
+      (val) => {
+        loginSuccess = val
+      }
+    );
+
+    if (loginSuccess) {
+      
+      this.router.navigate(['/', user]);
+      this.wrongpass = undefined;
+    } 
+    else {
+      this.wrongpass = "not valid";
+    }
   }
 
   getInfo() {

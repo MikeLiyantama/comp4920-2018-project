@@ -4,7 +4,8 @@ import { LoginComponent }       from './login/login.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
-  { path: '', redirectTo: '/login', pathMatch: 'full' }  
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: ':user', component: TaskComponent} //Replace Task Component with whatever the name of the actual application component is (don't confuse with appComponent)  
 ];
 
 @NgModule({
