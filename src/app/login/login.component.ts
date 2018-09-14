@@ -26,7 +26,21 @@ export class LoginComponent implements OnInit {
     var pass = info[1];
 
     var loginSuccess: number = 0;
-    loginSuccess = this.authService.authenticate(user, pass);
+    var response;
+    //loginSuccess = this.authService.authenticate(user, pass)
+    console.log("1");
+
+    this.authService.authenticate(user, pass)
+      .subscribe(res => response = res);
+      console.log("3");
+
+    console.log(response);
+    // if (response.success === true) {
+    //   loginSuccess = 1;
+    // } else {
+    //   loginSuccess = 0;
+    // }
+
 
     if (loginSuccess) {
 
