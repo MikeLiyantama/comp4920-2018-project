@@ -5,7 +5,50 @@ var cors = require('cors');
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var jwt = require('jsonwebtoken');
+
 var app = express();
+
+//Passport middleware configuration
+
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+  },
+  function(username, password, done){
+    return db.collection(USERS_COLLECTION).findOne({email, password}, function(err, user){
+      if (err){
+        return done(err, false, {success: false, message : 'Wrong email or password'});
+      } if (user){
+        return done(null, user, {success: true});
+      } else {
+        return done(null, false, {success: false, message: 'Must provide email and password'});
+      }
+    });
+  }
+))
+
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = 'Johnson4920';
+
+passport.use( new JwtStrategy(opts, function(jwt_payload, done){
+  return db.collection(USERS_COLLECTION).findOne({ _id : ObjectID(jwt_payload.id)}, function(err, user){
+    if (err){
+      return done(err, false);
+    } if (user){
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  });
+}));
+
+
 
 // Middleware
 app.use(bodyParser.json());
@@ -62,7 +105,8 @@ app.post('/api/auth', function(req, res) {
         db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
             if (result) {
                 if (req.body.password == result.password) {
-                  res.status(200).json({ success: true });
+                  var token = jwt.sign(result, 'Johnson4920');
+                  res.status(200).json({ success: true, token: token});
                 } else {
                   res.json({ success: false });
                 }
@@ -81,37 +125,32 @@ app.post('/api/auth', function(req, res) {
 
 var TASKS_COLLECTION = 'TASKS';
 
-app.post('/api/task', function (req, res) {
-  var newTask = req.body;
-  newTask.createdAt = new Date();
+app.post('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
+    var newTask = req.body;
+    newTask.createdAt = new Date();
 
-  if (!req.body.title) {
-    returnError(res, 'Invalid user input', 'Must provide a title', 400);
-  } else {
-    db.collection(TASKS_COLLECTION).insertOne(newTask, function (err, doc) {
+    if (!req.body.title) {
+      returnError(res, 'Invalid user input', 'Must provide a title', 400);
+    } else {
+      db.collection(TASKS_COLLECTION).insertOne(newTask, function (err, doc) {
+        if (err) {
+          returnError(res, err.message, "Failed to create new task");
+        } else {
+          res.status(201).json(doc.ops[0]);
+        }
+      });
+    }
+});
+
+app.get('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
+    db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
       if (err) {
-        returnError(res, err.message, "Failed to create new task");
+        returnError(res, err.message, "Failed to retieve tasks");
       } else {
-        res.status(201).json(doc.ops[0]);
+        res.status(200).json(docs);
       }
     });
-  }
-});
-
-app.get('/api/task', function (req, res) {
-  db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve tasks");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
-});
-
-/**
- * TASK
- */
-
+  
 app.get('/api/task/:id', function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
