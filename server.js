@@ -152,7 +152,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false}), function (
     });
 });
   
-app.get('/api/task/:id', function (req, res) {
+app.get('/api/task/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
       if (err) {
@@ -170,7 +170,7 @@ app.get('/api/task/:id', function (req, res) {
   }
 });
 
-app.put('/api/task/:id', function (req, res) {
+app.put('/api/task/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
       if (err) {
