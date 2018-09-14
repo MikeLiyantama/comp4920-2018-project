@@ -32,11 +32,10 @@ passport.use(new LocalStrategy({
   }
 ))
 
-var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'Johnson4920';
-
-passport.use( new JwtStrategy(opts, function(jwt_payload, done){
+passport.use( new JwtStrategy({
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey   : 'Johnson4920'
+}, function(jwt_payload, done){
   return db.collection(USERS_COLLECTION).findOne({ id : jwt_payload.id}, function(err, user){
     if (err){
       return done(err, false);
@@ -105,7 +104,7 @@ app.post('/api/auth', function(req, res) {
             if (result) {
                 if (req.body.password == result.password) {
                   var token = jwt.sign(result, 'Johnson4920');
-                  res.status(200).json({ success: true, token: 'token' + token});
+                  res.status(200).json({ success: true, token: token});
                 } else {
                   res.json({ success: false });
                 }
