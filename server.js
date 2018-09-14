@@ -32,11 +32,12 @@ passport.use(new LocalStrategy({
   }
 ))
 
-passport.use( new JwtStrategy({
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey   : 'Johnson4920'
-}, function(jwt_payload, done){
-  return db.collection(USERS_COLLECTION).findOne({ id : jwt_payload.id}, function(err, user){
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = 'Johnson4920';
+
+passport.use( new JwtStrategy(opts, function(jwt_payload, done){
+  return db.collection(USERS_COLLECTION).findOne({ _id : ObjectID(jwt_payload.id)}, function(err, user){
     if (err){
       return done(err, false);
     } if (user){
@@ -124,8 +125,6 @@ app.post('/api/auth', function(req, res) {
 var TASKS_COLLECTION = 'TASKS';
 
 app.post('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
-  let token = parseToken(req.headers);
-  if (token){
     var newTask = req.body;
     newTask.createdAt = new Date();
 
@@ -140,14 +139,9 @@ app.post('/api/task', passport.authenticate('jwt', { session: false}), function 
         }
       });
     }
-  } else {
-    returnError(res, 'Unauthorized request', 'Unauthorized', 403);
-  }
 });
 
 app.get('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
-  let token = parseToken(req.headers);
-  if (token){
     db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
@@ -155,23 +149,4 @@ app.get('/api/task', passport.authenticate('jwt', { session: false}), function (
         res.status(200).json(docs);
       }
     });
-  } else {
-    returnError(res, 'Unauthorized request', 'Unauthorized', 403);
-  }
 });
-
-
-//Helper function
-
-parseToken = function (header){
-  if(header && header.authorization){
-    var parted = headers.authorization.split(' ');
-    if(parted.length === 2){
-      return parted[1];
-    }else {
-      return null;
-    }
-  }else {
-    return null;
-  }
-}
