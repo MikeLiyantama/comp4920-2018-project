@@ -10,37 +10,54 @@
 <form class="form-horizontal">
     <!-- task name -->
     <div class="form-group">
-        <label for="taskname" 
-            class="col-md-1 col-md-offset-3 control-label"> Name </label>
-        <div class="col-md-5">
-            <input type="text" [(ngModel)]="nameField"
-                   class="form-control" 
-                   id="taskname"
-                   name="name"
+        <!--label for="taskname" 
+            class="col-md-1 col-md-offset-3 control-label"> Name </label-->
+        <div class="col-md-6 col-md-offset-4">
+            <mat-form-field>
+                <input matInput 
+                    [(ngModel)]="nameField"
+                    id="taskname"
+                    name="name"
                     placeholder="Task Name">
+            </mat-form-field>
         </div>
     </div>
     <!-- task description -->
     <div class="form-group">
-        <label for="taskdesc" 
-            class="col-md-1 col-md-offset-3 control-label"> Description </label>
-        <div class="col-md-5">
-            <textarea [(ngModel)]="descriptionField"
-                     class="form-control"
-                      id="taskdesc"
-                      name="description"
-                      placeholder="Task Description..."></textarea>
+        <div class="col-md-6 col-md-offset-4">
+            <mat-form-field>
+                <textarea matInput 
+                        matTextareaAutosize
+                        matAutosizeMinRows=3
+                        [(ngModel)]="descriptionField"
+                          id="taskdesc"
+                          name="description"
+                          placeholder="Task Description"></textarea>
+            </mat-form-field>
         </div>
     </div>
+
+    <!-- task due date -->
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <input type="text" id="taskdate" 
+                    name="date"
+                    placeholder="Due Date"
+                    [(ngModel)]="dateField"
+                    [matDatepicker]="myDatepicker">
+            <mat-datepicker-toggle matSuffix
+                   [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+        </div>
+    </div>
+
     <!-- form control elements -->
     <div class="row">
         <div class="col-md-offset-5">
-            <button type="button" 
+            <button mat-stroked-button color="primary" 
                     (click)="giveNewTask()"
-                    class="btn btn-primary"
                 >Submit</button>
-            <button type="button" 
-                class="btn btn-danger" 
+            <button mat-stroked-button color="warn"
                 (click)="clearFields()">Clear</button>
         </div>
     </div>

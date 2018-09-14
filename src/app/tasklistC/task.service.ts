@@ -7,7 +7,7 @@ import { Http, Response, Headers } from '@angular/http';
 @Injectable()
 export class TaskService {
     // Fix url later
-    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
+    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task/';
     constructor (private http: Http) {}
 
     // Get request for tasks
@@ -29,6 +29,14 @@ export class TaskService {
                 .catch (this.handleError);
     }
 
+    editTask (newTask): Promise <void | Task> {
+        var putUrl = this.tasksUrl + ":" + newTask._id;
+        console.log (putUrl);
+        return this.http.put (putUrl, newTask)
+                .toPromise()
+                .then (response => response.json() as Task)
+                .catch (this.handleError);
+    }
     private handleError (error: any) {
         let errMsg = (error.message) ? error.message:
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';

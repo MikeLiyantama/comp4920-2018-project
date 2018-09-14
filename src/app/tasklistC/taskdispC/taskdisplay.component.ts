@@ -12,9 +12,9 @@ import { TaskService } from '../task.service';
 })
 
 export class TaskDisplayComponent implements OnInit {
-    // Populate this array from the DB for that user   
-    // Chucking garbage in for now 
     tasks = [];    
+    checkedTasks = [];
+    numCheckedTasks = 0;
     @Input() receivedTask: Task;
     @Input() toRemove: Task;
 
@@ -41,11 +41,41 @@ export class TaskDisplayComponent implements OnInit {
         }
     }
 
+    checkGivenTask (task: Task) {
+        this.checkedTasks.push (task);
+        ++ this.numCheckedTasks;
+        if (this.numCheckedTasks == 1) {
+            // snack
+
+        }
+    }
+
+    uncheckGivenTask (task: Task) {
+        var n = this.checkedTasks.indexOf (task);
+        this.checkedTasks.splice (n, 1);
+        --this.numCheckedTasks;
+    }
+
     // Note for later: removed != completed. 
     removeTask (task : Task) {
         var n = this.tasks.indexOf (task);
         this.tasks.splice(n, 1);
         // delete from db
     }
+
+    saveTaskEdits (task: Task) {
+        console.log ("The received task from the child:");
+        console.log (task);
+        console.log ("The id is:");
+        console.log (task._id);
+        this.taskService.editTask (task);
+
+    }
+
+    completeCheckedTasks () {
+        
+
+    }
     
 }
+

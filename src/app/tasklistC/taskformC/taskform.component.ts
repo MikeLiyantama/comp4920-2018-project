@@ -7,6 +7,7 @@ import { TaskService } from '../task.service';
 @Component({
     selector: 'app-taskform',
     templateUrl: './taskform.component.html',
+    styleUrls: ['./taskform.component.css'],
     providers: [TaskService]
 })
 
@@ -14,6 +15,7 @@ export class TaskFormComponent {
     @Output () taskEmitter = new EventEmitter <Task>();
     nameField: string = "";
     descriptionField: string = "";
+    dateField: Date;
 
     constructor (private taskService: TaskService) {}
     
@@ -24,10 +26,9 @@ export class TaskFormComponent {
             this.taskEmitter.emit (task);
             this.nameField = "";
             this.descriptionField = "";
+            console.log (this.dateField);
             // Write to DB here
-            console.log ("Writing to DB");
             this.taskService.writeTask (task);
-            console.log ("Done writing to DB");
         }
     }
 
