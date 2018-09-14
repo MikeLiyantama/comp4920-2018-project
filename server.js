@@ -150,6 +150,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false}), function (
         res.status(200).json(docs);
       }
     });
+});
   
 app.get('/api/task/:id', function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
@@ -179,7 +180,7 @@ app.put('/api/task/:id', function (req, res) {
       } else {
         returnError(res, 'No task found', 'No task found', 404);
       }
-    });
+    })
   } else {
     returnError(res, 'Invalid user input', 'Invalid task ID', 400);
   }
