@@ -13,17 +13,25 @@ export class AuthService {
   
 
   authenticate(user, pass){
-    this.http.post("https://comp4920-organiser.herokuapp.com/api/auth", { user, pass}).subscribe( function (res){
-	console.log(res);
-})
-    
+    this.http.post("https://comp4920-organiser.herokuapp.com/api/auth", {"email": user, "password": pass})
+      .subscribe( function (res){
+        this.returnValue = res;
+        console.log("1");
+        console.log("2");
+  
+        if (this.returnValue.success === "true" ) {
+          this.returnValue = 1;
+        } else {
+          this.returnValue = 0;
+        }
+    })
+
+    console.log("3");
     return this.returnValue;
   
   }
 
-  function(res, returnValue) {
-    this.returnValue = res.success;
-  }
+  
 
   // private username = "user"; private password = "pass";              // local testing
   // authenticateLocally(user, pass) {
