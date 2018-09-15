@@ -27,29 +27,20 @@ export class LoginComponent implements OnInit {
 
     var loginSuccess: number = 0;
     var response;
-    //loginSuccess = this.authService.authenticate(user, pass)
-    console.log("1");
+
 
     this.authService.authenticate(user, pass)
-      .subscribe(res => response = res);
-      console.log("3");
+      .subscribe(res => {
+        response = res; 
+        if (response.success) {
+          this.router.navigate(['/', user]);
+          this.wrongpass = undefined;
+        } else {
+          this.wrongpass = "not valid";
+        }
+      });
 
-    console.log(response);
-    // if (response.success === true) {
-    //   loginSuccess = 1;
-    // } else {
-    //   loginSuccess = 0;
-    // }
 
-
-    if (loginSuccess) {
-
-      this.router.navigate(['/', user]);
-      this.wrongpass = undefined;
-    } 
-    else {
-      this.wrongpass = "not valid";
-    }
   }
 
   getInfo() {
