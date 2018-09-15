@@ -5,13 +5,17 @@
     class="sidenav"
     fixedInViewport="false"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [mode]="over"
     >
-    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-toolbar height=200% color="white">Your-Name-Here <br>Tasks</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <!---List of Task Groups here-->
+      <mat-divider></mat-divider>
+      <mat-list-item mat-list-icon>Collaborative List</mat-list-item>
+       <!---List of Collaborative List here-->
+      <mat-divider></mat-divider>
+      <mat-list-item mat-list-icon>Teams</mat-list-item>
+       <!---List of Teams here-->
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav
@@ -20,7 +24,7 @@
     class="sidenav"
     fixedInViewport="false"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [mode]="over"
     >
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
@@ -39,7 +43,7 @@
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>comp4920-organiser</span>
+      <span>Today</span>
       <span class="divider"></span>
       <button 
         type="button"
