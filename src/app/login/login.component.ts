@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
     var loginSuccess: number = 0;
     var response;
 
-
     this.authService.authenticate(user, pass)
       .subscribe(res => {
         response = res; 
