@@ -67,7 +67,7 @@ export class TaskDisplayComponent implements OnInit {
         console.log ("The received task from the child:");
         console.log (task);
         console.log ("The id is:");
-        console.log (task._id);
+        //console.log (task._id);
         this.taskService.editTask (task);
 
     }
