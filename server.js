@@ -125,7 +125,7 @@ app.post('/api/auth', function(req, res) {
 
 var TASKS_COLLECTION = 'TASKS';
 
-app.post('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
+app.post('/api/task', function (req, res) {
     var newTask = req.body;
     newTask.createdAt = new Date();
 
@@ -142,7 +142,7 @@ app.post('/api/task', passport.authenticate('jwt', { session: false}), function 
     }
 });
 
-app.get('/api/task', passport.authenticate('jwt', { session: false}), function (req, res) {
+app.get('/api/task', function (req, res) {
     db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
@@ -152,7 +152,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false}), function (
     });
 });
   
-app.get('/api/task/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/api/task/:id', function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
       if (err) {
@@ -170,7 +170,7 @@ app.get('/api/task/:id', passport.authenticate('jwt', {session: false}), functio
   }
 });
 
-app.put('/api/task/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.put('/api/task/:id', function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
       if (err) {
@@ -184,4 +184,69 @@ app.put('/api/task/:id', passport.authenticate('jwt', {session: false}), functio
   } else {
     returnError(res, 'Invalid user input', 'Invalid task ID', 400);
   }
+});
+
+
+
+//Endpoints with auth
+
+app.post('/api/task_with_auth', passport.authenticate('jwt', { session: false}), function (req, res) {
+  var newTask = req.body;
+  newTask.createdAt = new Date();
+
+  if (!req.body.title) {
+    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+  } else {
+    db.collection(TASKS_COLLECTION).insertOne(newTask, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to create new task");
+      } else {
+        res.status(201).json(doc.ops[0]);
+      }
+    });
+  }
+});
+
+app.get('/api/task_with_auth', passport.authenticate('jwt', { session: false}), function (req, res) {
+  db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve tasks");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+app.get('/api/task_with_auth/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+if (ObjectID.isValid(req.params.id)) {
+  db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve task");
+    } else {
+      if (doc) {
+        res.status(200).json(doc);
+      } else {
+        returnError(res, 'No task found', 'No task found', 404);
+      }
+    }
+  });
+} else {
+  returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+}
+});
+
+app.put('/api/task_with_auth/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+if (ObjectID.isValid(req.params.id)) {
+  db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
+    if (err) {
+      returnError(res, err.message, "Failed to update task");
+    } else if (result.result.n === 1) {
+      res.status(204).send({});
+    } else {
+      returnError(res, 'No task found', 'No task found', 404);
+    }
+  })
+} else {
+  returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+}
 });
