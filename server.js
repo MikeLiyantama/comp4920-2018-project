@@ -116,7 +116,7 @@ app.post('/api/auth', function(req, res) {
     }
 });
 
-api.put('/api/register', function(req, res) {
+app.put('/api/register', function(req, res) {
   if(req.body.email && req.body.password) {
       var obj = {email: req.body.email, password: req.body.password};
       db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, res){
