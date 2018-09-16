@@ -26,6 +26,7 @@ import { TaskFormComponent } from './tasklistC/taskformC/taskform.component';
 import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     TaskFormComponent,
     TaskComponent,
     NavbarComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     AppRoutingModule,
@@ -62,12 +64,6 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatListModule,
     MatSelectModule,
     MatSnackBarModule
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

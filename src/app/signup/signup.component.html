@@ -1,0 +1,31 @@
+<div>
+  <label>Username:
+    <input [(ngModel)]="username" placeholder="username">
+  </label>
+</div>
+<div>
+  <label>Password:
+    <input [(ngModel)]="password" placeholder="password" type="password">
+  </label>
+</div>
+<div>
+  <label>Confirm Password: 
+    <input [(ngModel)]="confirmPassword" placeholder="password" type="password">>
+  </label>
+</div>
+<div>
+  <button (click)="signup()">Create Account</button>
+</div>
+<div>
+  <nav>
+    <a style=text-decoration:none routerLink="/login">Login</a> 
+  </nav>
+</div>
+
+
+<div *ngIf="invalid">
+  You have entered invalid information!
+</div>
+<div *ngIf="exists">
+  The email you've entered is already registered!
+</div>

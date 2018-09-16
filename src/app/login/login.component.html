@@ -5,11 +5,16 @@
 </div>
 <div>
   <label>Password:
-    <input [(ngModel)]="password" placeholder="password">
+    <input [(ngModel)]="password" placeholder="password" type="password">
   </label>
 </div>
 <div>
-  <button (click)="checkAuth()">Submit</button>
+  <button (click)="checkAuth()">Login</button>
+</div>
+<div>
+  <nav>
+    <a style=text-decoration:none routerLink="/signup">Don't have an account? Sign up here</a> 
+  </nav>
 </div>
 
 <div *ngIf="wrongpass">
