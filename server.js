@@ -119,11 +119,11 @@ app.post('/api/auth', function(req, res) {
 app.put('/api/register', function(req, res) {
   if(req.body.email && req.body.password) {
       var obj = {email: req.body.email, password: req.body.password};
-      db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, res){
-        if(res){ // Existing user with same email found
+      db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, result){
+        if(result){ // Existing user with same email found
             res.status(200).json({success: false, message: "email has been used in another account"});
         } else{
-          db.collection(USERS_COLLECTION).insertOne(obj, function (err, res) {
+          db.collection(USERS_COLLECTION).insertOne(obj, function (err, result) {
             if (err) res.status(200).json({success: false, message: "database error"});        //DB Error
             else res.status(200).json({success: true, message: "registration successful"});
           });
