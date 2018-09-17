@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule, MatNativeDateModule, MatIconRegistry } from '@angular/material';
-import { MatButtonModule, MatCheckboxModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatInputModule, MatToolbarModule, MatSidenavModule, MatListModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -20,6 +20,8 @@ import { TaskControlComponent } from './tasklistC/taskcontrol.component';
 import { TaskDisplayComponent } from './tasklistC/taskdispC/taskdisplay.component';
 import { TaskFormComponent } from './tasklistC/taskformC/taskform.component';
 import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
     TaskDisplayComponent,
     TaskFormComponent,
     TaskComponent,
+    NavbarComponent,
   ],
   imports: [
   BrowserModule,
@@ -48,6 +51,10 @@ import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
   MatTabsModule,
   MatTooltipModule,
   MatDividerModule,
+  LayoutModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatListModule
   MatSelectModule,
   MatSnackBarModule
   ],
