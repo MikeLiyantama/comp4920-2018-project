@@ -13,6 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppComponent } from './app.component';
 import { TaskControlComponent } from './tasklistC/taskcontrol.component';
 import { TaskDisplayComponent } from './tasklistC/taskdispC/taskdisplay.component';
@@ -53,6 +55,8 @@ import { LayoutModule } from '@angular/cdk/layout';
   MatToolbarModule,
   MatSidenavModule,
   MatListModule
+  MatSelectModule,
+  MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
