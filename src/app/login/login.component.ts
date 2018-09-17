@@ -30,9 +30,9 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticate(user, pass)
       .subscribe(res => {
-        response = res; 
-        if (response.success) {
-          this.router.navigate(['/', user]);
+        if (res.success) {
+          localStorage.setItem('token', res.token);
+          this.router.navigate(['/tasks']);
           this.wrongpass = undefined;
         } else {
           this.wrongpass = "not valid";

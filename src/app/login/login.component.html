@@ -1,21 +1,19 @@
-<div>
-  <label>Username:
-    <input [(ngModel)]="username" placeholder="username">
-  </label>
-</div>
-<div>
-  <label>Password:
-    <input [(ngModel)]="password" placeholder="password" type="password">
-  </label>
-</div>
-<div>
-  <button (click)="checkAuth()">Login</button>
-</div>
-<div>
-  <nav>
-    <a style=text-decoration:none routerLink="/signup">Don't have an account? Sign up here</a> 
-  </nav>
-</div>
+<form class="col-md-4" (submit)="checkAuth()">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input [(ngModel)]="username" name="username" type="text" class="form-control" id="username">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input [(ngModel)]="password" name="password" type="password" class="form-control" id="password">
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn">Login</button>
+  </div>
+  <div class="form-group">
+    Need an account? <a routerLink="/signup">Sign up here</a> 
+  </div>
+</form>
 
 <div *ngIf="wrongpass">
   You have entered a wrong password

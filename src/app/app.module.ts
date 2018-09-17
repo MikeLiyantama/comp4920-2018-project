@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { HttpModule } from '@angular/http';
+import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutModule } from '@angular/cdk/layout';
+
 import { MatDatepickerModule, MatNativeDateModule, MatIconRegistry } from '@angular/material';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatToolbarModule, MatSidenavModule, MatListModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,14 +20,18 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './login/login.component';
+
 import { TaskControlComponent } from './tasklistC/taskcontrol.component';
 import { TaskDisplayComponent } from './tasklistC/taskdispC/taskdisplay.component';
 import { TaskFormComponent } from './tasklistC/taskformC/taskform.component';
 import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { LayoutModule } from '@angular/cdk/layout';
 import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './login/login.component';
+
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -40,11 +45,15 @@ import { SignupComponent } from './signup/signup.component';
     SignupComponent
   ],
   imports: [
-    AppRoutingModule,
     BrowserModule,
     FormsModule,
-    HttpModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:8080', 'comp4920-organiser.herokuapp.com']
+      }
+    }),
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -63,7 +72,8 @@ import { SignupComponent } from './signup/signup.component';
     MatSidenavModule,
     MatListModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
