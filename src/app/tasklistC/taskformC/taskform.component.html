@@ -18,7 +18,10 @@
                     [(ngModel)]="nameField"
                     id="taskname"
                     name="name"
+                    required
                     placeholder="Task Name">
+                <mat-error *ngIf="control.invalid">{{ getErrorMessage ()
+                    }}</mat-error>
             </mat-form-field>
         </div>
     </div>
@@ -33,6 +36,22 @@
                           id="taskdesc"
                           name="description"
                           placeholder="Task Description"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- task importance -->
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <mat-form-field>
+                <mat-select 
+                    [(ngModel)]="importanceField" 
+                    name="importance"
+                    placeholder="Task Importance">
+                    <mat-option *ngFor="let level of importanceLevels"
+                            [value]="level">
+                        {{ level }}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
         </div>
     </div>

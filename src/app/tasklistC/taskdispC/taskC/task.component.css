@@ -6,3 +6,8 @@
     padding: 0;
     margin: auto;
 }
+
+mat-form-field {
+    min-width: 350px;
+
+}

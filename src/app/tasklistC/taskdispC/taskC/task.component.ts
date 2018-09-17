@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input } from '@angular/core';
 import { Output, EventEmitter } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { Task } from '../../task.model';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FormControl } from '@anglular/forms';
 
 @Component({
     selector: 'app-task',
@@ -20,7 +21,9 @@ export class TaskComponent {
     @Output () editedEmitter = new EventEmitter <Task> ();
     @ViewChild ('formTitle') formTitle;
     @ViewChild ('formDescription') formDescription;
-    formDate;
+    @ViewChild ('formDate') formDate;
+    formImportance;
+    importanceLevels = ["Low", "Medium", "High"];
     showOptions: boolean = false;
     taskChecked: boolean = false;
 
@@ -33,7 +36,13 @@ export class TaskComponent {
             sanitizer.bypassSecurityTrustResourceUrl('assets/icons/clear.svg'));
     }
 
+    ngOnChanges () {
+        this.formImportance = this.task.importance;
+
+    }
+
     deleteTask () {
+        this.task.deleted = true;
         this.deleteEmitter.emit (this.task);
     }
 
@@ -48,6 +57,8 @@ export class TaskComponent {
     saveEdit () {
         this.task.title = this.formTitle.nativeElement.value;
         this.task.description = this.formDescription.nativeElement.value;
+        this.task.dueDate = this.formDate;
+        this.task.importance = this.formImportance;
         this.editedEmitter.emit (this.task);
     }
 }

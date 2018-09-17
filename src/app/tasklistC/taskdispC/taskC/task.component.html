@@ -1,22 +1,4 @@
     <div class="row">
-        <!--div class="col-md-6 col-md-offset-3" 
-             (mouseover)="showOptions=true"
-            (mouseout)="showOptions=false">
-            <a href="#" class="list-group-item">
-                <span *ngIf="showOptions" class="badge">
-                    <span class="glyphicon glyphicon-trash"
-                        (click)="deleteTask()"></span>
-                </span>
-                <span *ngIf="showOptions" class="badge">
-                    <span class="glyphicon glyphicon-ok"
-                        (click)="taskChecked=!taskChecked"></span>
-                </span>
-                <h4 class="list-group-item-heading" 
-                    [ngClass]="{checked:taskChecked}">{{ task.title }}</h4>
-                <p class="list-group-item-text"
-                    [ngClass]="{checked:taskChecked}"><i>{{ task.description }}</i></p>
-            </a>
-        </div-->
         <div class="col-md-5 col-md-offset-3">
             <mat-accordion>
                 <mat-expansion-panel>
@@ -42,18 +24,30 @@
                             </mat-form-field>
                             </div>
                             <div>
-                            <mat-form-field>
-                                <textarea matInput
-                                        matTextareaAutosize
-                                        matAutosizeMinRows=2
-                                        #formDescription 
-                                        value="{{ task.description }}"
-                                        placeholder="Task Description"></textarea>
-                            </mat-form-field>
+                                <mat-form-field>
+                                    <textarea matInput
+                                            matTextareaAutosize
+                                            matAutosizeMinRows=2
+                                            #formDescription 
+                                            value="{{ task.description }}"
+                                            placeholder="Task Description"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field>
+                                    <mat-select 
+                                        [(value)]="formImportance"
+                                        placeholder="Task Importance"
+                                        >
+                                        <mat-option *ngFor="let level of
+                                        importanceLevels" [value]="level">
+                                            {{ level }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                             </div>
                             <div>
                                 <input type="text" id="taskdate" 
-                                        name="date"
                                         placeholder="Due Date"
                                         #formDate
                                         [matDatepicker]="myDatepicker">

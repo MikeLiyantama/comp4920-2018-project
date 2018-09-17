@@ -13,7 +13,6 @@ export class TaskService {
     // Get request for tasks
     getTasks (): Promise<void | Task []> {
         let h = new Headers ();
-        //h.append ("Access-Control-Allow-Origin", "http://localhost:4200/");
         return this.http.get (this.tasksUrl, {headers: h})
             .toPromise()
             .then (response => response.json() as Task [])
@@ -30,9 +29,13 @@ export class TaskService {
     }
 
     editTask (newTask): Promise <void | Task> {
-        var putUrl = this.tasksUrl + ":" + newTask._id;
+        var putUrl = this.tasksUrl + newTask._id;
         console.log (putUrl);
-        return this.http.put (putUrl, newTask)
+        return this.http.put (putUrl, {title: newTask.title, 
+                description: newTask.description, 
+                importance: newTask.importance,
+                completed: newTask.completed,
+                deleted: newTask.deleted})
                 .toPromise()
                 .then (response => response.json() as Task)
                 .catch (this.handleError);
