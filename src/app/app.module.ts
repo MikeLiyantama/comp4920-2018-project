@@ -54,7 +54,7 @@ import { LayoutModule } from '@angular/cdk/layout';
   LayoutModule,
   MatToolbarModule,
   MatSidenavModule,
-  MatListModule
+  MatListModule,
   MatSelectModule,
   MatSnackBarModule
   ],
