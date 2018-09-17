@@ -1,0 +1,80 @@
+Backend API Documentation
+
+-------------------------------- USER --------------------------------
+
+POST /api/auth
+    Authenticate a user.
+    Required Payload: { email: "some@email.com", password: "some_password" }
+    Return Value:
+        200 - Log in successful
+                with { success: true, token: some_token }
+        200 - Log in failed
+                with { success: false }
+        400 - Invalid user input
+                with { message: "Must provide email and password" }
+
+PUT /api/register
+    Create a new user.
+    Required Payload: { email: "some@email.com", password: "some_password" }
+    Return Value:
+        200 - New user created successfully
+                with { success: true, message: "registration successful" }
+        200 - Email already used
+                with { success: false, message: "email has been used in another account" }
+        200 - Database error
+                with { success: false, message: "database error" }
+        400 - Invalid user input
+                with { success: false, message: "Must provide email and password" }
+
+
+-------------------------------- TASKS --------------------------------
+
+Note: Use /api/task_with_auth and /api/task_with_auth/:id instead
+      for endpoints with authentication
+
+POST /api/task
+    Create a new task.
+    Required Payload: A JSON, which must include a "title" field.
+    Return Value:
+        201 - New task created
+                with a JSON representing the task record
+        400 - Invalid user input
+                with { message: "Must provide a title" }
+        500 - Database error
+                with { message: "Failed to create new task" }
+
+GET /api/task
+    Retrieve all tasks.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON representing all task records
+        500 - Database error
+                with { message: "Failed to retieve tasks" }
+
+GET /api/task/:id
+    Retrieve one task.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON representing the task record
+        400 - Invalid user input
+                with { message: "Invalid task ID" }
+        404 - No task found
+                with { message: "No task found" }
+        500 - Database error
+                with { message: "Failed to retieve task" }
+
+PUT /api/task/:id
+    Update a task.
+    Required Payload: The new record for that task id.
+    Return Value:
+        204 - Success (No Content)
+                The server has successfully fulfilled the request and that 
+                there is no additional content to send in the response payload body.
+        400 - Invalid user input
+                with { message: "Invalid task ID" }
+        404 - No task found
+                with { message: "No task found" }
+        500 - Database error
+                with { message: "Failed to update task" }
