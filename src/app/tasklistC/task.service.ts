@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 @Injectable()
 export class TaskService {
     // Fix url later
-    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task_with_auth/';
+    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
     constructor (private http: HttpClient) {}
 
     // Get request for tasks
