@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
       .subscribe(res => {
         if (res.success) {
           localStorage.setItem('token', res.token);
-          this.router.navigate(['/tasks']);
+          this.router.navigate(['/app']);
           this.wrongpass = undefined;
         } else {
           this.wrongpass = "not valid";

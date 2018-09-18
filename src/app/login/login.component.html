@@ -1,20 +1,22 @@
-<form class="col-md-4" (submit)="checkAuth()">
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input [(ngModel)]="username" name="username" type="text" class="form-control" id="username">
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input [(ngModel)]="password" name="password" type="password" class="form-control" id="password">
-  </div>
-  <div class="form-group">
-    <button type="submit" class="btn">Login</button>
-  </div>
-  <div class="form-group">
-    Need an account? <a routerLink="/signup">Sign up here</a> 
-  </div>
-</form>
-
-<div *ngIf="wrongpass">
-  You have entered a wrong password
+<div class="wrapper">
+  <form class="form" (submit)="checkAuth()">
+    <h1>COMP4920 Tasks</h1>
+    <mat-form-field class="form-group input-field">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="username" name="username" type="text">
+    </mat-form-field>
+    <mat-form-field class="form-group input-field">
+      <mat-label>Password</mat-label>
+      <input matInput [(ngModel)]="password" name="password" type="password">
+    </mat-form-field>
+    <div *ngIf="wrongpass">
+      You have made a grave mistake...
+    </div>
+    <div class="form-group">
+      <button type="submit" mat-raised-button>Login</button>
+    </div>
+    <div class="form-group">
+      Need an account? <a routerLink="/auth/signup">Sign up here</a> 
+    </div>
+  </form>
 </div>

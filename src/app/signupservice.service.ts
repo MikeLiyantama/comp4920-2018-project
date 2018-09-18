@@ -14,7 +14,7 @@ export class SignupserviceService {
 
   private registerUrl = "https://comp4920-organiser.herokuapp.com/api/register";
   register(user, pass): Observable<any>{
-    return  this.http.put(this.registerUrl, {"email": user, "password": pass});
+    return this.http.put(this.registerUrl, {"email": user, "password": pass});
   }
 }
  

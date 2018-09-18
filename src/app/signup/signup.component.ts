@@ -37,7 +37,8 @@ export class SignupComponent implements OnInit {
         .subscribe(res => {
           response = res;
           if (response.success) {
-            this.router.navigate(['/login']);
+            localStorage.setItem('token', res.token);
+            this.router.navigate(['/app']);
             this.exists = false;            
           } else {
             this.exists = true;

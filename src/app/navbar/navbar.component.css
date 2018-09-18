@@ -1,3 +1,7 @@
+.sideMenuToggle {
+  position: absolute;
+}
+
 .sidenav-container {
   height: 100%;
 }
@@ -15,8 +19,6 @@
 .container {
   align-items: center;
   display: flex;
-  left: -40px;
-  position: relative;
 }
 
 .profileIcon {

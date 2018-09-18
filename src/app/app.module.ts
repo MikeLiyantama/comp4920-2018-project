@@ -29,6 +29,8 @@ import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
+import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -43,7 +45,9 @@ export function tokenGetter() {
     TaskComponent,
     NavbarComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    AppLayoutComponent,
+    AuthLayoutComponent
   ],
   imports: [
     BrowserModule,
