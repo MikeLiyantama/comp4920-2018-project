@@ -78,3 +78,32 @@ PUT /api/task/:id
                 with { message: "No task found" }
         500 - Database error
                 with { message: "Failed to update task" }
+
+
+-------------------------------- SCHEMA --------------------------------
+
+# This is generalised from what I found in the DB.    -- Yang
+
+collection USERS {
+        _id: ObjectId,
+        email: string,
+        password: string
+}
+
+collection TASKS {
+        _id: ObjectId,
+        owner: ObjectId,
+        title: string,
+        description: string,
+        importance: string,
+        dueDate: string,
+        createdAt: date,
+        deleted: boolean
+}
+
+collection TEAMS {
+        _id: ObjectId,
+        name: string,
+        createdAt: date,
+        members: array(ObjectId)
+}
