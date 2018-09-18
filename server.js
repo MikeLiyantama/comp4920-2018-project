@@ -199,13 +199,13 @@ app.put('/api/task/:id', function (req, res) {
   }
 });
 
-
-
 //Endpoints with auth
 
 app.post('/api/task_with_auth', passport.authenticate('jwt', { session: false}), function (req, res) {
+  let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
   var newTask = req.body;
   newTask.createdAt = new Date();
+  newTask.createdBy = token._id;
 
   if (!req.body.title) {
     returnError(res, 'Invalid user input', 'Must provide a title', 400);
@@ -221,7 +221,8 @@ app.post('/api/task_with_auth', passport.authenticate('jwt', { session: false}),
 });
 
 app.get('/api/task_with_auth', passport.authenticate('jwt', { session: false}), function (req, res) {
-  db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
+  let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
+  db.collection(TASKS_COLLECTION).find({_id : ObjectID(token._id)}).toArray(function (err, docs) {
     if (err) {
       returnError(res, err.message, "Failed to retieve tasks");
     } else {
@@ -262,4 +263,114 @@ if (ObjectID.isValid(req.params.id)) {
 } else {
   returnError(res, 'Invalid user input', 'Invalid task ID', 400);
 }
+});
+
+/** 
+ * Teams
+*/
+let TEAMS_COLLECTION = 'teams';
+
+/**
+ * Create team
+ */
+app.post('/api/team', passport.authenticate('jwt', {session: false}), function (req, res) {
+  let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
+  
+  var newTeam = req.body;
+  newTeam.createdAt = new Date();
+  newTeam.members = token._id;
+  if (!req.body.title) {
+    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+  } else {
+    db.collection(TEAMS_COLLECTION).insertOne(newTeam, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to create new team");
+      } else {
+        res.status(201).json(doc.ops[0]);
+      }
+    });
+  }
+});
+
+/**
+ * Get all teams by id
+ */
+
+app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
+  let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
+  db.collection(TEAMS_COLLECTION).find({members : token._id}).toArray(function (err, docs) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve teams");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+/**
+ * Get specific team
+ */
+
+app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+if (ObjectID.isValid(req.params.id)) {
+  db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, result) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve teams");
+    } else {
+      if (result) {
+        res.status(200).json(doc);
+      } else {
+        returnError(res, 'No team found', 'No task found', 404);
+      }
+    }
+  });
+} else {
+  returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+}
+});
+
+/**
+ * update team
+ */
+
+app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+if (ObjectID.isValid(req.params.id)) {
+  db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
+    if (err) {
+      returnError(res, err.message, "Failed to update teams");
+    } else if (result.result.n === 1) {
+      res.status(204).send({});
+    } else {
+      returnError(res, 'No team found', 'No team found', 404);
+    }
+  })
+} else {
+  returnError(res, 'Invalid user input', 'Invalid team ID', 400);
+}
+});
+
+/**
+ * Create new team member
+ */
+app.put('/api/team/member', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$push :{members : req.body._id}}, function(err, result){
+    if (err){
+      returnError(res, err.message, "Failed to add member");
+    } else{
+      res.status(200).json({success: true});
+    }
+  })
+})
+
+/**
+ * Remove a user from team
+ */
+app.delete('/api/team/member', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$pull :{members : req.body._id}}, function (err, result){
+    if (err){
+      returnError(res, err.message, "Failed to delete member");
+    } else{
+      res.status(200).json({success: true});
+    }
+  });
 });
