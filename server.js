@@ -85,9 +85,6 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
   });
 });
 
-// API Routers
-
-
 // error handler
 function returnError(res, reason, message, code) {
   console.log("ERROR: " + reason);
@@ -117,6 +114,22 @@ app.post('/api/auth', function(req, res) {
     } else {
       returnError(res, 'Invalid user input', 'Must provide email and password', 400);
     }
+});
+
+app.put('/api/register', function(req, res) {
+  if(req.body.email && req.body.password) {
+      var obj = {email: req.body.email, password: req.body.password};
+      db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, result){
+        if(result){ // Existing user with same email found
+            res.status(200).json({success: false, message: "email has been used in another account"});
+        } else{
+          db.collection(USERS_COLLECTION).insertOne(obj, function (err, result) {
+            if (err) res.status(200).json({success: false, message: "database error"});        //DB Error
+            else res.status(200).json({success: true, message: "registration successful"});
+          });
+        }
+      });   
+  } else res.status(400).json({success: false, message: "Must provide email and password"});
 });
 
 /**

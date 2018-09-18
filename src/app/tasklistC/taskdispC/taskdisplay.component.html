@@ -1,0 +1,26 @@
+<br>
+<div>
+    <app-task 
+     *ngFor="let t of tasks" 
+     [task]="t"
+    (deleteEmitter)="removeTask($event)"
+    (checkedEmitter)="checkGivenTask($event)" 
+    (uncheckedEmitter)="uncheckGivenTask($event)" 
+    (editedEmitter)="saveTaskEdits($event)"
+    ></app-task>
+    <div *ngIf="numCheckedTasks">
+        <br>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-5">
+
+                <button 
+                    color="accent" 
+                    (click)="completeCheckedTasks()" 
+                    mat-stroked-button>
+                    Complete {{ numCheckedTasks }} tasks.
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
