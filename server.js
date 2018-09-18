@@ -139,10 +139,9 @@ app.put('/api/register', function(req, res) {
 var TASKS_COLLECTION = 'TASKS';
 
 app.post('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
-  const token = jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());  
   const newTask = req.body;
   newTask.createdAt = new Date();
-  newTask.createdBy = ObjectId(token._id);
+  newTask.createdBy = ObjectId(req.user._id);
 
   if (!req.body.title) {
     returnError(res, 'Invalid user input', 'Must provide a title', 400);
@@ -158,8 +157,7 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
 });
 
 app.get('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
-  const token = jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
-  db.collection(TASKS_COLLECTION).find({ createdBy: ObjectID(token._id) }).toArray(function (err, docs) {
+  db.collection(TASKS_COLLECTION).find({ createdBy: ObjectID(req.user._id) }).toArray(function (err, docs) {
     if (err) {
       returnError(res, err.message, "Failed to retieve tasks");
     } else {
