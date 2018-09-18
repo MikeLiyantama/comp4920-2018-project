@@ -199,3 +199,7 @@ if (ObjectID.isValid(req.params.id)) {
   returnError(res, 'Invalid user input', 'Invalid task ID', 400);
 }
 });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distDir, '/index.html'));
+});
