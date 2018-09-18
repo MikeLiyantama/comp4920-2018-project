@@ -141,7 +141,7 @@ var TASKS_COLLECTION = 'TASKS';
 app.post('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
   const newTask = req.body;
   newTask.createdAt = new Date();
-  newTask.createdBy = ObjectId(req.user._id);
+  newTask.createdBy = ObjectID(req.user._id);
 
   if (!req.body.title) {
     returnError(res, 'Invalid user input', 'Must provide a title', 400);
