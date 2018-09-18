@@ -17,6 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -73,6 +74,7 @@ export function tokenGetter() {
     MatListModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatMenuModule,
     AppRoutingModule
   ],
   providers: [],

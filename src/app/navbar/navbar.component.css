@@ -9,8 +9,18 @@
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
+  margin-bottom: 48px;
 }
 
-.divider{
-  flex: 1 1 auto
+.container {
+  align-items: center;
+  display: flex;
+  left: -40px;
+  position: relative;
+}
+
+.profileIcon {
+  border: 2px solid white;
+  line-height: 39px;
+  margin-left: auto;
 }
