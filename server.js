@@ -313,19 +313,19 @@ app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (
 
 app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
 if (ObjectID.isValid(req.params.id)) {
-  db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, result) {
+  db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
     if (err) {
       returnError(res, err.message, "Failed to retieve teams");
     } else {
-      if (result) {
+      if (doc) {
         res.status(200).json(doc);
       } else {
-        returnError(res, 'No team found', 'No task found', 404);
+        returnError(res, 'No team found', 'No team found', 404);
       }
     }
   });
 } else {
-  returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+  returnError(res, 'Invalid user input', 'Invalid team ID', 400);
 }
 });
 
@@ -335,7 +335,7 @@ if (ObjectID.isValid(req.params.id)) {
 
 app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
 if (ObjectID.isValid(req.params.id)) {
-  db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
+  db.collection(TEAMS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
     if (err) {
       returnError(res, err.message, "Failed to update teams");
     } else if (result.result.n === 1) {
@@ -348,6 +348,11 @@ if (ObjectID.isValid(req.params.id)) {
   returnError(res, 'Invalid user input', 'Invalid team ID', 400);
 }
 });
+
+
+/** 
+ * Team members
+*/
 
 /**
  * Create new team member
