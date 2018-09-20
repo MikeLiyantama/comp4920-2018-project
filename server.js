@@ -1,3 +1,5 @@
+// Imports
+
 var express = require("express");
 var bodyParser = require("body-parser");
 var cors = require('cors');
@@ -92,11 +94,12 @@ function returnError(res, reason, message, code) {
 }
 
 /**
-  USERS
+  ******************************** USERS ********************************
  */
 
 var USERS_COLLECTION = 'USERS';
 
+// Create user
 app.post('/api/auth', function(req, res) {
     if (req.body.email && req.body.password) { // Field Check
         db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
@@ -116,6 +119,7 @@ app.post('/api/auth', function(req, res) {
     }
 });
 
+// Update user
 app.put('/api/register', function(req, res) {
   if(req.body.email && req.body.password) {
       var obj = {email: req.body.email, password: req.body.password};
@@ -133,11 +137,12 @@ app.put('/api/register', function(req, res) {
 });
 
 /**
- * TASKS
+ * ******************************** TASKS ********************************
  */
 
 var TASKS_COLLECTION = 'TASKS';
 
+// Create task
 app.post('/api/task', function (req, res) {
     var newTask = req.body;
     newTask.createdAt = new Date();
@@ -155,6 +160,7 @@ app.post('/api/task', function (req, res) {
     }
 });
 
+// Get all tasks
 app.get('/api/task', function (req, res) {
     db.collection(TASKS_COLLECTION).find({}).toArray(function (err, docs) {
       if (err) {
@@ -164,7 +170,8 @@ app.get('/api/task', function (req, res) {
       }
     });
 });
-  
+
+// Get task with specific id
 app.get('/api/task/:id', function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
@@ -183,6 +190,7 @@ app.get('/api/task/:id', function (req, res) {
   }
 });
 
+// Update task with specific id
 app.put('/api/task/:id', function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
@@ -199,8 +207,11 @@ app.put('/api/task/:id', function (req, res) {
   }
 });
 
-//Endpoints with auth
+/**
+ * **************************** TASKS WITH AUTH ****************************
+ */
 
+// Create task
 app.post('/api/task_with_auth', passport.authenticate('jwt', { session: false}), function (req, res) {
   let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
   var newTask = req.body;
@@ -220,6 +231,7 @@ app.post('/api/task_with_auth', passport.authenticate('jwt', { session: false}),
   }
 });
 
+// Get all tasks owned by the user
 app.get('/api/task_with_auth', passport.authenticate('jwt', { session: false}), function (req, res) {
   let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
   db.collection(TASKS_COLLECTION).find({_id : ObjectID(token._id)}).toArray(function (err, docs) {
@@ -231,6 +243,7 @@ app.get('/api/task_with_auth', passport.authenticate('jwt', { session: false}), 
   });
 });
 
+// Get task with specific id
 app.get('/api/task_with_auth/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
 if (ObjectID.isValid(req.params.id)) {
   db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
@@ -249,6 +262,7 @@ if (ObjectID.isValid(req.params.id)) {
 }
 });
 
+// Update task with specific id
 app.put('/api/task_with_auth/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
 if (ObjectID.isValid(req.params.id)) {
   db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
@@ -265,19 +279,19 @@ if (ObjectID.isValid(req.params.id)) {
 }
 });
 
-/** 
- * Teams
-*/
+/**
+ * **************************** TEAMS WITH AUTH ****************************
+ */
+
 let TEAMS_COLLECTION = 'teams';
 
-/**
- * Create team
- */
+// Create team
 app.post('/api/team', passport.authenticate('jwt', {session: false}), function (req, res) {
   let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
   
   var newTeam = req.body;
   newTeam.createdAt = new Date();
+  newTeam.createdBy = token._id;
   newTeam.members = token._id;
   if (!req.body.title) {
     returnError(res, 'Invalid user input', 'Must provide a title', 400);
@@ -292,10 +306,7 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
   }
 });
 
-/**
- * Get all teams by id
- */
-
+// Get all teams a user is in
 app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
   let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
   db.collection(TEAMS_COLLECTION).find({members : token._id}).toArray(function (err, docs) {
@@ -307,10 +318,7 @@ app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (
   });
 });
 
-/**
- * Get specific team
- */
-
+// Get team with specific id
 app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
 if (ObjectID.isValid(req.params.id)) {
   db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
@@ -328,6 +336,41 @@ if (ObjectID.isValid(req.params.id)) {
   returnError(res, 'Invalid user input', 'Invalid team ID', 400);
 }
 });
+
+// Delete team with specific id
+app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    // Check if the team is valid
+    db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to delete team");
+      } else {
+        if (doc) {
+          // A team can only be deleted by its creator
+          if (doc.createdBy === token._id) {
+            db.collection(TEAMS_COLLECTION).deleteOne({ createdBy: token._id }, function (err, doc2) {
+              if (err) {
+                returnError(res, err.message, "Failed to delete team");
+              } else {
+                if (doc.deletedCount > 0) {
+                  res.status(200).json(doc);
+                } else {
+                  returnError(res, 'No team found', 'No team found. Warning: this clause should not be reached.', 404);
+                }
+              }
+            }
+          } else {
+            returnError(res, 'Forbidden', 'Only the creator could delete a team', 403);
+          }
+        } else {
+          returnError(res, 'No team found', 'No team found', 404);
+        }
+      }
+    });
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid team ID', 400);
+  }
+  });
 
 /**
  * update team
@@ -349,14 +392,11 @@ if (ObjectID.isValid(req.params.id)) {
 }
 });
 
-
-/** 
- * Team members
-*/
-
 /**
- * Create new team member
+ * ************************ TEAM MEMBERS WITH AUTH ************************
  */
+
+// Add a new team member
 app.put('/api/team/member', passport.authenticate('jwt', {session: false}), function(req, res){
   db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$push :{members : req.body._id}}, function(err, result){
     if (err){
@@ -367,9 +407,7 @@ app.put('/api/team/member', passport.authenticate('jwt', {session: false}), func
   })
 })
 
-/**
- * Remove a user from team
- */
+// Remove a member from team
 app.delete('/api/team/member', passport.authenticate('jwt', {session: false}), function(req, res){
   db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$pull :{members : req.body._id}}, function (err, result){
     if (err){

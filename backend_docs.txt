@@ -105,5 +105,6 @@ collection TEAMS {
         _id: ObjectId,
         name: string,
         createdAt: date,
+        createdBy: ObjectId,
         members: array(ObjectId)
 }
