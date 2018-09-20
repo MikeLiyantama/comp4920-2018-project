@@ -358,7 +358,7 @@ app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
                   returnError(res, 'No team found', 'No team found. Warning: this clause should not be reached.', 404);
                 }
               }
-            }
+            });
           } else {
             returnError(res, 'Forbidden', 'Only the creator could delete a team', 403);
           }
@@ -412,6 +412,32 @@ app.delete('/api/team/member', passport.authenticate('jwt', {session: false}), f
   db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$pull :{members : req.body._id}}, function (err, result){
     if (err){
       returnError(res, err.message, "Failed to delete member");
+    } else{
+      res.status(200).json({success: true});
+    }
+  });
+});
+
+/**
+ * ************************ TEAM TASKS WITH AUTH ************************
+ */
+
+// Add a new team task
+app.put('/api/team/task', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$push :{tasks : req.body._id}}, function(err, result){
+    if (err){
+      returnError(res, err.message, "Failed to add task");
+    } else{
+      res.status(200).json({success: true});
+    }
+  })
+})
+
+// Remove a task from team
+app.delete('/api/team/task', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$pull :{tasks : req.body._id}}, function (err, result){
+    if (err){
+      returnError(res, err.message, "Failed to delete task");
     } else{
       res.status(200).json({success: true});
     }

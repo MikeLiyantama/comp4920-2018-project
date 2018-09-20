@@ -106,5 +106,6 @@ collection TEAMS {
         name: string,
         createdAt: date,
         createdBy: ObjectId,
-        members: array(ObjectId)
+        members: array(ObjectId),
+        tasks: array(ObjectId)
 }
