@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="page-container">
   <mat-sidenav
     #drawer
     position="start"
@@ -41,6 +41,11 @@
         </mat-menu>
       </div>
     </mat-toolbar>
-    <ng-content></ng-content>
+    <mat-sidenav-container hasBackdrop="false" class="content">
+      <mat-sidenav [(opened)]="rightPaneService.opened" class="rightPane" mode="side" position="end">
+        <app-task-detail></app-task-detail>        
+      </mat-sidenav>
+      <ng-content></ng-content>
+    </mat-sidenav-container>
   </mat-sidenav-content>
 </mat-sidenav-container>

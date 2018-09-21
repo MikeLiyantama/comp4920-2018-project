@@ -5,6 +5,8 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { RightPaneService } from '../rightpane.service';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -17,11 +19,15 @@ export class NavbarComponent {
       map(result => result.matches)
     );
     
-  constructor(private breakpointObserver: BreakpointObserver, private router: Router) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private rightPaneService: RightPaneService,
+    private router: Router,
+  ) {
+  }
 
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/']);
   }
-  
 }

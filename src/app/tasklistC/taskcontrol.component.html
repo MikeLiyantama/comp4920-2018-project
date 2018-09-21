@@ -1,8 +1,0 @@
-<mat-tab-group>
-    <mat-tab label="Current Tasks">
-        <app-taskdisplay [receivedTask]="createdTask"></app-taskdisplay>
-    </mat-tab>
-    <mat-tab label="Add Task">
-        <app-taskform (taskEmitter)="receiveNewTask($event)"></app-taskform>
-    </mat-tab>
-</mat-tab-group>

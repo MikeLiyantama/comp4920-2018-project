@@ -1,0 +1,7 @@
+<mat-nav-list class="container">
+    <app-task 
+        *ngFor="let t of tasks" 
+        [task]="t"
+        (checkedEmitter)="checkGivenTask($event)" 
+    ></app-task>
+</mat-nav-list>
