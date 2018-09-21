@@ -5,3 +5,7 @@
 .task-title {
     margin-left: 16px;
 }
+
+.task-important {
+    margin-left: auto;
+}

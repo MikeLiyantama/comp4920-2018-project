@@ -9,7 +9,8 @@
   <app-task 
     *ngFor="let t of tasks" 
     [task]="t"
-    (markedAsComplete)="onMarkedAsComplete($event)"
+    (markedAsComplete)="onTaskMarkedAsComplete($event)"
+    (toggledImportance)="onTaskImportanceToggled($event)"
   >
   </app-task>
 </mat-nav-list>

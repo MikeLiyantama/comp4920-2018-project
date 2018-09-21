@@ -3,6 +3,7 @@ export class Task {
     public title;
     public description;
     public dueDate;
+    public important;
     public completed;
     public deleted;
     

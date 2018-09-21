@@ -14,6 +14,8 @@ import { TaskService } from '../task.service';
 export class TaskComponent {
     @Input() task: Task;
     @Output() markedAsComplete = new EventEmitter<string>();
+    @Output() toggledImportance = new EventEmitter<Task>();
+    importantIcon: string = 'star_outline';
 
     constructor (    
         private rightPaneService: RightPaneService,
@@ -27,5 +29,10 @@ export class TaskComponent {
 
     completeTask() {
         this.markedAsComplete.emit(this.task._id);
+    }
+
+    toggleTaskImportance(event) {
+        event.stopPropagation();
+        this.toggledImportance.emit(this.task);
     }
 }

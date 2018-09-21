@@ -49,6 +49,13 @@ export class TaskService {
             )
     }
 
+    updateTaskImportance(taskId: string, important: boolean): Observable<any> {
+        return this.http.put(`${this.tasksUrl}/${taskId}`, { important })
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
     completeTask(taskId: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: true })
             .pipe(

@@ -1,4 +1,10 @@
 <a mat-list-item class="task" (click)="this.openDetailPane()">
     <mat-checkbox (change)="this.completeTask()" (click)="$event.stopPropagation()"></mat-checkbox>
     <span class="task-title">{{ task.title }}</span>
+    <mat-icon 
+        class="task-important" 
+        (click)="this.toggleTaskImportance($event)"
+    >
+        {{ task.important ? 'star' : 'star_outline' }}
+    </mat-icon>
 </a>

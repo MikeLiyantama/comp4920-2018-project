@@ -42,9 +42,15 @@ export class TaskListComponent {
     }) 
   }
 
-  onMarkedAsComplete(taskId: string) {
+  onTaskMarkedAsComplete(taskId: string) {
     this.taskService.completeTask(taskId).subscribe(() => {
       this.tasks = this.tasks.filter(task => task._id !== taskId);
+      this.taskService.invalidateTaskListStatus(true);
+    });
+  }
+
+  onTaskImportanceToggled(toggledTask) {
+    this.taskService.updateTaskImportance(toggledTask._id, !toggledTask.important).subscribe(() => {
       this.taskService.invalidateTaskListStatus(true);
     });
   }
