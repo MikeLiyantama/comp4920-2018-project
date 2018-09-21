@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Task } from '../task.model';
 
@@ -9,7 +9,7 @@ import { TaskService } from '../task.service';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent {
   tasks: Task[] = [];
   quickAddTask: string;
   subscription: Subscription;
@@ -31,15 +31,22 @@ export class TaskListComponent implements OnInit {
 
   async getTasks() {
     this.taskService.getTasks().subscribe((tasks: Task[]) => {
-      this.tasks = tasks.filter((task) => !task.completed && !task.deleted);
+      this.tasks = tasks.filter(task => !task.completed && !task.deleted);
     });
   }
 
   addTask() {
-    this.taskService.createTask({ title: this.quickAddTask }).subscribe(() => {    
+    this.taskService.createTask({ title: this.quickAddTask }).subscribe(() => {
       this.taskService.invalidateTaskListStatus(true);
       this.quickAddTask = '';
     }) 
+  }
+
+  onMarkedAsComplete(taskId: string) {
+    this.taskService.completeTask(taskId).subscribe(() => {
+      this.tasks = this.tasks.filter(task => task._id !== taskId);
+      this.taskService.invalidateTaskListStatus(true);
+    });
   }
   
   ngOnDestroy() {

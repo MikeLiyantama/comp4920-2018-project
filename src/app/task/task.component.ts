@@ -1,12 +1,9 @@
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Task } from '../task.model';
 
 import { RightPaneService } from '../rightpane.service';
+import { TaskService } from '../task.service';
 
 @Component({
     selector: 'app-task',
@@ -15,16 +12,20 @@ import { RightPaneService } from '../rightpane.service';
 })
 
 export class TaskComponent {
-    @Input () task: Task;
+    @Input() task: Task;
+    @Output() markedAsComplete = new EventEmitter<string>();
 
-    constructor (
-        iconRegistry: MatIconRegistry, 
-        sanitizer: DomSanitizer,        
+    constructor (    
         private rightPaneService: RightPaneService,
+        private taskService: TaskService,
     ) { }
 
     openDetailPane() {
         this.rightPaneService.setTask(this.task);
         this.rightPaneService.open('detail');
+    }
+
+    completeTask() {
+        this.markedAsComplete.emit(this.task._id);
     }
 }

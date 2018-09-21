@@ -9,7 +9,7 @@
   <app-task 
     *ngFor="let t of tasks" 
     [task]="t"
-    (checkedEmitter)="checkGivenTask($event)" 
+    (markedAsComplete)="onMarkedAsComplete($event)"
   >
   </app-task>
 </mat-nav-list>

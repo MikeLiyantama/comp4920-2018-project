@@ -31,10 +31,14 @@ export class TaskDetailComponent implements OnInit {
       description: this.description,
       dueDate: this.dueDate,
     };
-    this.taskService.editTask(editedTask).subscribe(() => {
-      this.taskService.invalidateTaskListStatus(true);
+    if (this.title || this.description || this.dueDate) {
+      this.taskService.editTask(editedTask).subscribe(() => {
+        this.taskService.invalidateTaskListStatus(true);
+        this.rightPaneService.close();
+      });
+    } else {
       this.rightPaneService.close();
-    });
+    }
   }
 
   async maybeDeleteAndClose() {

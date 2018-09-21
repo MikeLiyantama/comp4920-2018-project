@@ -4,3 +4,13 @@ html,
 body {
     height: 100%;
 }
+
+/* customise material checkbox for task list item */
+.task .mat-checkbox .mat-checkbox-layout {
+    margin-bottom: 0;
+}
+
+.task .mat-checkbox .mat-checkbox-frame,
+.task .mat-checkbox .mat-checkbox-background {
+    border-radius: 50%;
+}

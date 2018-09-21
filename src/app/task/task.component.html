@@ -1,4 +1,4 @@
 <a mat-list-item class="task" (click)="this.openDetailPane()">
-    <mat-checkbox></mat-checkbox>
+    <mat-checkbox (change)="this.completeTask()" (click)="$event.stopPropagation()"></mat-checkbox>
     <span class="task-title">{{ task.title }}</span>
 </a>
