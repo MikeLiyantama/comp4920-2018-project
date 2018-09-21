@@ -1,9 +1,17 @@
-.sideMenuToggle {
-  position: absolute;
+.page-container {
+  background: #673ab7;
 }
 
-.sidenav-container {
-  height: 100%;
+.content {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px; 
+  height: 100vh;
+  overflow: hidden;
+  padding-top: 32px;
+}
+
+.sideMenuToggle {
+  position: absolute;
 }
 
 .sidenav {
@@ -13,7 +21,6 @@
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
-  margin-bottom: 48px;
 }
 
 .container {
@@ -25,4 +32,10 @@
   border: 2px solid white;
   line-height: 39px;
   margin-left: auto;
+}
+
+.rightPane {
+  background: #fafafa;
+  border-left: 1px solid #ececec;
+  width: 300px;
 }

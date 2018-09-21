@@ -1,0 +1,18 @@
+.header {
+  align-items: center;
+  display: flex;
+  border-bottom: 1px solid #ececec;
+  height: 64px;
+}
+
+.deleteButton {
+  margin: 0 8px 0 auto;
+}
+
+.form {
+  padding: 16px;
+}
+
+.form-field {
+  width: 100%;
+}

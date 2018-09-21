@@ -22,15 +22,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { TaskControlComponent } from './tasklistC/taskcontrol.component';
-import { TaskDisplayComponent } from './tasklistC/taskdispC/taskdisplay.component';
-import { TaskFormComponent } from './tasklistC/taskformC/taskform.component';
-import { TaskComponent } from './tasklistC/taskdispC/taskC/task.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { TaskDetailComponent } from './task-detail/task-detail.component';
+import { TaskListComponent } from './task-list/task-list.component';
+import { TaskComponent } from './task/task.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -39,15 +38,14 @@ export function tokenGetter() {
 @NgModule({
   declarations: [
     AppComponent,
-    TaskControlComponent,
-    TaskDisplayComponent,
-    TaskFormComponent,
     TaskComponent,
     NavbarComponent,
     LoginComponent,
     SignupComponent,
     AppLayoutComponent,
-    AuthLayoutComponent
+    AuthLayoutComponent,
+    TaskDetailComponent,
+    TaskListComponent
   ],
   imports: [
     BrowserModule,

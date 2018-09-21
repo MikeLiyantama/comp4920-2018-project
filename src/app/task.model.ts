@@ -1,14 +1,15 @@
 export class Task {
+    public _id;
     public title;
     public description;
-    public importance;
     public dueDate;
+    public important;
     public completed;
     public deleted;
-    constructor (title, description, importance, dueDate) {
+    
+    constructor (title, description, dueDate) {
         this.title = title;
         this.description = description;
-        this.importance = importance;
         this.dueDate = dueDate;
     }
 

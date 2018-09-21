@@ -1,0 +1,11 @@
+.task {
+    border-bottom: 1px solid #ececec;
+}
+
+.task-title {
+    margin-left: 16px;
+}
+
+.task-important {
+    margin-left: auto;
+}
