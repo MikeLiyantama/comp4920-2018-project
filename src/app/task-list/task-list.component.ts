@@ -11,13 +11,14 @@ import { TaskService } from '../task.service';
 })
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
+  quickAddTask: string;
   subscription: Subscription;
 
   constructor(private taskService: TaskService) { 
-    this.subscription = taskService.taskEdited$.subscribe(
-      taskEdited => {
-        if (taskEdited) {
-          taskService.changeTaskEditedStatus(false);
+    this.subscription = taskService.taskListValid$.subscribe(
+      taskListValid => {
+        if (!taskListValid) {
+          taskService.validateTaskListStatus(false);
           this.getTasks();
         }
       }
@@ -29,9 +30,16 @@ export class TaskListComponent implements OnInit {
   }
 
   async getTasks() {
-    const tasks = await this.taskService.getTasks().subscribe((tasks: Task[]) => {
+    this.taskService.getTasks().subscribe((tasks: Task[]) => {
       this.tasks = tasks.filter((task) => !task.completed && !task.deleted);
     });
+  }
+
+  addTask() {
+    this.taskService.createTask({ title: this.quickAddTask }).subscribe(() => {    
+      this.taskService.invalidateTaskListStatus(true);
+      this.quickAddTask = '';
+    }) 
   }
   
   ngOnDestroy() {

@@ -1,7 +1,15 @@
 <mat-nav-list class="container">
-    <app-task 
-        *ngFor="let t of tasks" 
-        [task]="t"
-        (checkedEmitter)="checkGivenTask($event)" 
-    ></app-task>
+  <form (submit)="addTask()">
+    <mat-form-field class="quickAdd" appearance="outline">
+      <mat-label>Add New Task</mat-label>
+      <input matInput [(ngModel)]="quickAddTask" name="quickAddTask">
+      <mat-icon matSuffix>add</mat-icon>
+    </mat-form-field>  
+  </form>
+  <app-task 
+    *ngFor="let t of tasks" 
+    [task]="t"
+    (checkedEmitter)="checkGivenTask($event)" 
+  >
+  </app-task>
 </mat-nav-list>

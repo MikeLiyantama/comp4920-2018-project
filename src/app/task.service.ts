@@ -14,23 +14,23 @@ export class TaskService {
     // Fix url later
     private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
 
-    private taskEditedSource = new Subject<boolean>();
+    private taskListValidSource = new Subject<boolean>();
 
-    taskEdited$ = this.taskEditedSource.asObservable();
+    taskListValid$ = this.taskListValidSource.asObservable();
 
     constructor (private http: HttpClient) {}
 
-    // Get request for tasks
-    getTasks(): Observable<Task []> {
-        return this.http.get<Task []>(this.tasksUrl)
+    // Post request for tasks
+    createTask(newTask: Task): Observable<Task> {
+        return this.http.post<Task>(this.tasksUrl, newTask)
             .pipe(
                 catchError(this.handleError)
             )
     }
 
-    // Post request for tasks
-    writeTask(newTask: Task): Observable<Task> {
-        return this.http.post<Task>(this.tasksUrl, newTask)
+    // Get request for tasks
+    getTasks(): Observable<Task []> {
+        return this.http.get<Task []>(this.tasksUrl)
             .pipe(
                 catchError(this.handleError)
             )
@@ -63,8 +63,12 @@ export class TaskService {
             )
     }
 
-    changeTaskEditedStatus(edited) {
-        this.taskEditedSource.next(edited);
+    invalidateTaskListStatus() {
+        this.taskListValidSource.next(false);
+    }
+
+    validateTaskListStatus() {
+        this.taskListValidSource.next(true);
     }
 
     private handleError (error: any) {

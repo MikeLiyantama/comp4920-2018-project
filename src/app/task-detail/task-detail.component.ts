@@ -32,14 +32,14 @@ export class TaskDetailComponent implements OnInit {
       dueDate: this.dueDate,
     };
     this.taskService.editTask(editedTask).subscribe(() => {
-      this.taskService.changeTaskEditedStatus(true);
+      this.taskService.invalidateTaskListStatus(true);
       this.rightPaneService.close();
     });
   }
 
   async maybeDeleteAndClose() {
     this.taskService.deleteTask(this.rightPaneService.task._id).subscribe(() => {
-      this.taskService.changeTaskEditedStatus(true);
+      this.taskService.invalidateTaskListStatus(true);
       this.rightPaneService.close();
     });
   }
