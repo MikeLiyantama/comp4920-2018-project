@@ -158,13 +158,16 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
 });
 
 app.get('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
-  db.collection(TASKS_COLLECTION).find({ createdBy: ObjectID(req.user._id) }).toArray(function (err, docs) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve tasks");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
+  db.collection(TASKS_COLLECTION)
+    .find({ createdBy: ObjectID(req.user._id) })
+    .sort({ createdAt: -1 })
+    .toArray(function (err, docs) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve tasks");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
 });
 
 app.get('/api/task/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
