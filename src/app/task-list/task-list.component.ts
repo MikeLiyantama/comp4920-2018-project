@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Task } from '../task.model';
 
@@ -18,7 +19,7 @@ export class TaskListComponent {
     this.subscription = taskService.taskListValid$.subscribe(
       taskListValid => {
         if (!taskListValid) {
-          taskService.validateTaskListStatus(false);
+          taskService.validateTaskListStatus();
           this.getTasks();
         }
       }
@@ -36,8 +37,8 @@ export class TaskListComponent {
   }
 
   addTask() {
-    this.taskService.createTask({ title: this.quickAddTask }).subscribe(() => {
-      this.taskService.invalidateTaskListStatus(true);
+    this.taskService.addTask({ title: this.quickAddTask }).subscribe(() => {
+      this.taskService.invalidateTaskListStatus();
       this.quickAddTask = '';
     }) 
   }
@@ -45,13 +46,13 @@ export class TaskListComponent {
   onTaskMarkedAsComplete(taskId: string) {
     this.taskService.completeTask(taskId).subscribe(() => {
       this.tasks = this.tasks.filter(task => task._id !== taskId);
-      this.taskService.invalidateTaskListStatus(true);
+      this.taskService.invalidateTaskListStatus();
     });
   }
 
   onTaskImportanceToggled(toggledTask) {
     this.taskService.updateTaskImportance(toggledTask._id, !toggledTask.important).subscribe(() => {
-      this.taskService.invalidateTaskListStatus(true);
+      this.taskService.invalidateTaskListStatus();
     });
   }
   

@@ -33,7 +33,7 @@ export class TaskDetailComponent implements OnInit {
     };
     if (this.title || this.description || this.dueDate) {
       this.taskService.editTask(editedTask).subscribe(() => {
-        this.taskService.invalidateTaskListStatus(true);
+        this.taskService.invalidateTaskListStatus();
         this.rightPaneService.close();
       });
     } else {
@@ -43,7 +43,7 @@ export class TaskDetailComponent implements OnInit {
 
   async maybeDeleteAndClose() {
     this.taskService.deleteTask(this.rightPaneService.task._id).subscribe(() => {
-      this.taskService.invalidateTaskListStatus(true);
+      this.taskService.invalidateTaskListStatus();
       this.rightPaneService.close();
     });
   }

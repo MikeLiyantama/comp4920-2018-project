@@ -1,16 +1,9 @@
-export class Task {
-    public _id;
-    public title;
-    public description;
-    public dueDate;
-    public important;
-    public completed;
-    public deleted;
-    
-    constructor (title, description, dueDate) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-    }
-
+export interface Task {
+    _id?: string;
+    title: string;
+    description?: string;
+    dueDate?: string;
+    important?: boolean;
+    completed?: boolean;
+    deleted?: boolean;
 }

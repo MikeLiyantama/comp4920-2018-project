@@ -21,7 +21,7 @@ export class TaskService {
     constructor (private http: HttpClient) {}
 
     // Post request for tasks
-    createTask(newTask: Task): Observable<Task> {
+    addTask(newTask: Task): Observable<Task> {
         return this.http.post<Task>(this.tasksUrl, newTask)
             .pipe(
                 catchError(this.handleError)
