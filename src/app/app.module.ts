@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +18,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +35,10 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { TeamManagementComponent } from './teammanage/tmanager.component';
+import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
+import { MemcardComponent } from './teammanage/memcard/memcard.component';
+
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -47,7 +55,10 @@ export function tokenGetter() {
     LoginComponent,
     SignupComponent,
     AppLayoutComponent,
-    AuthLayoutComponent
+    AuthLayoutComponent,
+    TeamManagementComponent,
+    TeamCreateComponent,
+    MemcardComponent
   ],
   imports: [
     BrowserModule,
@@ -79,7 +90,12 @@ export function tokenGetter() {
     MatSelectModule,
     MatSnackBarModule,
     MatMenuModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatGridListModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

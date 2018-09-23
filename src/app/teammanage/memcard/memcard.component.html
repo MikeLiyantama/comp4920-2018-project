@@ -1,0 +1,32 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title> {{ teamMember?.user.username }}</mat-card-title>
+        <mat-card-subtitle>Real name here</mat-card-subtitle>
+        <img mat-card-avatar [src]="teamMember.user.profilePic">
+    </mat-card-header>
+    <mat-card-content>
+        <p>
+            {{ dummyBio }}
+        </p>
+    </mat-card-content>
+    <mat-card-actions>
+        <mat-checkbox
+            [checked]="teamMember.isCreator"
+            [disabled]="creatorDisabled" 
+            >
+            Creator
+        </mat-checkbox>
+        <mat-checkbox
+            [checked]="teamMember.isLeader"
+            [disabled]="leaderDisabled" 
+            >
+            Leader
+        </mat-checkbox>
+        <button mat-stroked-button 
+            [disabled]="removeDisabled"
+            color="accent">
+            Remove
+        </button>
+    </mat-card-actions>
+</mat-card>
+

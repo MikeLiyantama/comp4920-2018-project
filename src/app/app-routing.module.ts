@@ -7,6 +7,8 @@ import { TaskControlComponent } from './tasklistC/taskcontrol.component';
 
 import { AppLayoutComponent }   from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent }   from './layouts/auth-layout/auth-layout.component';
+import { TeamManagementComponent } from './teammanage/tmanager.component';
+import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
@@ -15,7 +17,8 @@ const routes: Routes = [
     { path: 'signup', component: SignupComponent },
   ]},
   { path: 'app', component: AppLayoutComponent, children: [
-    { path: '', component: TaskControlComponent },
+      { path: '', component: TaskControlComponent },
+      { path: 'teamcreate', component: TeamCreateComponent }
   ]}
 ];
 
