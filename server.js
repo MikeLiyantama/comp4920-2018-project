@@ -158,7 +158,11 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
 });
 
 app.get('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
-  const filterParams = { createdBy: ObjectID(req.user._id), completed: false, deleted: false };
+  const filterParams = { 
+    createdBy: ObjectID(req.user._id),
+    completed: { $in: [null, false] }, 
+    deleted: { $in: [null, false] },
+  };
   if (req.query.status) {
     filterParams[req.query.status] = true;
   }
