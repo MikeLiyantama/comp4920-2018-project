@@ -5,3 +5,7 @@
 .loading {
   margin: 0 auto;
 }
+
+.completedHint {
+  margin: 1.34375em 0;
+}

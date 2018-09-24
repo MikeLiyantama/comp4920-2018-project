@@ -18,6 +18,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +32,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskComponent } from './task/task.component';
+import { CompletedTaskListComponent } from './completed-task-list/completed-task-list.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -45,8 +48,12 @@ export function tokenGetter() {
     AppLayoutComponent,
     AuthLayoutComponent,
     TaskDetailComponent,
-    TaskListComponent
+    TaskListComponent,
+    CompletedTaskListComponent
   ],
+  entryComponents: [
+    CompletedTaskListComponent
+  ]
   imports: [
     BrowserModule,
     FormsModule,
@@ -77,7 +84,9 @@ export function tokenGetter() {
     MatSelectModule,
     MatSnackBarModule,
     MatMenuModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatProgressSpinnerModule,
+    MatBottomSheetModule
   ],
   providers: [],
   bootstrap: [AppComponent]

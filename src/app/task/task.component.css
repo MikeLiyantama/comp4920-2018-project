@@ -2,6 +2,10 @@
     border-bottom: 1px solid #ececec;
 }
 
+.task.selected {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 .task-title {
     margin-left: 16px;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -36,6 +36,15 @@ export class TaskService {
             )
     }
 
+    // Get request for tasks
+    getCompletedTasks(): Observable<Task []> {
+        const options = { params: new HttpParams().set('status', 'completed') };
+        return this.http.get<Task []>(this.tasksUrl, options)
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
     editTask(editedTask): Observable<Task> {
         return this.http.put<Task>(
                 `${this.tasksUrl}/${editedTask._id}`, 
@@ -58,6 +67,13 @@ export class TaskService {
 
     completeTask(taskId: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: true })
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
+    uncompleteTask(taskId: string): Observable<any> {
+        return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: false })
             .pipe(
                 catchError(this.handleError)
             )

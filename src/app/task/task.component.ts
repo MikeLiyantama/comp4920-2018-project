@@ -14,6 +14,7 @@ import { TaskService } from '../task.service';
 export class TaskComponent {
     @Input() task: Task;
     @Output() markedAsComplete = new EventEmitter<string>();
+    @Output() markedAsIncomplete = new EventEmitter<string>();
     @Output() toggledImportance = new EventEmitter<Task>();
     importantIcon: string = 'star_outline';
     completed: boolean = false;
@@ -21,16 +22,26 @@ export class TaskComponent {
     constructor (    
         private rightPaneService: RightPaneService,
         private taskService: TaskService,
-    ) { }
+    ) {
+    }
+
+    ngOnInit() {
+        this.completed = this.task.completed;
+    }
 
     openDetailPane() {
         this.rightPaneService.setTask(this.task);
         this.rightPaneService.open('detail');
     }
 
-    completeTask() {
-        this.completed = true;
-        this.markedAsComplete.emit(this.task._id);
+    toggleTaskCompleted(event) {
+        if (event.checked) {
+            this.completed = true;
+            this.markedAsComplete.emit(this.task._id);
+        } else {
+            this.completed = false;
+            this.markedAsIncomplete.emit(this.task._id);
+        }
     }
 
     toggleTaskImportance(event) {

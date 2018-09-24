@@ -19,4 +19,12 @@
     (toggledImportance)="onTaskImportanceToggled($event)"
   >
   </app-task>
+  <button
+    *ngIf="!loading"
+    mat-flat-button 
+    class="completedHint" 
+    [disabled]="loadingCompletedTasks" 
+    (click)="openCompletedTasks()">
+    View Completed Tasks
+  </button>
 </mat-nav-list>

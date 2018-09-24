@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Task } from '../task.model';
+import { MatBottomSheet } from '@angular/material';
 
+import { CompletedTaskListComponent } from '../completed-task-list/completed-task-list.component';
+
+import { Task } from '../task.model';
 import { TaskService } from '../task.service';
 
 @Component({
@@ -12,12 +15,14 @@ import { TaskService } from '../task.service';
 })
 export class TaskListComponent {
 
-  tasks: Task[] = [];
-  quickAddTask: string;
   subscription: Subscription;
+  quickAddTask: string;
   loading: boolean = true;
+  tasks: Task[] = [];
+  loadingCompletedTasks: boolean = false;
+  completedTasks: Task[] = [];
 
-  constructor(private taskService: TaskService) { 
+  constructor(private taskService: TaskService, private bottomSheet: MatBottomSheet) { 
     this.subscription = taskService.taskListValid$.subscribe(
       taskListValid => {
         if (!taskListValid) {
@@ -56,6 +61,16 @@ export class TaskListComponent {
   onTaskImportanceToggled(toggledTask) {
     this.taskService.updateTaskImportance(toggledTask._id, !toggledTask.important).subscribe(() => {
       this.taskService.invalidateTaskListStatus();
+    });
+  }
+
+  openCompletedTasks() {
+    this.loadingCompletedTasks = true;
+    this.taskService.getCompletedTasks().subscribe((tasks: Task[]) => {
+      this.loadingCompletedTasks = false;
+      this.bottomSheet.open(CompletedTaskListComponent, {
+        data: { completedTasks: tasks },
+      });
     });
   }
   
