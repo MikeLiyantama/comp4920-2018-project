@@ -11,9 +11,11 @@ import { TaskService } from '../task.service';
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent {
+
   tasks: Task[] = [];
   quickAddTask: string;
   subscription: Subscription;
+  loading: boolean = true;
 
   constructor(private taskService: TaskService) { 
     this.subscription = taskService.taskListValid$.subscribe(
@@ -32,7 +34,8 @@ export class TaskListComponent {
 
   async getTasks() {
     this.taskService.getTasks().subscribe((tasks: Task[]) => {
-      this.tasks = tasks.filter(task => !task.completed && !task.deleted);
+      this.loading = false;
+      this.tasks = tasks;
     });
   }
 

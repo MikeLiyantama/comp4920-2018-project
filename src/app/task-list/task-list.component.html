@@ -6,9 +6,15 @@
       <mat-icon matSuffix>add</mat-icon>
     </mat-form-field>  
   </form>
+  <mat-spinner
+    *ngIf="loading"
+    class="loading"
+    color="primary"
+    diameter="40">
+  </mat-spinner>
   <app-task 
-    *ngFor="let t of tasks" 
-    [task]="t"
+    *ngFor="let task of tasks" 
+    [task]="task"
     (markedAsComplete)="onTaskMarkedAsComplete($event)"
     (toggledImportance)="onTaskImportanceToggled($event)"
   >
