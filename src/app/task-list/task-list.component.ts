@@ -36,7 +36,7 @@ export class TaskListComponent {
   ngOnInit() {
     this.getTasks();
   }
-
+  
   async getTasks() {
     this.taskService.getTasks().subscribe((tasks: Task[]) => {
       this.loading = false;
@@ -66,7 +66,7 @@ export class TaskListComponent {
 
   openCompletedTasks() {
     this.loadingCompletedTasks = true;
-    this.taskService.getCompletedTasks().subscribe((tasks: Task[]) => {
+    this.taskService.getTasks({ completed: true }).subscribe((tasks: Task[]) => {
       this.loadingCompletedTasks = false;
       this.bottomSheet.open(CompletedTaskListComponent, {
         data: { completedTasks: tasks },

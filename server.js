@@ -163,13 +163,16 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
     completed: { $in: [null, false] }, 
     deleted: { $in: [null, false] },
   };
-  if (req.query.status) {
-    filterParams[req.query.status] = true;
+  if (req.query.completed === 'true') {
+    filterParams.compelted = true;
+  }
+  if (req.query.deleted === 'true') {
+    filterParams.deleted = true;
   }
 
   db.collection(TASKS_COLLECTION)
     .find(filterParams)
-    .sort({ createdAt: -1 })
+    .sort({ important: -1, createdAt: -1 })
     .toArray(function (err, docs) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
