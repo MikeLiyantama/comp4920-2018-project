@@ -16,6 +16,7 @@ export class TaskComponent {
     @Output() markedAsComplete = new EventEmitter<string>();
     @Output() toggledImportance = new EventEmitter<Task>();
     importantIcon: string = 'star_outline';
+    completed: boolean = false;
 
     constructor (    
         private rightPaneService: RightPaneService,
@@ -28,6 +29,7 @@ export class TaskComponent {
     }
 
     completeTask() {
+        this.completed = true;
         this.markedAsComplete.emit(this.task._id);
     }
 

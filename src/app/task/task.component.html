@@ -1,6 +1,6 @@
 <a mat-list-item class="task" (click)="this.openDetailPane()">
     <mat-checkbox (change)="this.completeTask()" (click)="$event.stopPropagation()"></mat-checkbox>
-    <span class="task-title">{{ task.title }}</span>
+    <span class="task-title" [class.completed]="completed || task.completed">{{ task.title }}</span>
     <mat-icon 
         class="task-important" 
         (click)="this.toggleTaskImportance($event)"

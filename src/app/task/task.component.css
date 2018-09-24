@@ -6,6 +6,10 @@
     margin-left: 16px;
 }
 
+.task-title.completed {
+    text-decoration: line-through;
+}
+
 .task-important {
     margin-left: auto;
 }
