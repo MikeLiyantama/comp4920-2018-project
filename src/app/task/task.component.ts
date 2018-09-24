@@ -18,6 +18,7 @@ export class TaskComponent {
     @Output() toggledImportance = new EventEmitter<Task>();
     importantIcon: string = 'star_outline';
     completed: boolean = false;
+    important: boolean = false;
 
     constructor (    
         private rightPaneService: RightPaneService,
@@ -26,7 +27,8 @@ export class TaskComponent {
     }
 
     ngOnInit() {
-        this.completed = this.task.completed;
+        this.completed = !!this.task.completed;
+        this.important = !!this.task.important;
     }
 
     openDetailPane() {
@@ -46,6 +48,7 @@ export class TaskComponent {
 
     toggleTaskImportance(event) {
         event.stopPropagation();
+        this.important = !this.important;
         this.toggledImportance.emit(this.task);
     }
 }

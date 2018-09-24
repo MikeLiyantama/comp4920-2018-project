@@ -15,7 +15,7 @@
         class="task-important" 
         (click)="this.toggleTaskImportance($event)"
     >
-        {{ task.important ? 'star' : 'star_outline' }}
+        {{ important ? 'star' : 'star_outline' }}
     </mat-icon>
 </a>
 <mat-list-item *ngIf="completed" class="task">
