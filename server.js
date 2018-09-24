@@ -158,8 +158,13 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
 });
 
 app.get('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
+  const filterParams = { createdBy: ObjectId(req.user._id) };
+  if (req.query.status) {
+    filterParams[req.query.status] = true;
+  }
+
   db.collection(TASKS_COLLECTION)
-    .find({ createdBy: ObjectID(req.user._id) })
+    .find(filterParams)
     .sort({ createdAt: -1 })
     .toArray(function (err, docs) {
       if (err) {
