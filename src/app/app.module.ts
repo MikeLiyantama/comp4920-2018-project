@@ -53,7 +53,7 @@ export function tokenGetter() {
   ],
   entryComponents: [
     CompletedTaskListComponent
-  ]
+  ],
   imports: [
     BrowserModule,
     FormsModule,
