@@ -99,7 +99,7 @@ function returnError(res, reason, message, code) {
 
 var USERS_COLLECTION = 'USERS';
 
-// Create user
+// Authenticate user
 app.post('/api/auth', function(req, res) {
     if (req.body.email && req.body.password) { // Field Check
         db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
@@ -119,7 +119,7 @@ app.post('/api/auth', function(req, res) {
     }
 });
 
-// Update user
+// Create user
 app.put('/api/register', function(req, res) {
   if(req.body.email && req.body.password) {
       var obj = {email: req.body.email, password: req.body.password};
@@ -469,7 +469,13 @@ app.post('/api/list', passport.authenticate('jwt', {session: false}), function (
       if (err) {
         returnError(res, err.message, "Failed to create new list");
       } else {
-        res.status(201).json(doc);
+        db.collection(USERS_COLLECTION).updateOne({_id : token._id}, {$push :{lists : doc._id}}, function(err, doc2){
+          if (err){
+            returnError(res, err.message, "Failed to create new list");
+          } else{
+            res.status(201).json(doc);
+          }
+        });
       }
     });
   }
@@ -517,15 +523,21 @@ app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), func
         if (doc) {
           // A list can only be deleted by its creator
           if (doc.createdBy === token._id) {
-            db.collection(LISTS_COLLECTION).deleteOne({ createdBy: token._id }, function (err, doc2) {
+            db.collection(USERS_COLLECTION).updateOne({_id : token._id}, {$pull :{lists : doc._id}}, function(err, doc2){
               if (err) {
                 returnError(res, err.message, "Failed to delete list");
               } else {
-                if (doc.deletedCount > 0) {
-                  res.status(200).json(doc);
-                } else {
-                  returnError(res, 'No list found', 'No list found. Warning: this clause should not be reached.', 404);
-                }
+                db.collection(LISTS_COLLECTION).deleteOne({ createdBy: token._id }, function (err, doc2) {
+                  if (err) {
+                    returnError(res, err.message, "Failed to delete list");
+                  } else {
+                    if (doc.deletedCount > 0) {
+                      res.status(200).json(doc);
+                    } else {
+                      returnError(res, 'No list found', 'No list found. Warning: this clause should not be reached.', 404);
+                    }
+                  }
+                });
               }
             });
           } else {
