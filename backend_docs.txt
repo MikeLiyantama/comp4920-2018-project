@@ -230,31 +230,16 @@ PUT /api/team/:id
         500 - Database error
                 with { message: "Failed to update team" }
 
-GET /api/team/:id/member
-    Get current members of the team.
-    Required Payload: Nothing.
-    Return Value:
-        200 - Success
-                with a JSON transaction record.
-        403 - Forbidden
-                with { message: "Only a team member could view other members" }
-        404 - No team found
-                with { message: "No team found" }
-        500 - Database error
-                with { message: "Failed to get members" }
-
 PUT /api/team/:id/member
     Add a member to a team.
     Required Payload: { "_id": ObjectId of the member }
     Return Value:
         200 - Success
                 with a JSON transaction record.
-        403 - Forbidden
-                with { message: "Only a team member could add new members" }
         404 - No team found
                 with { message: "No team found" }
         500 - Database error
-                with { message: "Failed to update team" }
+                with { message: "Failed to add member" }
 
 DELETE /api/team/:id/member
     Remove a member from a team.
@@ -262,13 +247,32 @@ DELETE /api/team/:id/member
     Return Value:
         200 - Success
                 with a JSON transaction record.
-        403 - Forbidden
-                with { message: "Only the team owner could delete members" }
         404 - No team found
                 with { message: "No team found" }
         500 - Database error
-                with { message: "Failed to update team" }
+                with { message: "Failed to delete member" }
 
+PUT /api/team/:id/list
+    Add a list to a team.
+    Required Payload: { "_id": ObjectId of the list }
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to add list" }
+
+DELETE /api/team/:id/list
+    Remove a list from a team.
+    Required Payload: { "_id": ObjectId of the list }
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to delete list" }
 
 -------------------------------- SCHEMA --------------------------------
 

@@ -201,7 +201,7 @@ app.put('/api/task/:id', function (req, res) {
       } else {
         returnError(res, 'No task found', 'No task found', 404);
       }
-    })
+    });
   } else {
     returnError(res, 'Invalid user input', 'Invalid task ID', 400);
   }
@@ -245,38 +245,38 @@ app.get('/api/task_with_auth', passport.authenticate('jwt', { session: false}), 
 
 // Get task with specific id
 app.get('/api/task_with_auth/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-if (ObjectID.isValid(req.params.id)) {
-  db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve task");
-    } else {
-      if (doc) {
-        res.status(200).json(doc);
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TASKS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve task");
       } else {
-        returnError(res, 'No task found', 'No task found', 404);
+        if (doc) {
+          res.status(200).json(doc);
+        } else {
+          returnError(res, 'No task found', 'No task found', 404);
+        }
       }
-    }
-  });
-} else {
-  returnError(res, 'Invalid user input', 'Invalid task ID', 400);
-}
+    });
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+  }
 });
 
 // Update task with specific id
 app.put('/api/task_with_auth/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-if (ObjectID.isValid(req.params.id)) {
-  db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
-    if (err) {
-      returnError(res, err.message, "Failed to update task");
-    } else if (result.result.n === 1) {
-      res.status(204).send({});
-    } else {
-      returnError(res, 'No task found', 'No task found', 404);
-    }
-  })
-} else {
-  returnError(res, 'Invalid user input', 'Invalid task ID', 400);
-}
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
+      if (err) {
+        returnError(res, err.message, "Failed to update task");
+      } else if (result.result.n === 1) {
+        res.status(204).send({});
+      } else {
+        returnError(res, 'No task found', 'No task found', 404);
+      }
+    })
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid task ID', 400);
+  }
 });
 
 /**
@@ -320,21 +320,21 @@ app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (
 
 // Get team with specific id
 app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-if (ObjectID.isValid(req.params.id)) {
-  db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve teams");
-    } else {
-      if (doc) {
-        res.status(200).json(doc);
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve teams");
       } else {
-        returnError(res, 'No team found', 'No team found', 404);
+        if (doc) {
+          res.status(200).json(doc);
+        } else {
+          returnError(res, 'No team found', 'No team found', 404);
+        }
       }
-    }
-  });
-} else {
-  returnError(res, 'Invalid user input', 'Invalid team ID', 400);
-}
+    });
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid team ID', 400);
+  }
 });
 
 // Delete team with specific id
@@ -370,80 +370,83 @@ app.delete('/api/team/:id', passport.authenticate('jwt', {session: false}), func
   } else {
     returnError(res, 'Invalid user input', 'Invalid team ID', 400);
   }
-  });
+});
 
 // Update a team
 app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-if (ObjectID.isValid(req.params.id)) {
-  db.collection(TEAMS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
-    if (err) {
-      returnError(res, err.message, "Failed to update teams");
-    } else if (result.result.n === 1) {
-      res.status(204).send({});
-    } else {
-      returnError(res, 'No team found', 'No team found', 404);
-    }
-  })
-} else {
-  returnError(res, 'Invalid user input', 'Invalid team ID', 400);
-}
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
+      if (err) {
+        returnError(res, err.message, "Failed to update teams");
+      } else if (result.result.n === 1) {
+        res.status(204).send({});
+      } else {
+        returnError(res, 'No team found', 'No team found', 404);
+      }
+    });
+  } else {
+    returnError(res, 'Invalid user input', 'Invalid team ID', 400);
+  }
 });
 
-
-/** 
- * Team members
-*/
-
-/**
- * ************************ TEAM MEMBERS WITH AUTH ************************
- */
-
-// Add a new team member
-app.put('/api/team/member', passport.authenticate('jwt', {session: false}), function(req, res){
-  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$push :{members : req.body._id}}, function(err, result){
-    if (err){
-      returnError(res, err.message, "Failed to add member");
-    } else{
-      res.status(200).json({success: true});
-    }
-  })
-})
-
-// Remove a member from team
-app.delete('/api/team/member', passport.authenticate('jwt', {session: false}), function(req, res){
-  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$pull :{members : req.body._id}}, function (err, result){
-    if (err){
-      returnError(res, err.message, "Failed to delete member");
-    } else{
-      res.status(200).json({success: true});
-    }
-  });
+// Add a member to a team
+app.put('/api/team/:id/member', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{members : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to add member");
+      } else{
+        res.status(200).json(doc);
+      }
+    });
+  } else {
+    returnError(res, 'No team found', 'No team found', 404);
+  }
 });
 
-/**
- * ************************ TEAM TASKS WITH AUTH ************************
- */
+// Remove a member from a team
+app.delete('/api/team/:id/member', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{members : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to delete member");
+      } else{
+        res.status(200).json(doc);
+      }
+    });
+  } else {
+    returnError(res, 'No team found', 'No team found', 404);
+  }
+});
 
-// Add a new team task
-app.put('/api/team/task', passport.authenticate('jwt', {session: false}), function(req, res){
-  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$push :{tasks : req.body._id}}, function(err, result){
-    if (err){
-      returnError(res, err.message, "Failed to add task");
-    } else{
-      res.status(200).json({success: true});
-    }
-  })
-})
+// Add a list to a team
+app.put('/api/team/:id/list', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{lists : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to add list");
+      } else{
+        res.status(200).json(doc);
+      }
+    });
+  } else {
+    returnError(res, 'No team found', 'No team found', 404);
+  }
+});
 
-// Remove a task from team
-app.delete('/api/team/task', passport.authenticate('jwt', {session: false}), function(req, res){
-  db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.body.id)}, {$pull :{tasks : req.body._id}}, function (err, result){
-    if (err){
-      returnError(res, err.message, "Failed to delete task");
-    } else{
-      res.status(200).json({success: true});
-    }
-  });
+// Remove a list from a team
+app.delete('/api/team/:id/list', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{lists : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to delete list");
+      } else{
+        res.status(200).json(doc);
+      }
+    });
+  } else {
+    returnError(res, 'No team found', 'No team found', 404);
+  }
 });
 
 /**
@@ -501,7 +504,7 @@ app.get('/api/list/:id', passport.authenticate('jwt', {session: false}), functio
   } else {
     returnError(res, 'No list found', 'No list found', 404);
   }
-  });
+});
 
 // Delete list with specific id
 app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
@@ -536,7 +539,7 @@ app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), func
   } else {
     returnError(res, 'No list found', 'No list found', 404);
   }
-  });
+});
 
 // Update a list
 app.put('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
@@ -549,7 +552,7 @@ app.put('/api/list/:id', passport.authenticate('jwt', {session: false}), functio
       } else {
         returnError(res, 'No list found', 'No list found', 404);
       }
-    })
+    });
   } else {
     returnError(res, 'No list found', 'No list found', 404);
   }
@@ -564,11 +567,11 @@ app.put('/api/list/:id/task', passport.authenticate('jwt', {session: false}), fu
       } else{
         res.status(200).json(doc);
       }
-    })
+    });
   } else {
     returnError(res, 'No list found', 'No list found', 404);
   }
-})
+});
 
 // Delete a task from a list
 app.delete('/api/list/:id/task', passport.authenticate('jwt', {session: false}), function(req, res){
@@ -579,8 +582,8 @@ app.delete('/api/list/:id/task', passport.authenticate('jwt', {session: false}),
       } else{
         res.status(200).json(doc);
       }
-    })
+    });
   } else {
     returnError(res, 'No list found', 'No list found', 404);
   }
-})
+});
