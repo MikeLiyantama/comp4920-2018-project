@@ -81,7 +81,7 @@ PUT /api/task/:id
                 with { message: "Failed to update task" }
 
 
----------------------------- LISTS (Individual) ----------------------------
+-------------------------------- LISTS --------------------------------
 
 Note: Each user has a default list.
 
@@ -118,12 +118,12 @@ GET /api/list/:id
 
 DELETE /api/list/:id
     Delete a list.
-    When deleting a list, (1) all tasks in the list are deleted
-                          (3) then, the list itself is deleted
     Required Payload: Nothing.
     Return Value:
         200 - Success
                 with a JSON delete transaction record.
+        403 - Forbidden
+                with { message: "Only the creator could delete a list" }
         404 - No list found
                 with { message: "No list found" }
         500 - Database error
@@ -136,25 +136,10 @@ PUT /api/list/:id
         204 - Success (No Content)
                 The server has successfully fulfilled the request and that 
                 there is no additional content to send in the response payload body.
-        400 - Invalid user input
-                with { message: "Invalid fields to be updated" }
         404 - No list found
                 with { message: "No list found" }
         500 - Database error
                 with { message: "Failed to update list" }
-
-GET /api/list/:id/task
-    Get all tasks in a list.
-    Required Payload: Nothing.
-    Return Value:
-        200 - Success
-                with a JSON transaction record.
-        403 - Forbidden
-                with { message: "Only the owner could see tasks in a list" }
-        404 - No list found
-                with { message: "No list found" }
-        500 - Database error
-                with { message: "Failed to get tasks in a list" }
 
 PUT /api/list/:id/task
     Add a task to a list.
@@ -162,8 +147,6 @@ PUT /api/list/:id/task
     Return Value:
         200 - Success
                 with a JSON transaction record.
-        403 - Forbidden
-                with { message: "Only the owner could modify a list" }
         404 - No list found
                 with { message: "No list found" }
         500 - Database error
@@ -176,8 +159,6 @@ DELETE /api/list/:id/task
         200 - Success
                 with a JSON transaction record.
         // a deletion succeeds no matter if the task exists
-        403 - Forbidden
-                with { message: "Only the owner could modify a list" }
         404 - No list found
                 with { message: "No list found" }
         500 - Database error
@@ -222,9 +203,6 @@ GET /api/team/:id
 
 DELETE /api/team/:id
     Delete a team.
-    When deleting a team, (1) all tasks in team-owned lists are deleted
-                          (2) all team-owned lists are deleted
-                          (3) finally, the team itself is deleted
     Required Payload: Nothing.
     Return Value:
         200 - Success
@@ -290,115 +268,6 @@ DELETE /api/team/:id/member
                 with { message: "No team found" }
         500 - Database error
                 with { message: "Failed to update team" }
-
-
------------------------------- LISTS (Team) ------------------------------
-
-Note: Each team has a default list.
-
-POST /api/team/:id/list
-    Create a new list for the team.
-    Required Payload: A JSON, which must include a "title" field.
-    Return Value:
-        201 - New list created
-                with a JSON representing the list record
-        400 - Invalid user input
-                with { message: "Must provide a title" }
-        403 - Forbidden
-                with { message: "Only a team member could create new lists" }
-        404 - No team found
-                with { message: "No team found" }
-        500 - Database error
-                with { message: "Failed to create new list" }
-
-GET /api/team/:id/list
-    Retrieve all lists for the team.
-    Required Payload: Nothing.
-    Return Value:
-        200 - Success
-                with a JSON representing all list records
-        403 - Forbidden
-                with { message: "Only a team member could view lists" }
-        404 - Not team found
-                with { message: "No team found" }
-        500 - Database error
-                with { message: "Failed to retieve lists" }
-
-GET /api/team/:id/list/:id
-    Retrieve one list with specific ID.
-    Required Payload: Nothing.
-    Return Value:
-        200 - Success
-                with a JSON representing the list record
-        403 - Forbidden
-                with { message: "Only a team member could view lists" }
-        404 - Not found
-                with { message: "No team found" }
-                or { message: "No list found" }
-        500 - Database error
-                with { message: "Failed to retieve list" }
-
-DELETE /api/team/:id/list/:id
-    Delete a list.
-    When deleting a list, (1) all tasks in the list are deleted
-                          (3) then, the list itself is deleted
-    Required Payload: Nothing.
-    Return Value:
-        200 - Success
-                with a JSON delete transaction record.
-        403 - Forbidden
-                with { message: "Only a team member could delete lists" }
-        404 - Not found
-                with { message: "No team found" }
-                or { message: "No list found" }
-        500 - Database error
-                with { message: "Failed to delete list" }
-
-PUT /api/team/:id/list/:id
-    Update a list. Only the title and the description can be updated.
-    Required Payload: A JSON containing "title" and/or "description" field.
-    Return Value:
-        204 - Success (No Content)
-                The server has successfully fulfilled the request and that 
-                there is no additional content to send in the response payload body.
-        400 - Invalid user input
-                with { message: "Invalid fields to be updated" }
-        403 - Forbidden
-                with { message: "Only a team member could update lists" }
-        404 - Not found
-                with { message: "No team found" }
-                or { message: "No list found" }
-        500 - Database error
-                with { message: "Failed to update list" }
-
-PUT /api/team/:id/list/:id/task
-    Add a task to a list.
-    Required Payload: { "_id": ObjectId of the task }
-    Return Value:
-        200 - Success
-                with a JSON transaction record.
-        403 - Forbidden
-                with { message: "Only a team member could modify a list" }
-        404 - Not found
-                with { message: "No team found" }
-                or { message: "No list found" }
-        500 - Database error
-                with { message: "Failed to update list" }
-
-DELETE /api/team/:id/list/:id/task
-    Delete a task from a list.
-    Required Payload: { "_id": ObjectId of the task }
-    Return Value:
-        200 - Success
-                with a JSON transaction record.
-        // a deletion succeeds no matter if the task exists
-        403 - Forbidden
-                with { message: "Only a team member could modify a list" }
-        404 - Not found
-                with { message: "No team found" }
-                or { message: "No list found" }
-        500 - Database error
-                with { message: "Failed to update list" }
 
 
 -------------------------------- SCHEMA --------------------------------

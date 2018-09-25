@@ -338,7 +338,7 @@ if (ObjectID.isValid(req.params.id)) {
 });
 
 // Delete team with specific id
-app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+app.delete('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     // Check if the team is valid
     db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
@@ -372,10 +372,7 @@ app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
   }
   });
 
-/**
- * update team
- */
-
+// Update a team
 app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
 if (ObjectID.isValid(req.params.id)) {
   db.collection(TEAMS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
@@ -391,6 +388,11 @@ if (ObjectID.isValid(req.params.id)) {
   returnError(res, 'Invalid user input', 'Invalid team ID', 400);
 }
 });
+
+
+/** 
+ * Team members
+*/
 
 /**
  * ************************ TEAM MEMBERS WITH AUTH ************************
@@ -443,3 +445,142 @@ app.delete('/api/team/task', passport.authenticate('jwt', {session: false}), fun
     }
   });
 });
+
+/**
+ * ************************ LISTS ************************
+ */
+
+let LISTS_COLLECTION = 'lists';
+
+// Create list
+app.post('/api/list', passport.authenticate('jwt', {session: false}), function (req, res) {
+  let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
+  
+  var newList = req.body;
+  newList.createdAt = new Date();
+  newList.createdBy = token._id;
+  if (!req.body.title) {
+    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+  } else {
+    db.collection(LISTS_COLLECTION).insertOne(newList, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to create new list");
+      } else {
+        res.status(201).json(doc);
+      }
+    });
+  }
+});
+
+// Get all lists a user has created
+app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (req, res) {
+  let token =  jwt.decode(ExtractJwt.fromAuthHeaderAsBearerToken());
+  db.collection(LISTS_COLLECTION).find({createdBy : token._id}).toArray(function (err, docs) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve lists");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+// Get a list with specific id
+app.get('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve list");
+      } else {
+        if (doc) {
+          res.status(200).json(doc);
+        } else {
+          returnError(res, 'No list found', 'No list found', 404);
+        }
+      }
+    });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+  });
+
+// Delete list with specific id
+app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    // Check if the list is valid
+    db.collection(LISTS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to delete list");
+      } else {
+        if (doc) {
+          // A list can only be deleted by its creator
+          if (doc.createdBy === token._id) {
+            db.collection(LISTS_COLLECTION).deleteOne({ createdBy: token._id }, function (err, doc2) {
+              if (err) {
+                returnError(res, err.message, "Failed to delete list");
+              } else {
+                if (doc.deletedCount > 0) {
+                  res.status(200).json(doc);
+                } else {
+                  returnError(res, 'No list found', 'No list found. Warning: this clause should not be reached.', 404);
+                }
+              }
+            });
+          } else {
+            returnError(res, 'Forbidden', 'Only the creator could delete a list', 403);
+          }
+        } else {
+          returnError(res, 'No list found', 'No list found', 404);
+        }
+      }
+    });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+  });
+
+// Update a list
+app.put('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
+      if (err) {
+        returnError(res, err.message, "Failed to update list");
+      } else if (result.result.n === 1) {
+        res.status(204).send({});
+      } else {
+        returnError(res, 'No list found', 'No list found', 404);
+      }
+    })
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+});
+
+// Add a task to a list
+app.put('/api/list/:id/task', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{tasks : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to add task");
+      } else{
+        res.status(200).json(doc);
+      }
+    })
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+})
+
+// Delete a task from a list
+app.delete('/api/list/:id/task', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{tasks : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to delete task");
+      } else{
+        res.status(200).json(doc);
+      }
+    })
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+})
