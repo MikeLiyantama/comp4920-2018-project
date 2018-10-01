@@ -27,6 +27,13 @@ PUT /api/register
         400 - Invalid user input
                 with { success: false, message: "Must provide email and password" }
 
+GET /api/users
+    Get all users.
+    Return Value:
+        200 - Success
+                with information as payload
+        500 - Database error
+                with { message: "Failed to retrieve users" }
 
 -------------------------------- TASKS --------------------------------
 
@@ -231,8 +238,9 @@ PUT /api/team/:id
                 with { message: "Failed to update team" }
 
 PUT /api/team/:id/member
-    Add a member to a team.
-    Required Payload: { "_id": ObjectId of the member }
+    Add the current user, or a specific user to a team.
+    Required Payload: Optional { "_id": ObjectId of the member }
+                      If no "_id" is specified the current user will be added.
     Return Value:
         200 - Success
                 with a JSON transaction record.
@@ -242,8 +250,9 @@ PUT /api/team/:id/member
                 with { message: "Failed to add member" }
 
 DELETE /api/team/:id/member
-    Remove a member from a team.
-    Required Payload: { "_id": ObjectId of the member }
+    Remove the current user, or a specific member from a team.
+    Required Payload: Optional { "_id": ObjectId of the member }
+                      If no "_id" is specified the current user will be deleted.
     Return Value:
         200 - Success
                 with a JSON transaction record.

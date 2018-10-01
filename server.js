@@ -136,6 +136,17 @@ app.put('/api/register', function(req, res) {
   } else res.status(400).json({success: false, message: "Must provide email and password"});
 });
 
+// Get all users
+app.get('/api/users', function(req, res) {
+  db.collection(USERS_COLLECTION).find({}, {_id:1}, function (err, result) {
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      returnError(res, err.message, "Failed to retrieve users");
+    }
+  });
+});
+
 /**
  * ******************************** TASKS ********************************
  */
@@ -389,31 +400,53 @@ app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
   }
 });
 
-// Add a member to a team
+// Add the current user, or a specific user to a team
 app.put('/api/team/:id/member', passport.authenticate('jwt', {session: false}), function(req, res){
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{members : req.body._id}}, function(err, doc){
-      if (err){
-        returnError(res, err.message, "Failed to add member");
-      } else{
-        res.status(200).json(doc);
-      }
-    });
+    if("_id" in req.body) {
+      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{members : req.body._id}}, function(err, doc){
+        if (err){
+          returnError(res, err.message, "Failed to add member");
+        } else{
+          res.status(200).json(doc);
+        }
+      });
+    } else {
+      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{members : token._id}}, function(err, doc){
+        if (err){
+          returnError(res, err.message, "Failed to add member");
+        } else{
+          res.status(200).json(doc);
+        }
+      });
+    }
+    
   } else {
     returnError(res, 'No team found', 'No team found', 404);
   }
 });
 
-// Remove a member from a team
+// Remove the current user, or a specific member from a team
 app.delete('/api/team/:id/member', passport.authenticate('jwt', {session: false}), function(req, res){
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{members : req.body._id}}, function(err, doc){
-      if (err){
-        returnError(res, err.message, "Failed to delete member");
-      } else{
-        res.status(200).json(doc);
-      }
-    });
+    if("_id" in req.body) {
+      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{members : req.body._id}}, function(err, doc){
+        if (err){
+          returnError(res, err.message, "Failed to delete member");
+        } else{
+          res.status(200).json(doc);
+        }
+      });
+    } else {
+      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{members : token._id}}, function(err, doc){
+        if (err){
+          returnError(res, err.message, "Failed to delete member");
+        } else{
+          res.status(200).json(doc);
+        }
+      });
+    }
+    
   } else {
     returnError(res, 'No team found', 'No team found', 404);
   }
