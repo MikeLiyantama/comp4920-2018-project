@@ -1,0 +1,83 @@
+<br>
+<!--
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <p> Look, its a form! </p>
+    </div>
+</div>
+-->
+
+<form class="form-horizontal">
+    <!-- task name -->
+    <div class="form-group">
+        <!--label for="taskname" 
+            class="col-md-1 col-md-offset-3 control-label"> Name </label-->
+        <div class="col-md-6 col-md-offset-4">
+            <mat-form-field>
+                <input matInput 
+                    [(ngModel)]="nameField"
+                    id="taskname"
+                    name="name"
+                    required
+                    placeholder="Task Name">
+                <mat-error *ngIf="control.invalid">{{ getErrorMessage ()
+                    }}</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- task description -->
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <mat-form-field>
+                <textarea matInput 
+                        matTextareaAutosize
+                        matAutosizeMinRows=3
+                        [(ngModel)]="descriptionField"
+                          id="taskdesc"
+                          name="description"
+                          placeholder="Task Description"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- task importance -->
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <mat-form-field>
+                <mat-select 
+                    [(ngModel)]="importanceField" 
+                    name="importance"
+                    placeholder="Task Importance">
+                    <mat-option *ngFor="let level of importanceLevels"
+                            [value]="level">
+                        {{ level }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- task due date -->
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <input type="text" id="taskdate" 
+                    name="date"
+                    placeholder="Due Date"
+                    [(ngModel)]="dateField"
+                    [matDatepicker]="myDatepicker">
+            <mat-datepicker-toggle matSuffix
+                   [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+        </div>
+    </div>
+
+    <!-- form control elements -->
+    <div class="row">
+        <div class="col-md-offset-5">
+            <button mat-stroked-button color="primary" 
+                    (click)="giveNewTask()"
+                >Submit</button>
+            <button mat-stroked-button color="warn"
+                (click)="clearFields()">Clear</button>
+        </div>
+    </div>
+</form>

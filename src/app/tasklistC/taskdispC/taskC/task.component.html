@@ -1,0 +1,84 @@
+    <div class="row">
+        <div class="col-md-5 col-md-offset-3">
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title 
+                            [ngClass]="{checked: taskChecked}">
+                            {{ task.title }}
+                        </mat-panel-title>
+                            <mat-panel-description 
+                        [ngClass]="{checked:taskChecked}">
+                            {{ task.description}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <!-- accordion body -->
+                            <br>
+                            <div>
+                            <mat-form-field>
+                                <input matInput 
+                                #formTitle
+                                value="{{ task.title }}" 
+                                placeholder="Title">
+                            </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field>
+                                    <textarea matInput
+                                            matTextareaAutosize
+                                            matAutosizeMinRows=2
+                                            #formDescription 
+                                            value="{{ task.description }}"
+                                            placeholder="Task Description"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field>
+                                    <mat-select 
+                                        [(value)]="formImportance"
+                                        placeholder="Task Importance"
+                                        >
+                                        <mat-option *ngFor="let level of
+                                        importanceLevels" [value]="level">
+                                            {{ level }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <input type="text" id="taskdate" 
+                                        placeholder="Due Date"
+                                        #formDate
+                                        [matDatepicker]="myDatepicker">
+                                        <mat-datepicker-toggle matSuffix
+                                               [for]="myDatepicker"></mat-datepicker-toggle>
+                                        <mat-datepicker #myDatepicker></mat-datepicker>
+                            </div>
+                            <div>
+                                <button 
+                                    (click)="saveEdit()"
+                                    color="primary" 
+                                    mat-stroked-button>
+                                    Save
+                                </button>
+                            </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div class="col-md-1 itemControlIcon">
+            <button mat-icon-button 
+                matTooltip="Check off task"
+                (click)="taskChecked=!taskChecked; toggleCheck();" 
+                class="itemControlIcon"> 
+                <mat-icon svgIcon="done"></mat-icon>
+            </button> 
+            <button mat-icon-button 
+                matTooltip="Delete this task"
+                (click)="deleteTask()"
+                color="warn" 
+                class="itemControlIcon"> 
+                <mat-icon svgIcon="clear"></mat-icon>
+            </button> 
+        </div>
+    </div>

@@ -1,0 +1,13 @@
+.checked {
+    text-decoration: line-through
+}
+
+.itemControlIcon {
+    padding: 0;
+    margin: auto;
+}
+
+mat-form-field {
+    min-width: 350px;
+
+}
