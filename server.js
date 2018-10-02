@@ -136,8 +136,8 @@ app.put('/api/register', function(req, res) {
   } else res.status(400).json({success: false, message: "Must provide email and password"});
 });
 
-// Get all users
-app.get('/api/users', function(req, res) {
+// Get all users (with auth)
+app.get('/api/users', passport.authenticate('jwt', {session: false}), function (req, res) {
   db.collection(USERS_COLLECTION).find({}, {_id:1}, function (err, result) {
     if (result) {
       res.status(200).json(result);
@@ -145,6 +145,11 @@ app.get('/api/users', function(req, res) {
       returnError(res, err.message, "Failed to retrieve users");
     }
   });
+});
+
+// Get current user (with auth)
+app.get('/api/me', passport.authenticate('jwt', {session: false}), function (req, res) {
+  res.status(200).json({"currUser": token._id});
 });
 
 /**

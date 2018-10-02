@@ -35,6 +35,12 @@ GET /api/users
         500 - Database error
                 with { message: "Failed to retrieve users" }
 
+GET /api/me
+    Get the current user.
+    Return Value:
+        200 - Success
+                with { currUser: ObjectId }
+
 -------------------------------- TASKS --------------------------------
 
 Note: Use /api/task_with_auth and /api/task_with_auth/:id instead
@@ -137,7 +143,9 @@ DELETE /api/list/:id
                 with { message: "Failed to delete list" }
 
 PUT /api/list/:id
-    Update a list. Only the title and the description can be updated.
+    Update a list.
+    Usually, only the title and the description should be updated.
+    But there is no restriction on what can be updated.
     Required Payload: A JSON containing "title" and/or "description" field.
     Return Value:
         204 - Success (No Content)
@@ -224,7 +232,9 @@ DELETE /api/team/:id
                 with { message: "Failed to delete team" }
 
 PUT /api/team/:id
-    Update a team. Only the name and the description can be updated.
+    Update a team. 
+    Usually, only the name and the description should be updated.
+    But there is no restriction on what can be updated.
     Required Payload: A JSON containing "name" and/or "description" field.
     Return Value:
         204 - Success (No Content)
