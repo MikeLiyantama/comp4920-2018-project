@@ -15,6 +15,7 @@ POST /api/auth
 
 PUT /api/register
     Create a new user.
+    A default list for the user will be created.
     Required Payload: { email: "some@email.com", password: "some_password" }
     Return Value:
         200 - New user created successfully
@@ -26,6 +27,19 @@ PUT /api/register
         400 - Invalid user input
                 with { success: false, message: "Must provide email and password" }
 
+GET /api/users
+    Get all users.
+    Return Value:
+        200 - Success
+                with information as payload
+        500 - Database error
+                with { message: "Failed to retrieve users" }
+
+GET /api/me
+    Get the current user.
+    Return Value:
+        200 - Success
+                with { currUser: ObjectId }
 
 -------------------------------- TASKS --------------------------------
 
@@ -80,30 +94,240 @@ PUT /api/task/:id
                 with { message: "Failed to update task" }
 
 
--------------------------------- SCHEMA --------------------------------
+-------------------------------- LISTS --------------------------------
 
-# This is generalised from what I found in the DB.    -- Yang
+Note: Each user has a default list.
+
+POST /api/list
+    Create a new list for the current user.
+    Required Payload: A JSON, which must include a "title" field.
+    Return Value:
+        201 - New list created
+                with a JSON representing the list record
+        400 - Invalid user input
+                with { message: "Must provide a title" }
+        500 - Database error
+                with { message: "Failed to create new list" }
+
+GET /api/list
+    Retrieve all lists the current user has created.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON representing all list records
+        500 - Database error
+                with { message: "Failed to retieve lists" }
+
+GET /api/list/:id
+    Retrieve one list with specific ID.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON representing the list record
+        404 - No list found
+                with { message: "No list found" }
+        500 - Database error
+                with { message: "Failed to retieve list" }
+
+DELETE /api/list/:id
+    Delete a list.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON delete transaction record.
+        403 - Forbidden
+                with { message: "Only the creator could delete a list" }
+        404 - No list found
+                with { message: "No list found" }
+        500 - Database error
+                with { message: "Failed to delete list" }
+
+PUT /api/list/:id
+    Update a list.
+    Usually, only the title and the description should be updated.
+    But there is no restriction on what can be updated.
+    Required Payload: A JSON containing "title" and/or "description" field.
+    Return Value:
+        204 - Success (No Content)
+                The server has successfully fulfilled the request and that 
+                there is no additional content to send in the response payload body.
+        404 - No list found
+                with { message: "No list found" }
+        500 - Database error
+                with { message: "Failed to update list" }
+
+PUT /api/list/:id/task
+    Add a task to a list.
+    Required Payload: { "_id": ObjectId of the task }
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No list found
+                with { message: "No list found" }
+        500 - Database error
+                with { message: "Failed to update list" }
+
+DELETE /api/list/:id/task
+    Delete a task from a list.
+    Required Payload: { "_id": ObjectId of the task }
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        // a deletion succeeds no matter if the task exists
+        404 - No list found
+                with { message: "No list found" }
+        500 - Database error
+                with { message: "Failed to update list" }
+
+
+-------------------------------- TEAMS --------------------------------
+
+POST /api/team
+    Create a new team.
+    A default list for the team will be created.
+    Required Payload: A JSON, which must include a "title" field.
+    Return Value:
+        201 - New team created
+                with a JSON representing the team record
+        400 - Invalid user input
+                with { message: "Must provide a title" }
+        500 - Database error
+                with { message: "Failed to create new team" }
+
+GET /api/team
+    Retrieve all teams a user is in.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON representing all team records
+        500 - Database error
+                with { message: "Failed to retieve teams" }
+
+GET /api/team/:id
+    Retrieve one team with specific ID.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON representing the team record
+        400 - Invalid user input
+                with { message: "Invalid team ID" }
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to retieve team" }
+
+DELETE /api/team/:id
+    Delete a team.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with a JSON delete transaction record.
+        400 - Invalid user input
+                with { message: "Invalid team ID" }
+        403 - Forbidden
+                with { message: "Only the creator could delete a team" }
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to delete team" }
+
+PUT /api/team/:id
+    Update a team. 
+    Usually, only the name and the description should be updated.
+    But there is no restriction on what can be updated.
+    Required Payload: A JSON containing "name" and/or "description" field.
+    Return Value:
+        204 - Success (No Content)
+                The server has successfully fulfilled the request and that 
+                there is no additional content to send in the response payload body.
+        400 - Invalid user input
+                with { message: "Invalid team ID" }
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to update team" }
+
+PUT /api/team/:id/member
+    Add the current user, or a specific user to a team.
+    Required Payload: Optional { "_id": ObjectId of the member }
+                      If no "_id" is specified the current user will be added.
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to add member" }
+
+DELETE /api/team/:id/member
+    Remove the current user, or a specific member from a team.
+    Required Payload: Optional { "_id": ObjectId of the member }
+                      If no "_id" is specified the current user will be deleted.
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to delete member" }
+
+PUT /api/team/:id/list
+    Add a list to a team.
+    Required Payload: { "_id": ObjectId of the list }
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to add list" }
+
+DELETE /api/team/:id/list
+    Remove a list from a team.
+    Required Payload: { "_id": ObjectId of the list }
+    Return Value:
+        200 - Success
+                with a JSON transaction record.
+        404 - No team found
+                with { message: "No team found" }
+        500 - Database error
+                with { message: "Failed to delete list" }
+
+-------------------------------- SCHEMA --------------------------------
 
 collection USERS {
         _id: ObjectId,
         email: string,
-        password: string
+        password: string,
+        lists: array(ObjectId)
 }
 
 collection TASKS {
         _id: ObjectId,
-        owner: ObjectId,
         title: string,
         description: string,
         importance: string,
         dueDate: string,
         createdAt: date,
+        createdBy: ObjectId,
         deleted: boolean
 }
 
 collection TEAMS {
         _id: ObjectId,
         name: string,
+        description: string,
         createdAt: date,
-        members: array(ObjectId)
+        createdBy: ObjectId,
+        members: array(ObjectId),
+        lists: array(ObjectId)
+}
+
+collection LISTS {
+        _id: ObjectId,
+        title: string,
+        description: string,
+        createdAt: date,
+        createdBy: ObjectId,
+        tasks: array(ObjectId)
 }
