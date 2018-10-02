@@ -1,0 +1,9 @@
+<mat-list>
+  <h2 mat-subheader>Completed Tasks</h2>
+  <app-task 
+    *ngFor="let task of data.completedTasks" 
+    [task]="task"
+    (markedAsIncomplete)="onTaskMarkedAsIncomplete($event)"
+  >
+  </app-task>
+</mat-list>

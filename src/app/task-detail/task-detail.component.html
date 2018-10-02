@@ -1,0 +1,36 @@
+
+<div class="header">
+  <button
+    type="button"
+    aria-label="Toggle Right Pane"
+    mat-icon-button
+    (click)="this.maybeSaveAndClose()"
+  >
+    <mat-icon aria-label="Close pane">arrow_back</mat-icon>
+  </button>
+  <button
+    class="deleteButton"
+    type="button"
+    aria-label="Delete Task"
+    mat-icon-button
+    (click)="this.maybeDeleteAndClose()"
+  >
+    <mat-icon aria-label="Delete task">delete</mat-icon>
+  </button>
+</div>
+<form class="form" (submit)="checkAuth()">
+  <mat-form-field class="form-group form-field">
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="title" value="{{ rightPaneService.task && rightPaneService.task.title || '' }}" name="title" type="text">
+  </mat-form-field>
+  <mat-form-field class="form-group form-field">
+    <mat-label>Notes</mat-label>
+    <textarea matInput [(ngModel)]="description" value="{{ rightPaneService.task && rightPaneService.task.description || '' }}" name="description"></textarea>
+  </mat-form-field>
+  <mat-form-field class="form-group form-field">
+    <mat-label>Set Due Date</mat-label>
+    <input matInput [(ngModel)]="dueDate" [matDatepicker]="datepicker" name="dueDate">
+    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+    <mat-datepicker #datepicker></mat-datepicker>
+  </mat-form-field>
+</form>

@@ -1,0 +1,15 @@
+.task.selected {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.task-title {
+    margin-left: 16px;
+}
+
+.task-title.completed {
+    text-decoration: line-through;
+}
+
+.task-important {
+    margin-left: auto;
+}

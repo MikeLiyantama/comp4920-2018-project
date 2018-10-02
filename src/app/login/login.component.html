@@ -1,0 +1,22 @@
+<div class="wrapper">
+  <form class="form" (submit)="checkAuth()">
+    <h1>Organise.me</h1>
+    <mat-form-field class="form-group input-field">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="username" name="username" type="text">
+    </mat-form-field>
+    <mat-form-field class="form-group input-field">
+      <mat-label>Password</mat-label>
+      <input matInput [(ngModel)]="password" name="password" type="password">
+    </mat-form-field>
+    <div *ngIf="wrongpass">
+      You have made a grave mistake...
+    </div>
+    <div class="form-group">
+      <button type="submit" mat-raised-button>Login</button>
+    </div>
+    <div class="form-group">
+      Need an account? <a routerLink="/auth/signup">Sign up here</a> 
+    </div>
+  </form>
+</div>

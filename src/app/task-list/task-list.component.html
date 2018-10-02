@@ -1,0 +1,30 @@
+<mat-nav-list class="container">
+  <form (submit)="addTask()">
+    <mat-form-field class="quickAdd" appearance="outline">
+      <mat-label>Add New Task</mat-label>
+      <input matInput [(ngModel)]="quickAddTask" name="quickAddTask">
+      <mat-icon matSuffix>add</mat-icon>
+    </mat-form-field>  
+  </form>
+  <mat-spinner
+    *ngIf="loading"
+    class="loading"
+    color="primary"
+    diameter="40">
+  </mat-spinner>
+  <app-task 
+    *ngFor="let task of tasks" 
+    [task]="task"
+    (markedAsComplete)="onTaskMarkedAsComplete($event)"
+    (toggledImportance)="onTaskImportanceToggled($event)"
+  >
+  </app-task>
+  <button
+    *ngIf="!loading"
+    mat-flat-button 
+    class="completedHint" 
+    [disabled]="loadingCompletedTasks" 
+    (click)="openCompletedTasks()">
+    View Completed Tasks
+  </button>
+</mat-nav-list>
