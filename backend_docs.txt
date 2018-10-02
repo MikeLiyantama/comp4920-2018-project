@@ -15,7 +15,6 @@ POST /api/auth
 
 PUT /api/register
     Create a new user.
-    A default list for the user will be created.
     Required Payload: { email: "some@email.com", password: "some_password" }
     Return Value:
         200 - New user created successfully
@@ -31,7 +30,7 @@ GET /api/users
     Get all users.
     Return Value:
         200 - Success
-                with information as payload
+                an array of all users
         500 - Database error
                 with { message: "Failed to retrieve users" }
 
@@ -99,7 +98,7 @@ PUT /api/task/:id
 Note: Each user has a default list.
 
 POST /api/list
-    Create a new list for the current user.
+    Create a new list.
     Required Payload: A JSON, which must include a "title" field.
     Return Value:
         201 - New list created
@@ -114,7 +113,7 @@ GET /api/list
     Required Payload: Nothing.
     Return Value:
         200 - Success
-                with a JSON representing all list records
+                an array of all lists
         500 - Database error
                 with { message: "Failed to retieve lists" }
 
@@ -134,9 +133,7 @@ DELETE /api/list/:id
     Required Payload: Nothing.
     Return Value:
         200 - Success
-                with a JSON delete transaction record.
-        403 - Forbidden
-                with { message: "Only the creator could delete a list" }
+                with { message: "success" }
         404 - No list found
                 with { message: "No list found" }
         500 - Database error
@@ -161,7 +158,7 @@ PUT /api/list/:id/task
     Required Payload: { "_id": ObjectId of the task }
     Return Value:
         200 - Success
-                with a JSON transaction record.
+                with { message: "success" }
         404 - No list found
                 with { message: "No list found" }
         500 - Database error
@@ -172,7 +169,7 @@ DELETE /api/list/:id/task
     Required Payload: { "_id": ObjectId of the task }
     Return Value:
         200 - Success
-                with a JSON transaction record.
+                with { message: "success" }
         // a deletion succeeds no matter if the task exists
         404 - No list found
                 with { message: "No list found" }
@@ -184,7 +181,6 @@ DELETE /api/list/:id/task
 
 POST /api/team
     Create a new team.
-    A default list for the team will be created.
     Required Payload: A JSON, which must include a "title" field.
     Return Value:
         201 - New team created
@@ -224,8 +220,6 @@ DELETE /api/team/:id
                 with a JSON delete transaction record.
         400 - Invalid user input
                 with { message: "Invalid team ID" }
-        403 - Forbidden
-                with { message: "Only the creator could delete a team" }
         404 - No team found
                 with { message: "No team found" }
         500 - Database error
@@ -253,9 +247,9 @@ PUT /api/team/:id/member
                       If no "_id" is specified the current user will be added.
     Return Value:
         200 - Success
-                with a JSON transaction record.
-        404 - No team found
-                with { message: "No team found" }
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
         500 - Database error
                 with { message: "Failed to add member" }
 
@@ -265,9 +259,9 @@ DELETE /api/team/:id/member
                       If no "_id" is specified the current user will be deleted.
     Return Value:
         200 - Success
-                with a JSON transaction record.
-        404 - No team found
-                with { message: "No team found" }
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
         500 - Database error
                 with { message: "Failed to delete member" }
 
@@ -276,9 +270,9 @@ PUT /api/team/:id/list
     Required Payload: { "_id": ObjectId of the list }
     Return Value:
         200 - Success
-                with a JSON transaction record.
-        404 - No team found
-                with { message: "No team found" }
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
         500 - Database error
                 with { message: "Failed to add list" }
 
@@ -287,9 +281,9 @@ DELETE /api/team/:id/list
     Required Payload: { "_id": ObjectId of the list }
     Return Value:
         200 - Success
-                with a JSON transaction record.
-        404 - No team found
-                with { message: "No team found" }
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
         500 - Database error
                 with { message: "Failed to delete list" }
 
@@ -298,8 +292,7 @@ DELETE /api/team/:id/list
 collection USERS {
         _id: ObjectId,
         email: string,
-        password: string,
-        lists: array(ObjectId)
+        password: string
 }
 
 collection TASKS {
@@ -319,8 +312,7 @@ collection TEAMS {
         description: string,
         createdAt: date,
         createdBy: ObjectId,
-        members: array(ObjectId),
-        lists: array(ObjectId)
+        members: array(ObjectId)
 }
 
 collection LISTS {
