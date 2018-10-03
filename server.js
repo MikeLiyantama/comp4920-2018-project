@@ -186,7 +186,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
     deleted: { $in: [null, false] },
   };
   if (req.query.completed === 'true') {
-    filterParams.compelted = true;
+    filterParams.completed = true;
   }
   if (req.query.deleted === 'true') {
     filterParams.deleted = true;
