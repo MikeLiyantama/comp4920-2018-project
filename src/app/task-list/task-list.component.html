@@ -12,13 +12,21 @@
     color="primary"
     diameter="40">
   </mat-spinner>
-  <app-task 
-    *ngFor="let task of tasks" 
-    [task]="task"
-    (markedAsComplete)="onTaskMarkedAsComplete($event)"
-    (toggledImportance)="onTaskImportanceToggled($event)"
-  >
-  </app-task>
+  <cdk-drop lockAxis="y" (dropped)="taskDrop($event)">
+    <app-task
+      *ngFor="let task of tasks"
+      cdkDrag
+      class="task"
+      [task]="task"
+      (markedAsComplete)="onTaskMarkedAsComplete($event)"
+      (toggledImportance)="onTaskImportanceToggled($event)"
+    >
+      <span *cdkDragPreview class="task taskPreview">
+        <mat-checkbox></mat-checkbox>
+        {{ task.title }}
+      </span>
+    </app-task>
+  </cdk-drop>
   <button
     *ngIf="!loading"
     mat-flat-button 

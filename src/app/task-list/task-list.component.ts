@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatBottomSheet } from '@angular/material';
 
 import { CompletedTaskListComponent } from '../completed-task-list/completed-task-list.component';
@@ -72,6 +74,11 @@ export class TaskListComponent {
         data: { completedTasks: tasks },
       });
     });
+  }
+
+  taskDrop(event: CdkDragDrop<string[]>) {
+    console.log(event);
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
   }
   
   ngOnDestroy() {

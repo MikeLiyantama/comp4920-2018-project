@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LayoutModule } from '@angular/cdk/layout';
 
+import { LayoutModule } from '@angular/cdk/layout';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDatepickerModule, MatNativeDateModule, MatIconRegistry } from '@angular/material';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatToolbarModule, MatSidenavModule, MatListModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,6 +21,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -86,7 +88,9 @@ export function tokenGetter() {
     MatMenuModule,
     AppRoutingModule,
     MatProgressSpinnerModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    DragDropModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
