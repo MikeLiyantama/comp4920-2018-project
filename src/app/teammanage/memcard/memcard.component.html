@@ -19,11 +19,13 @@
         <mat-checkbox
             [checked]="teamMember.isLeader"
             [disabled]="leaderDisabled" 
+            (click)="changeLeadership()"
             >
             Leader
         </mat-checkbox>
         <button mat-stroked-button 
             [disabled]="removeDisabled"
+            (click)="removeMember()"
             color="accent">
             Remove
         </button>

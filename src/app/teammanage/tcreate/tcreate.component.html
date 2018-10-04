@@ -2,51 +2,70 @@
     <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Your team details</ng-template>
-            <div>
-                <mat-form-field>
-                    <input matInput placeholder="Team Name"
-                                    formControlName="NameCtrl" required>
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field>
-                    <textarea matInput placeholder="Description"
-                                    formControlName="DescCtrl"
-                                    matTextareaAutosize
-                                    matAutosizeMinRows=3
-                                    ></textarea>
-                </mat-form-field>
-            </div>
-            <div>
-                <button mat-button matStepperNext>Next</button>
-            </div>
+            <mat-grid-list cols="1" rowHeight="10:1">
+                <mat-grid-tile>
+                    <mat-form-field id="teamName">
+                        <input          [(ngModel)]="enteredTeamName" 
+                                        matInput     
+                                        placeholder="Team Name"
+                                        formControlName="NameCtrl" required>
+                    </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list cols="1" rowHeight="10:1">
+                <mat-grid-tile>
+                    <mat-form-field id="teamDescription">
+                        <textarea matInput 
+                                        [(ngModel)]="enteredTeamDescription"
+                                        placeholder="Description"
+                                        formControlName="DescCtrl"
+                                        matTextareaAutosize
+                                        matAutosizeMinRows=3
+                                        ></textarea>
+                    </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list>
         </form>
+        <mat-grid-list cols="1" rowHeight="24:1">
+            <mat-grid-tile>
+                <button mat-button matStepperNext>Next</button>
+            </mat-grid-tile>
+        </mat-grid-list>
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Add some members</ng-template>
-            <mat-form-field>
-                <!-- drop search component here --> 
-                <input type="search" 
-                        matInput 
-                        placeholder="Search"
-                        formControlName="SearchCtrl"
-                        [formControl]="myControl"
-                        [matAutocomplete]="auto">
-            </mat-form-field>
-            <!-- display search options here -->
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let user of filteredUsers | async"
-                    [value]="user.username" (click)="addTeamMember(user)">
-                    <img class="profileimg" [src]="user.profilePic">
-                    <span>{{ user.username }} </span>
-                    <mat-divider></mat-divider>
-                </mat-option>
-            </mat-autocomplete>
-            <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext>Next</button>
-            </div>
+            <mat-grid-list cols="1" rowHeight="13:1">
+                <mat-grid-tile>
+                    <mat-form-field id="memberSearch" appearance="outline">
+                        <!-- drop search component here --> 
+                        <mat-label>Member Search</mat-label>
+                        <input type="search" 
+                                matInput 
+                                placeholder="Search for your team members..."
+                                formControlName="SearchCtrl"
+                                [formControl]="myControl"
+                                [matAutocomplete]="auto">
+                    </mat-form-field>
+                <!-- display search options here -->
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let user of filteredUsers | async"
+                            [value]="user.username" (click)="addTeamMember(user)">
+                            <img class="profileimg" [src]="user.profilePic">
+                            <span>{{ user.username }} </span>
+                            <mat-divider></mat-divider>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list cols="1" rowHeight="24:1">
+                <mat-grid-tile>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
         </form>
         <mat-divider></mat-divider>
         <!-- display current team members from here -->
@@ -66,16 +85,51 @@
                     [creatorDisabled]="true"
                     [leaderDisabled]="false"
                     [removeDisabled]="false"
+                    (removeEmitter)="removeTeamMember($event)"
                     ></app-memcard>
             </mat-grid-tile>
         </mat-grid-list>
     </mat-step>
     <mat-step>
-        <ng-template matStepLabel>Submit</ng-template>
-        Team Summary here
-        <div>
-            <button mat-button>Submit</button>
-        </div>
+        <ng-template matStepLabel>Team Summary</ng-template>
+        <mat-grid-list cols="1" rowHeight="12:1">
+            <mat-grid-tile>
+                <button mat-button>Submit</button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" id="nameSummary">
+                    <mat-label>Team Name </mat-label>
+                    <input matInput value="{{ enteredTeamName }}" disabled="true">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" id="descriptionSummary">
+                    <mat-label>Team Description </mat-label>
+                    <textarea matInput value="{{ enteredTeamDescription }}" disabled="true">
+                    </textarea>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+        <!-- Display the members here again -->
+        <mat-grid-list cols="3" rowHeight="400px">
+            <mat-grid-tile>
+                <app-memcard 
+                    [teamMember]="currentCreator"
+                    [creatorDisabled]="true"
+                    [leaderDisabled]="true"
+                    [removeDisabled]="true"
+                    ></app-memcard>
+            </mat-grid-tile>
+            <mat-grid-tile *ngFor="let member of selectedTeamMembers">
+                <app-memcard
+                    [teamMember]="member"
+                    [creatorDisabled]="true"
+                    [leaderDisabled]="true"
+                    [removeDisabled]="true"
+                    (removeEmitter)="removeTeamMember($event)"
+                    ></app-memcard>
+            </mat-grid-tile>
+        </mat-grid-list>
     </mat-step>
 
 
