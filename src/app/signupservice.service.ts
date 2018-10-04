@@ -13,8 +13,12 @@ export class SignupserviceService {
   ) { }
 
   private registerUrl = "https://comp4920-organiser.herokuapp.com/api/register";
-  register(user, pass): Observable<any>{
-    return this.http.put(this.registerUrl, {"email": user, "password": pass});
+  register(user, pass, name, email): Observable<any>{
+      return this.http.put(this.registerUrl, {"username": user, 
+      "password": pass,
+      "name": name,
+      "email": email
+      });
   }
 }
  

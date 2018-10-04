@@ -2,6 +2,14 @@
   <form class="form" (submit)="signup()">
     <h1>Organise.me</h1>
     <mat-form-field class="form-group input-field">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="name" name="name" type="text">
+    </mat-form-field>
+    <mat-form-field class="form-group input-field">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" name="email" type="text">
+    </mat-form-field>
+    <mat-form-field class="form-group input-field">
       <mat-label>Username</mat-label>
       <input matInput [(ngModel)]="username" name="username" type="text">
     </mat-form-field>
@@ -12,7 +20,7 @@
     <mat-form-field class="form-group input-field">
         <mat-label>Confirm Password</mat-label>
         <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" type="password">
-      </mat-form-field>
+    </mat-form-field>
     <div *ngIf="invalid">
       You have made a grave mistake...
     </div>

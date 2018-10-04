@@ -120,7 +120,9 @@ app.post('/api/auth', function(req, res) {
 // Create user
 app.put('/api/register', function(req, res) {
   if(req.body.email && req.body.password) {
-      var obj = {email: req.body.email, password: req.body.password};
+      var obj = req.body;
+      console.log ("RECEIVED OBJECT:");
+      console.log (obj);
       db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, result){
         if(result){ // Existing user with same email found
             res.status(200).json({success: false, message: "email has been used in another account"});

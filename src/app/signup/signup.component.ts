@@ -9,6 +9,8 @@ import { SignupserviceService } from '../signupservice.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  name: string;
+  email: string;
   username: string;
   password: string;
   confirmPassword: string;
@@ -28,12 +30,14 @@ export class SignupComponent implements OnInit {
     var user = info[0];
     var pass = info[1];
     var cpass = info[2];
+    var name = info[3];
+    var email = info[4];
 
     var response;
 
     if (this.checkValid(user, pass, cpass)) {
       this.invalid = undefined;
-      this.signupservice.register(user, pass)
+      this.signupservice.register(user, pass, name, email)
         .subscribe(res => {
           response = res;
           if (response.success) {
@@ -65,11 +69,13 @@ export class SignupComponent implements OnInit {
   }
 
   getInfo() {
+    var name = this.name;
+    var email = this.email;
     var user = this.username;
     var pass = this.password;
     var cpass = this.confirmPassword;
-
-    var info = [user, pass, cpass];
+    
+    var info = [user, pass, cpass, name, email];
     
     return info;
   }
