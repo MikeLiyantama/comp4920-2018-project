@@ -31,14 +31,15 @@ export class TeamCreateComponent implements OnInit {
     "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
     "justo eleifend, quis tincidunt sapien.";
 
-    allUsers: User [] = [
-        new User ('Bobby', this.dummyBio, 'assets/1.jpg'),
-        new User ('Tracy', this.dummyBio, 'assets/2.jpg'),
-        new User ('Kyle', this.dummyBio, 'assets/3.jpg'),
-        new User ('Charles', this.dummyBio, 'assets/4.jpg'),
-        new User ('Lily', this.dummyBio, 'assets/5.jpg')
-    ];
-    currentUser: User = new User ('Wendy', this.dummyBio, 'assets/0.jpg');
+    //    allUsers: User [] = [
+    //        new User ('Bobby', this.dummyBio, 'assets/1.jpg'),
+    //        new User ('Tracy', this.dummyBio, 'assets/2.jpg'),
+    //        new User ('Kyle', this.dummyBio, 'assets/3.jpg'),
+    //        new User ('Charles', this.dummyBio, 'assets/4.jpg'),
+    //        new User ('Lily', this.dummyBio, 'assets/5.jpg')
+    //    ];
+    allUsers: User [];
+    currentUser: User = new User ('CatLover22', 'Wendy', this.dummyBio, 'assets/0.jpg');
 
     constructor (private _formBuilder: FormBuilder, private teamService: TeamService) {}
 
@@ -56,9 +57,13 @@ export class TeamCreateComponent implements OnInit {
         );
         this.currentCreator = new TeamMember (this.currentUser, true, true);
 
-        console.log ("test: ");
-        this.teamService.getAllUsers().then(data => console.log(data));
-        this.teamService.getMe ().then (data => console.log (data));
+
+        // Get all the users here
+
+        //console.log ("test: ");
+        //this.teamService.getAllUsers().then(data => console.log(data));
+        //this.teamService.getMe ().then (data => console.log (data));
+        //console.log (this.teamService.getAllUsers());
     }
 
     private _filter (value: string): User[] {
