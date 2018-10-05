@@ -264,9 +264,7 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
 
 // Get all teams a user is in
 app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(TEAMS_COLLECTION).find({
-      "$or": [{members: {"_id": req.user._id}}, {creator: {"_id": req.user._id}}])
-          .toArray(function (err, docs) {
+  db.collection(TEAMS_COLLECTION).find({members : req.user._id}).toArray(function (err, docs) {
     if (err) {
       returnError(res, err.message, "Failed to retieve teams");
     } else {
