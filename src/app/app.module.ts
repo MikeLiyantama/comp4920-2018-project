@@ -35,7 +35,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { TeamManagementComponent } from './teammanage/tmanager.component';
+import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
 import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
 import { MemcardComponent } from './teammanage/memcard/memcard.component';
 

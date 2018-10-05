@@ -82,10 +82,15 @@ export class TeamCreateComponent implements OnInit {
     }
 
     createTeam() {
-    console.log (this.enteredTeamName);
-    console.log (this.enteredTeamDescription);
-    console.log (this.selectedTeamMembers);
-    console.log (this.currentCreator);
+    //console.log (this.enteredTeamName);
+    //console.log (this.enteredTeamDescription);
+    //console.log (this.selectedTeamMembers);
+    //console.log (this.currentCreator);
+    console.log ("creating team");
+    var newTeam = new Team (this.enteredTeamName, this.enteredTeamDescription, 
+                    this.currentCreator, this.selectedTeamMembers);
+    this.teamService.writeTeam (newTeam);
+    console.log ("done creating team");
     }
 
     addTeamMember (user: User) {
