@@ -250,13 +250,9 @@ let TEAMS_COLLECTION = 'TEAMS';
 
 // Create team
 app.post('/api/team', passport.authenticate('jwt', {session: false}), function (req, res) {
-  var newTeam = req.body;
-  newTeam.createdAt = new Date();
-  newTeam.createdBy = req.user._id;
-  newTeam.members = [];
-  if (!req.body.title) {
-    returnError(res, 'Invalid user input', 'Must provide a title', 400);
-  } else {
+    var newTeam = req.body;
+    newTeam.createdAt = new Date();
+    newTeam.createdBy = req.user._id;
     db.collection(TEAMS_COLLECTION).insertOne(newTeam, function (err, doc) {
       if (err) {
         returnError(res, err.message, "Failed to create new team");
@@ -264,7 +260,6 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
         res.status(201).json(doc.ops[0]);
       }
     });
-  }
 });
 
 // Get all teams a user is in
