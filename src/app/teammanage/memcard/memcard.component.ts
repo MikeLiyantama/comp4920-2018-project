@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TeamMember } from '../teammember.model';
 import { User } from '../../user/user.model';
 
@@ -8,17 +8,15 @@ import { User } from '../../user/user.model';
     styleUrls: ['./memcard.component.css']
 })
 
-export class MemcardComponent {
+export class MemcardComponent implements OnInit {
     @Input () teamMember: TeamMember;
     @Input () creatorDisabled: boolean;
     @Input () leaderDisabled: boolean;
     @Input () removeDisabled: boolean;
     @Output () removeEmitter = new EventEmitter <TeamMember> ();
-    dummyBio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit " + 
-    "Donec vitae elit aliquam, dignissim ex sed, fermentum ex. " + 
-    "Ut gravida sodales sagittis. Suspendisse lacus ipsum, maximus vitae " + 
-    "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
-    "justo eleifend, quis tincidunt sapien.";
+
+    ngOnInit () {
+    }
 
     removeMember () {
         this.removeEmitter.emit (this.teamMember);

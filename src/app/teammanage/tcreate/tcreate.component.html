@@ -51,7 +51,7 @@
                     <mat-autocomplete #auto="matAutocomplete">
                         <mat-option *ngFor="let user of filteredUsers | async"
                             [value]="user.username" (click)="addTeamMember(user)">
-                            <img class="profileimg" [src]="user.profilePic">
+                            <img class="profileimg" [src]="user.profile">
                             <span>{{ user.username }} </span>
                             <mat-divider></mat-divider>
                         </mat-option>
@@ -71,7 +71,7 @@
         <!-- display current team members from here -->
         <!-- start first with the team leader -->
         <mat-grid-list cols="3" rowHeight="400px">
-            <mat-grid-tile>
+            <mat-grid-tile *ngIf="currentCreator">
                 <app-memcard 
                     [teamMember]="currentCreator"
                     [creatorDisabled]="true"
@@ -94,7 +94,7 @@
         <ng-template matStepLabel>Team Summary</ng-template>
         <mat-grid-list cols="1" rowHeight="12:1">
             <mat-grid-tile>
-                <button mat-button>Submit</button>
+                <button mat-button (click)="createTeam()">Submit</button>
             </mat-grid-tile>
             <mat-grid-tile>
                 <mat-form-field appearance="fill" id="nameSummary">
@@ -112,7 +112,7 @@
         </mat-grid-list>
         <!-- Display the members here again -->
         <mat-grid-list cols="3" rowHeight="400px">
-            <mat-grid-tile>
+            <mat-grid-tile *ngIf="currentCreator">
                 <app-memcard 
                     [teamMember]="currentCreator"
                     [creatorDisabled]="true"

@@ -25,25 +25,46 @@ export class TeamCreateComponent implements OnInit {
     enteredTeamDescription: string;
     currentCreator: TeamMember;
     // Till the backend supports user selecting, use dummy data
-    dummyBio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit " + 
-    "Donec vitae elit aliquam, dignissim ex sed, fermentum ex. " + 
-    "Ut gravida sodales sagittis. Suspendisse lacus ipsum, maximus vitae " + 
-    "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
-    "justo eleifend, quis tincidunt sapien.";
-
-    //    allUsers: User [] = [
-    //        new User ('Bobby', this.dummyBio, 'assets/1.jpg'),
-    //        new User ('Tracy', this.dummyBio, 'assets/2.jpg'),
-    //        new User ('Kyle', this.dummyBio, 'assets/3.jpg'),
-    //        new User ('Charles', this.dummyBio, 'assets/4.jpg'),
-    //        new User ('Lily', this.dummyBio, 'assets/5.jpg')
-    //    ];
     allUsers: User [];
-    currentUser: User = new User ('CatLover22', 'Wendy', this.dummyBio, 'assets/0.jpg');
+    currentUser: User;
 
     constructor (private _formBuilder: FormBuilder, private teamService: TeamService) {}
 
+    public getAllUsers () {
+        // Set the array for all users
+        this.teamService.getAllUsers().then (data => {
+            data.forEach (function (ref, n) {
+                var dummyBio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit " + 
+                "Donec vitae elit aliquam, dignissim ex sed, fermentum ex. " + 
+                "Ut gravida sodales sagittis. Suspendisse lacus ipsum, maximus vitae " + 
+                "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
+                "justo eleifend, quis tincidunt sapien.";
+                if (!data[n].profile) {
+                    data[n].profile = 'assets/0.jpg';
+                }
+                if (!data[n].bio) {
+                    data[n].bio = dummyBio;
+                }
+            });
+            this.allUsers = data;
+
+            // Set the current user
+            this.teamService.getMe().then (idObj => {
+                this.currentUser = this.allUsers.find (function (user) {
+                    return user._id == idObj.currUser;
+                });
+                this.currentCreator = new TeamMember (this.currentUser, true, true);
+            });
+            // Set the filter for users for searching later
+            this.filteredUsers = this.myControl.valueChanges.pipe (
+                startWith(''),
+                map (user => user ? this._filter(user) : this.allUsers.slice())
+            );
+        });
+    }
+
     ngOnInit() {
+        this.getAllUsers();
         this.firstFormGroup = this._formBuilder.group({
             NameCtrl: ['', Validators.required],
             DescCtrl: ['', Validators.required]
@@ -51,19 +72,8 @@ export class TeamCreateComponent implements OnInit {
         this.secondFormGroup = this._formBuilder.group({
             SearchCtrl: ['', Validators.required]
         });
-        this.filteredUsers = this.myControl.valueChanges.pipe (
-            startWith(''),
-            map (user => user ? this._filter(user) : this.allUsers.slice())
-        );
-        this.currentCreator = new TeamMember (this.currentUser, true, true);
 
 
-        // Get all the users here
-
-        //console.log ("test: ");
-        //this.teamService.getAllUsers().then(data => console.log(data));
-        //this.teamService.getMe ().then (data => console.log (data));
-        //console.log (this.teamService.getAllUsers());
     }
 
     private _filter (value: string): User[] {
@@ -72,9 +82,10 @@ export class TeamCreateComponent implements OnInit {
     }
 
     createTeam() {
-        console.log ("Team name: " + this.firstFormGroup.controls["NameCtrl"].value);
-        console.log ("Team desc: " + this.firstFormGroup.controls["DescCtrl"].value);
-
+    console.log (this.enteredTeamName);
+    console.log (this.enteredTeamDescription);
+    console.log (this.selectedTeamMembers);
+    console.log (this.currentCreator);
     }
 
     addTeamMember (user: User) {
@@ -85,6 +96,9 @@ export class TeamCreateComponent implements OnInit {
         });
         if (!exists) {
             this.selectedTeamMembers.push (new TeamMember (user, false, false));
+            console.log ("Added new team member");
+            console.log ("The team members are currently: ");
+            console.log (this.selectedTeamMembers);
         }
         this.secondFormGroup.controls["SearchCtrl"].reset();
     }

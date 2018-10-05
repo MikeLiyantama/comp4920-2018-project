@@ -1,9 +1,8 @@
 export class Team {
     public name;
     public description;
-    public members;
+    public members; // Leaders are listed amongst members
     public creator; // Always has full set of privileges
-    public leaders; // Has a subset of privileges
     constructor (name, description, creator, leaders, members) {
         this.name = name;
         this.description = description;

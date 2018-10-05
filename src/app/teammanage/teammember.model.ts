@@ -5,7 +5,7 @@ export class TeamMember {
     public isLeader;
 
     constructor (user, isCreator, isLeader) {
-        this.user = new User (user.username, user.bio, user.profilePic);
+        this.user = user;
         this.isCreator = isCreator;
         this.isLeader = isLeader;
     }

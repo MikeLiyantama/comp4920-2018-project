@@ -1,15 +1,17 @@
 export class User {
-    public username;
     public name;
+    public username;
+    public email;
+    public password;
     public bio;
-    public profilePic;
+    public profile;
     
     // Use a dummy picture for now
-    public profilePic;
-    constructor (username, name, bio, profilePic) {
-        this.username = username;
+    constructor (name, username, email, password, bio, profile) {
         this.name = name;
+        this.username = username;
+        this.email = email;
         this.bio = bio;
-        this.profilePic = profilePic;
+        this.profile = profile;
     }
 }
