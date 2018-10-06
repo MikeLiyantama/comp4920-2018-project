@@ -168,8 +168,8 @@ app.get('/api/account/check/:email', function(req, res) {
   });
 });
 
-app.put('/api/account/change', function(req, res) { 
-  db.collection(USERS_COLLECTION).updateOne({email: req.body.email}, { $set: {password : req.body.password} }, function (err, doc){
+app.put('/api/account/change/:email', function(req, res) { 
+  db.collection(USERS_COLLECTION).updateOne({email: req.params.email}, { $set: req.body }, function (err, doc){
     if (err){
       returnError(res, err, "Cannot update credential", 400);
     } else {
