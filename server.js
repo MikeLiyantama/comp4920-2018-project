@@ -165,7 +165,9 @@ var TASKS_COLLECTION = 'TASKS';
 // Create task
 app.post('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
   const newTask = req.body;
-  newTask.createdAt = new Date();
+  const now = new Date();
+  newTask.createdAt = now;
+  newTask.orderDate = now;
   newTask.createdBy = ObjectID(req.user._id);
 
   if (!req.body.title) {
