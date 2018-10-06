@@ -181,12 +181,10 @@ DELETE /api/list/:id/task
 
 POST /api/team
     Create a new team.
-    Required Payload: A JSON, which must include a "title" field.
+    Required Payload: A JSON
     Return Value:
         201 - New team created
                 with a JSON representing the team record
-        400 - Invalid user input
-                with { message: "Must provide a title" }
         500 - Database error
                 with { message: "Failed to create new team" }
 

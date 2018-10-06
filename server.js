@@ -4,6 +4,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var cors = require('cors');
 var path = require('path');
+var _ = require('lodash');
 
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
@@ -264,11 +265,38 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
 
 // Get all teams a user is in
 app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(TEAMS_COLLECTION).find({members : req.user._id}).toArray(function (err, docs) {
+  db.collection(TEAMS_COLLECTION).find({members : req.user._id}).toArray(function (err, teams) {
     if (err) {
       returnError(res, err.message, "Failed to retieve teams");
     } else {
-      res.status(200).json(docs);
+      let teamCreators = [];
+      let teamMembers = [];
+      teams.forEach((team) => {
+        teamCreators.push(team.createdBy);
+        teamMembers.push(team.members);
+      });
+      teamMembers = _.flatten(teamMembers);
+      let users = _.concat(teamCreators, teamMembers);
+      users = _.uniq(users);
+
+      db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}).toArray(function (err, users) {
+
+        let finalTeams = teams.map(team => {
+          team.createdBy = {
+            "user": users.find(user => user.id = team.createdBy),
+            "isCreator": true,
+            "isLeader": true
+          };
+          team.members = team.members.map(member => member = {
+            "user": users.find(user => user.id = member),
+            "isCreator": false,
+            "isLeader": false
+          });
+          return team;
+        });
+        
+        res.status(200).json(finalTeams);
+      });
     }
   });
 });
@@ -276,12 +304,32 @@ app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (
 // Get team with specific id
 app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+    db.collection(TEAMS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, team) {
       if (err) {
         returnError(res, err.message, "Failed to retieve teams");
       } else {
-        if (doc) {
-          res.status(200).json(doc);
+        if (team) {
+          let teamMembers = team.members;
+          teamMembers = _.flatten(teamMembers);
+          let users = _.concat(team.createdBy, teamMembers);
+          users = _.uniq(users);
+
+          db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}).toArray(function (err, users) {
+
+            team.createdBy = {
+              "user": users.find(user => user.id = team.createdBy),
+              "isCreator": true,
+              "isLeader": true
+            };
+            team.members = team.members.map(member => member = {
+              "user": users.find(user => user.id = member),
+              "isCreator": false,
+              "isLeader": false
+            });
+        
+            res.status(200).json(team);
+          });
+
         } else {
           returnError(res, 'No team found', 'No team found', 404);
         }
