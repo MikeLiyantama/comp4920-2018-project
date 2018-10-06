@@ -196,7 +196,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
 
   db.collection(TASKS_COLLECTION)
     .find(filterParams)
-    .sort({ important: -1, createdAt: -1 })
+    .sort({ important: -1, orderDate: -1, createdAt: -1 })
     .toArray(function (err, docs) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
