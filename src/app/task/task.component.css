@@ -2,8 +2,8 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
-.task-title {
-    margin-left: 16px;
+.task-checkbox {
+    margin: 0 16px;
 }
 
 .task-title.completed {

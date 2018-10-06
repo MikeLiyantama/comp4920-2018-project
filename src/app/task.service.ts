@@ -61,6 +61,13 @@ export class TaskService {
             )
     }
 
+    updateTaskOrderDate(taskId: string, orderDate: string): Observable<any> {
+        return this.http.put(`${this.tasksUrl}/${taskId}`, { orderDate })
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
     completeTask(taskId: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: true })
             .pipe(

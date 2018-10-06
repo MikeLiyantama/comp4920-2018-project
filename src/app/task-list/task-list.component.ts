@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatBottomSheet } from '@angular/material';
 
 import { CompletedTaskListComponent } from '../completed-task-list/completed-task-list.component';
@@ -71,6 +73,28 @@ export class TaskListComponent {
       this.bottomSheet.open(CompletedTaskListComponent, {
         data: { completedTasks: tasks },
       });
+    });
+  }
+
+  taskDrop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+    const movedTask = this.tasks[event.currentIndex];
+    
+    const taskBefore = this.tasks[event.currentIndex - 1];
+    const taskAfter = this.tasks[event.currentIndex + 1];
+    const taskBeforeDate = taskBefore ? Date.parse(taskBefore.orderDate) : null;
+    const taskAfterDate = taskAfter ? Date.parse(taskAfter.orderDate) : null;
+
+    let newOrderDate;
+    if (taskBeforeDate && !taskAfterDate) {
+      // bottom of the list
+      newOrderDate = (new Date(taskBeforeDate - 1));
+    } else if (taskAfterDate) {
+      // everywhere else (top of the list, or anywhere in the middle)
+      newOrderDate = (new Date(taskAfterDate + 1));
+    }
+    this.taskService.updateTaskOrderDate(movedTask._id, newOrderDate).subscribe(() => {
+      this.taskService.invalidateTaskListStatus();
     });
   }
   

@@ -14,3 +14,7 @@ body {
 .task .mat-checkbox .mat-checkbox-background {
     border-radius: 50%;
 }
+
+.cdk-drag-drop-disable-native-interactions * {
+    cursor: grabbing;
+}
