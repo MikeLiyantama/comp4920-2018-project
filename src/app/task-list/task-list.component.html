@@ -21,7 +21,8 @@
       (markedAsComplete)="onTaskMarkedAsComplete($event)"
       (toggledImportance)="onTaskImportanceToggled($event)"
     >
-      <span *cdkDragPreview class="task taskPreview">
+      <mat-icon cdkDragHandle drag-handle>drag_handle</mat-icon>
+      <span *cdkDragPreview drag-preview class="task taskPreview">
         <mat-checkbox></mat-checkbox>
         {{ task.title }}
       </span>

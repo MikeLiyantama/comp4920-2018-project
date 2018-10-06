@@ -5,7 +5,9 @@
     [class.selected]="rightPaneService.opened && rightPaneService.task._id === task._id"    
     (click)="this.openDetailPane()"    
 >
-    <mat-checkbox 
+    <ng-content select="[drag-handle]"></ng-content>
+    <mat-checkbox
+        class="task-checkbox"
         (change)="this.toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
@@ -20,12 +22,14 @@
 </a>
 
 <mat-list-item *ngIf="completed" class="task">
+    <ng-content select="[drag-handle]"></ng-content>
     <mat-checkbox 
         checked="true"
+        class="task-checkbox"
         (change)="this.toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
     <span class="task-title completed">{{ task.title }}</span>
 </mat-list-item>
 
-<ng-content></ng-content>
+<ng-content select="[drag-preview]"></ng-content>
