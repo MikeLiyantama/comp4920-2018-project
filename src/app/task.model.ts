@@ -1,6 +1,8 @@
 export interface Task {
     _id?: string;
     title: string;
+    createdAt?: string;
+    orderDate?: string;
     description?: string;
     dueDate?: string;
     important?: boolean;

@@ -14,6 +14,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
 
 var app = express();
 
@@ -156,6 +157,61 @@ app.get('/api/me', passport.authenticate('jwt', {session: false}), function (req
   res.status(200).json({"currUser": req.user._id});
 });
 
+
+app.get('/api/account/check/:email', function(req, res) {
+  db.collection(USERS_COLLECTION).findOne({email : req.params.email}, function(err, doc) {
+    if(doc == null){
+      returnError(res, "Account not Found", "Account not Found", 400);
+    } else {
+      res.status(200).json({success : true});
+    }
+  });
+});
+
+app.put('/api/account/change/:email', function(req, res) { 
+  db.collection(USERS_COLLECTION).updateOne({email: req.params.email}, { $set: req.body }, function (err, doc){
+    if (err){
+      returnError(res, err, "Cannot update credential", 400);
+    } else {
+      res.json({success : true});
+    }
+  })
+});
+
+app.post('/api/account/email_verification', function(req, res){
+  db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, doc){
+    if(err){
+      returnError(res, "Account not Found", "Account Not Found", 400);
+    } else{
+      let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'organiser.me@gmail.com',
+            pass: 'Johnson4920'
+          }
+      });
+      var randomCode = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); //https://gist.github.com/6174/6062387
+      randomCode = randomCode.substring(0,10);
+      let mailOptions = {
+        from: 'organiser.me@gmail.com',
+        to: req.body.email,
+        subject: 'Password Change Request',
+        text: randomCode
+      };
+
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          returnError(res, "Error occured when sending email", "Error occured when sending email", 400);
+        } else {
+          console.log('Email sent: ' + info.response); //DEBUG
+          res.status(200).json({success: true, code: randomCode});
+        }
+      });
+    }
+  })
+});
+
+
 /**
  * ******************************** TASKS ********************************
  */
@@ -165,7 +221,9 @@ var TASKS_COLLECTION = 'TASKS';
 // Create task
 app.post('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
   const newTask = req.body;
-  newTask.createdAt = new Date();
+  const now = new Date();
+  newTask.createdAt = now;
+  newTask.orderDate = now;
   newTask.createdBy = ObjectID(req.user._id);
 
   if (!req.body.title) {
@@ -197,7 +255,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
 
   db.collection(TASKS_COLLECTION)
     .find(filterParams)
-    .sort({ important: -1, orderDate: -1, createdAt: -1 })
+    .sort({ important: -1, orderDate: -1 })
     .toArray(function (err, docs) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
@@ -229,7 +287,11 @@ app.get('/api/task/:id', passport.authenticate('jwt', { session: false }), funct
 // Update task with specific id
 app.put('/api/task/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
+    const updatedTask = { ...req.body };
+    if (req.body.orderDate) {
+      updatedTask.orderDate = new Date(Date.parse(req.body.orderDate));
+    }
+    db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: updatedTask }, function (err, result) {
       if (err) {
         returnError(res, err.message, "Failed to update task");
       } else if (result.result.n === 1) {
@@ -254,6 +316,23 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
     var newTeam = req.body;
     newTeam.createdAt = new Date();
     newTeam.createdBy = req.user._id;
+    if(newTeam.creator) {
+      if(newTeam.creator.isLeader) {
+        newTeam.leader = req.user._id;
+      }
+    }
+
+    if(newTeam.members) {
+      // Non empty team initialisation
+      newTeam.members = newTeam.members.map((member) => {
+        if(member.isLeader) {
+          newTeam.leader = member.user._id;
+        }
+        member = member.user._id;
+        return member;
+      });
+    }
+
     db.collection(TEAMS_COLLECTION).insertOne(newTeam, function (err, doc) {
       if (err) {
         returnError(res, err.message, "Failed to create new team");
