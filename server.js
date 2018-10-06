@@ -199,7 +199,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
 
   db.collection(TASKS_COLLECTION)
     .find(filterParams)
-    .sort({ important: -1, orderDate: -1, createdAt: -1 })
+    .sort({ important: -1, orderDate: -1 })
     .toArray(function (err, docs) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
@@ -231,7 +231,11 @@ app.get('/api/task/:id', passport.authenticate('jwt', { session: false }), funct
 // Update task with specific id
 app.put('/api/task/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: req.body }, function (err, result) {
+    const updatedTask = { ...req.body };
+    if (req.body.orderDate) {
+      updatedTask.orderDate = new Date(Date.parse(req.body.orderDate));
+    }
+    db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: updatedTask }, function (err, result) {
       if (err) {
         returnError(res, err.message, "Failed to update task");
       } else if (result.result.n === 1) {
