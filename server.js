@@ -260,6 +260,23 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
     var newTeam = req.body;
     newTeam.createdAt = new Date();
     newTeam.createdBy = req.user._id;
+    if(newTeam.creator) {
+      if(newTeam.creator.isLeader) {
+        newTeam.leader = req.user._id;
+      }
+    }
+
+    if(newTeam.members) {
+      // Non empty team initialisation
+      newTeam.members = newTeam.members.map((member) => {
+        if(member.isLeader) {
+          newTeam.leader = member.user._id;
+        }
+        member = member.user._id;
+        return member;
+      });
+    }
+
     db.collection(TEAMS_COLLECTION).insertOne(newTeam, function (err, doc) {
       if (err) {
         returnError(res, err.message, "Failed to create new team");
