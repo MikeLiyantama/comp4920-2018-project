@@ -19,7 +19,9 @@ var nodemailer = require('nodemailer');
 var app = express();
 
 // Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true, parameterLimit: 10000 }));
+
 app.use(cors({ origin: '*' }));
 app.use(cors({
   origin: [
