@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service'
 
 
 @Component({
@@ -18,16 +19,30 @@ export class RecoverComponent implements OnInit {
   newPassword: string; // new password input by the user
 
   constructor(
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
   }
 
-  sendEmail() {
+  sendEmail() { ///api/account/email_verification
     console.log(this.username);
     // send username to backend to check if user exists 
     // if the user exists, send an email to the user with a code
+
+    var response;
+
+    this.authService.checkEmail(this.username).subscribe(res => {
+      response = res;
+      if (response.success) {
+        this.sent = true;
+        this.error = false;
+        this.serverCode = response.code;
+      }
+
+    })
+
 
     // this.error = true;
     this.sent = true;

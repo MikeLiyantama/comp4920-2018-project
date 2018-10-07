@@ -12,10 +12,16 @@ export class AuthService{
 
   private returnValue;
   private authUrl = "https://comp4920-organiser.herokuapp.com/api/auth";
+  private verifyUrl = "https://comp4920-organiser.herokuapp.com/api/account/email_verification"
   
 
   authenticate(user, pass):Observable<any> {
     return  this.http.post(this.authUrl, {"email": user, "password": pass});
+  }
+
+  checkEmail(email):Observable<any> {
+    return this.http.post(this.verifyUrl, {"email": email});
+
   }
 
   
