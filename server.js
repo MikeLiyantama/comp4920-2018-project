@@ -211,6 +211,25 @@ app.post('/api/account/email_verification', function(req, res){
   })
 });
 
+app.get('/api/assets/:type/:id', passport.authenticate('jwt', {session : false}), function(req, res){
+  if(req.params.type == profile_picture){
+    let path = 'assets/user/' + req.params.id;
+    if (!fs.existsSync(path)){
+      returnError(res, "User not found", "User not found", 400);
+    } else{
+        path = path + "/profile_picture.jpg"
+        if (!fs.existsSync(path)){
+          //No profile pic found, Use default
+          res.sendFile("assets/user/default/profile_picture.jpg");
+        } else {
+          res.sendFile(path);
+        }
+    }
+  } else {
+    returnError(res, "Bad Request", "Bad Request", 400);
+  }
+})
+
 
 /**
  * ******************************** TASKS ********************************
