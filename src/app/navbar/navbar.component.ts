@@ -37,4 +37,8 @@ export class NavbarComponent {
   goToSettings(){
     this.router.navigate['/app/settings'];
   }
+
+  goToProfile(){
+    this.router.navigate['/app/profile'];
+  }
 }

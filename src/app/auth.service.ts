@@ -19,11 +19,11 @@ export class AuthService{
     return  this.http.post(this.authUrl, {"email": user, "password": pass});
   }
 
-  updatePassword(email, n_pass){
+  updatePassword(email, n_pass): Observable<any>{
     return this.http.put( this.updateAccountUrl + email, {"password" : n_pass} );
   }
 
-  updateEmail(email, n_email){
+  updateEmail(email, n_email) : Observable<any>{
     return this.http.put( this.updateAccountUrl + email, {"email" : n_email} );
   }
 }
