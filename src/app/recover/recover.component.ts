@@ -18,6 +18,7 @@ export class RecoverComponent implements OnInit {
   codeCorrect: boolean; // set to true if serverCode and userCode are the same
   newPassword: string; // new password input by the user
   errorMessage: string;
+  success: boolean = false;
 
   constructor(
     private router: Router,
@@ -94,7 +95,8 @@ export class RecoverComponent implements OnInit {
       
       if (response.success) { // if successful 
         this.error = false;
-        this.router.navigate(['/login']);
+        this.success = true;
+        // this.router.navigate(['/login']);
       } else {
         this.error = true;
         this.errorMessage = response.error;

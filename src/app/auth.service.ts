@@ -33,7 +33,7 @@ export class AuthService{
 
   changeEmail(email, newPassword):Observable<any> {
     this.changeUrl = this.changeUrl + email;
-    return this.http.put(this.changeUrl, {"password": newPassword});
+    return this.http.put(this.changeUrl, {newPassword});
   }
 
   

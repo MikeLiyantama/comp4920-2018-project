@@ -1,3 +1,13 @@
+<div class="wrapper" *ngIf="success; else recover">
+
+  <div class="form-group">
+    <h1>You have successfully changed your password!</h1>
+    <a routerLink="/auth/login">Back to login</a> 
+  </div>
+
+</div>
+
+<ng-template #recover>
 <div class="wrapper" *ngIf="!sent; else codeSent">
 
   <form class="form" (submit)="sendEmail()">
@@ -37,6 +47,7 @@
     </div>
     </form>
   </div>
+</ng-template>
 
 <ng-template #newPass>
   <div class="wrapper">
@@ -58,8 +69,5 @@
     </form>
   </div>
 </ng-template>
-
-
-
 
 </ng-template>
