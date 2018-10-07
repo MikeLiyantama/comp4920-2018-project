@@ -180,6 +180,16 @@ app.put('/api/account/change/:email', function(req, res) {
   })
 });
 
+app.get('/api/account/data', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(USERS_COLLECTION).findOne({_id: ObjectID(req.user._id)}, function(err, doc){
+    if(doc == null || err){
+      returnError(res, "User not Found", "User not Found", 400);
+    } else {
+      res.status(200).json(doc);
+    }
+  })
+})
+
 app.post('/api/account/email_verification', function(req, res){
   db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, doc){
     if(err){
