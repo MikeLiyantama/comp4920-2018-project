@@ -29,15 +29,16 @@ export class SettingsComponent implements OnInit {
   }
 
   changePassword(){
+    let thisC = this;
     this.auth.updatePassword(this.currEmail, this.newPass)
         .subscribe(function(res){
           let response;
           response = res;
           console.log(res);
           if(response.success){
-            this.clearForm(true,"Password Updated!", "Close", {duration: 2000});
+            thisC.clearForm(true,"Password Updated!", "Close", {duration: 2000});
           } else {
-            this.clearForm(false,"Error!", "Close", {duration: 2000});
+            thisC.clearForm(false,"Error!", "Close", {duration: 2000});
           }
         })
   }
@@ -54,6 +55,7 @@ export class SettingsComponent implements OnInit {
   }
 
   changeEmail(){
+    let thisC = this;
     this.auth.updateEmail(this.currEmail, this.newEmail)
         .subscribe(function(res){
           let response;
@@ -61,11 +63,11 @@ export class SettingsComponent implements OnInit {
           console.log(res);
           if(response.success){
             if(response.success){
-              this.clearForm(true,"Email Updated!", "Close", {duration: 2000});
+              thisC.clearForm(true,"Email Updated!", "Close", {duration: 2000});
               
               //this.getNewToken(this.currEmail, this.newPass);
             } else {
-              this.clearForm(false,"Error!", "Close", {duration: 2000});
+              thisC.clearForm(false,"Error!", "Close", {duration: 2000});
             }
           }
         });

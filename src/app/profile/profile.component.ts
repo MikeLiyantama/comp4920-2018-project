@@ -14,7 +14,6 @@ export class ProfileComponent implements OnInit {
   bio : String;
   profile : String;
   username : String;
-  //profileImage : ImageBitmap;
   profilePicUrl : String;
   constructor(
     private router: Router,
@@ -23,17 +22,22 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    let thisC = this;
     this.profileService.getUserData()
         .subscribe(function(res){
           let response;
           response = res;
+          console.log(res);
           if(response._id){
-            this.name = response.name;
-            this.bio = response.bio;
-            this.profile = response.profile;
-            this.username = response.username;
-            //this.profilePicUrl = 'http://comp4920-organiser.herokuapp.com/api/assets/profile_picture/' + response._id;
+            thisC.updateData(response.username, response.name, response.bio, response.profile);
           }
         });
+  }
+
+  updateData(username, name, bio, profile){
+    this.username = username;
+    this.name = name;
+    this.bio = bio;
+    this.profile = profile;
   }
 }
