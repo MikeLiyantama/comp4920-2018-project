@@ -316,9 +316,10 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
     var newTeam = req.body;
     newTeam.createdAt = new Date();
     newTeam.createdBy = req.user._id;
+    newTeam.leaders = [];
     if(newTeam.creator) {
       if(newTeam.creator.isLeader) {
-        newTeam.leader = req.user._id;
+        newTeam.leaders.push(newTeam.creator.user._id);
       }
     }
 
@@ -326,7 +327,7 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
       // Non empty team initialisation
       newTeam.members = newTeam.members.map((member) => {
         if(member.isLeader) {
-          newTeam.leader = member.user._id;
+          newTeam.leaders.push(member.user._id);
         }
         member = member.user._id;
         return member;
@@ -344,7 +345,7 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
 
 // Get all teams a user is in
 app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(TEAMS_COLLECTION).find({members : req.user._id}).toArray(function (err, teams) {
+  db.collection(TEAMS_COLLECTION).find({"$or": [{members : req.user._id}, {createdBy: req.user._id}]}).toArray(function (err, teams) {
     if (err) {
       returnError(res, err.message, "Failed to retieve teams");
     } else {
@@ -352,25 +353,29 @@ app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (
       let teamMembers = [];
       teams.forEach((team) => {
         teamCreators.push(team.createdBy);
-        teamMembers.push(team.members);
+        if(team.members) {
+          teamMembers.push(team.members);
+        }
       });
       teamMembers = _.flatten(teamMembers);
       let users = _.concat(teamCreators, teamMembers);
       users = _.uniq(users);
 
-      db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}).toArray(function (err, users) {
-
+      db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}, {_id:1}).toArray(function (err, users) {
+        
         let finalTeams = teams.map(team => {
-          team.createdBy = {
-            "user": users.find(user => user.id = team.createdBy),
+          team.creator = {
+            "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
             "isCreator": true,
-            "isLeader": true
+            "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
           };
-          team.members = team.members.map(member => member = {
-            "user": users.find(user => user.id = member),
-            "isCreator": false,
-            "isLeader": false
-          });
+          if(team.members) {
+            team.members = team.members.map(member => member = {
+              "user": users.find(user => ObjectID(member).equals(user._id)),
+              "isCreator": false,
+              "isLeader": _.includes(team.leaders, member) ? true : false
+            });
+          }
           return team;
         });
         
@@ -393,19 +398,20 @@ app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
           let users = _.concat(team.createdBy, teamMembers);
           users = _.uniq(users);
 
-          db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}).toArray(function (err, users) {
+          db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}, {_id:1}).toArray(function (err, users) {
 
-            team.createdBy = {
-              "user": users.find(user => user.id = team.createdBy),
+            team.creator = {
+              "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
               "isCreator": true,
-              "isLeader": true
+              "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
             };
-            team.members = team.members.map(member => member = {
-              "user": users.find(user => user.id = member),
-              "isCreator": false,
-              "isLeader": false
-            });
-        
+            if(team.members) {
+              team.members = team.members.map(member => member = {
+                "user": users.find(user => ObjectID(member).equals(user._id)),
+                "isCreator": false,
+                "isLeader": _.includes(team.leaders, member) ? true : false
+              });
+            }
             res.status(200).json(team);
           });
 

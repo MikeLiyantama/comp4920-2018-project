@@ -182,6 +182,12 @@ DELETE /api/list/:id/task
 POST /api/team
     Create a new team.
     Required Payload: A JSON
+                    - "members" array is allowed in the JSON. Each element of
+                      the array should follow the TeamMember model.
+                    - "creator" is also allowed and should follow the
+                      TeamMember model.
+                    - Multiple leaders can present in a team.
+
     Return Value:
         201 - New team created
                 with a JSON representing the team record
@@ -189,11 +195,15 @@ POST /api/team
                 with { message: "Failed to create new team" }
 
 GET /api/team
-    Retrieve all teams a user is in.
+    Retrieve all teams of which a user is a member or a creator.
     Required Payload: Nothing.
     Return Value:
         200 - Success
-                with a JSON representing all team records
+                with a JSON representing all relevant team records
+              - Note that this is an expanded version of the team record.
+                This means the creator and the members fields of the JSON
+                are not the same as what get stored in the database (id only),
+                instead, they follow the TeamMember model.
         500 - Database error
                 with { message: "Failed to retieve teams" }
 
@@ -203,6 +213,10 @@ GET /api/team/:id
     Return Value:
         200 - Success
                 with a JSON representing the team record
+              - Note that this is an expanded version of the team record.
+                This means the creator and the members fields of the JSON
+                are not the same as what get stored in the database (id only),
+                instead, they follow the TeamMember model.
         400 - Invalid user input
                 with { message: "Invalid team ID" }
         404 - No team found
@@ -310,7 +324,8 @@ collection TEAMS {
         description: string,
         createdAt: date,
         createdBy: ObjectId,
-        members: array(ObjectId)
+        members: array(ObjectId),
+        leaders: array(ObjectId)
 }
 
 collection LISTS {
@@ -320,4 +335,10 @@ collection LISTS {
         createdAt: date,
         createdBy: ObjectId,
         tasks: array(ObjectId)
+}
+
+class TeamMember {
+        user: User,
+        isCreator: boolean,
+        isLeader: boolean
 }
