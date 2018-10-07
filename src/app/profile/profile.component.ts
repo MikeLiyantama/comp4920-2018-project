@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
             this.bio = response.bio;
             this.profile = response.profile;
             this.username = response.username;
-            this.profilePicUrl = 'http://comp4920-organiser.herokuapp.com/api/assets/profile_picture/' + response._id;
+            //this.profilePicUrl = 'http://comp4920-organiser.herokuapp.com/api/assets/profile_picture/' + response._id;
           }
         });
   }

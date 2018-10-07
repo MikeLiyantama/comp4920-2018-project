@@ -30,15 +30,4 @@ export class NavbarComponent {
     localStorage.removeItem('token');
     this.router.navigate(['/']);
   }
-
-  goToHome(){
-    this.router.navigate(['/app']);
-  }  
-  goToSettings(){
-    this.router.navigate['/app/settings'];
-  }
-
-  goToProfile(){
-    this.router.navigate['/app/profile'];
-  }
 }
