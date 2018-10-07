@@ -35,6 +35,8 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskComponent } from './task/task.component';
 import { CompletedTaskListComponent } from './completed-task-list/completed-task-list.component';
+import { SettingsComponent } from './settings/settings.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -51,7 +53,9 @@ export function tokenGetter() {
     AuthLayoutComponent,
     TaskDetailComponent,
     TaskListComponent,
-    CompletedTaskListComponent
+    CompletedTaskListComponent,
+    SettingsComponent,
+    ProfileComponent
   ],
   entryComponents: [
     CompletedTaskListComponent

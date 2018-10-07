@@ -35,7 +35,8 @@
           U
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-          <button mat-menu-item>Settings</button>
+          <button mat-menu-item (click)="goToHome()">Home</button>
+          <button mat-menu-item (click)="goToSettings()">Settings</button>
           <button mat-menu-item>Help</button>
           <button mat-menu-item (click)="logout()">Log Out</button>
         </mat-menu>

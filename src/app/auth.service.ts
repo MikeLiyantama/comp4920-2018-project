@@ -12,20 +12,18 @@ export class AuthService{
 
   private returnValue;
   private authUrl = "https://comp4920-organiser.herokuapp.com/api/auth";
+  private updateAccountUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/";
   
 
   authenticate(user, pass):Observable<any> {
     return  this.http.post(this.authUrl, {"email": user, "password": pass});
   }
 
-  
+  updatePassword(email, n_pass){
+    return this.http.put( this.updateAccountUrl + email, {"password" : n_pass} );
+  }
 
-  // private username = "user"; private password = "pass";              // local testing
-  // authenticateLocally(user, pass) {
-  //   if (user === this.username && pass === this.password) {        
-  //       return 1;
-  //     } else {
-  //       return 0;
-  //     }
-  // }
+  updateEmail(email, n_email){
+    return this.http.put( this.updateAccountUrl + email, {"email" : n_email} );
+  }
 }

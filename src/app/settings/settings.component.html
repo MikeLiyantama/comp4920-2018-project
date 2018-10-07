@@ -1,0 +1,49 @@
+<div class="container">
+    <mat-accordion>
+        <mat-expansion-panel (opened)="emailOpenState = true"
+                             (closed)="emailOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Change email
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form class="form" (submit)="changeEmail()">
+            <mat-form-field class="form-group input-field settings-item">
+              <mat-label>Current Email</mat-label>
+              <input matInput [(ngModel)]="currEmail" placeholder="Current Email" name="currEmail" type="text">
+            </mat-form-field>
+            <mat-form-field class="form-group input-field settings-item">
+                <mat-label>New Email</mat-label>
+                <input matInput [(ngModel)]="newEmail" placeholder="New Email" name="newEmail" type="text">
+            </mat-form-field>
+            <div class="form-group">
+                <button type="submit" mat-raised-button>Submit</button>
+            </div>
+          </form>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="passOpenState = true"
+                             (closed)="passOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Change password
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form class="form" (submit)="changePassword()">
+              <mat-form-field class="form-group input-field settings-item">
+                <mat-label>Current Email</mat-label>
+                <input matInput [(ngModel)]="newEmail" placeholder="Current Email" name="currEmail" type="text">
+              </mat-form-field>
+              <mat-form-field class="form-group input-field settings-item">
+                  <mat-label>New Password</mat-label>
+                  <input matInput [(ngModel)]="newPass" placeholder="New Password" name="newPass" type="text">
+              </mat-form-field>
+              <div class="form-group">
+                  <button type="submit" mat-raised-button>Submit</button>
+              </div>
+            </form>
+          
+        </mat-expansion-panel>
+      </mat-accordion>
+      <p>Current Email Panel State : {{emailOpenState ? 'open' : 'closed'}}</p>
+      <p>Current Email Panel State : {{passOpenState ? 'open' : 'closed'}}</p>
+</div>
