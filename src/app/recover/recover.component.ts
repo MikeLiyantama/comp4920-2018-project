@@ -17,6 +17,7 @@ export class RecoverComponent implements OnInit {
   userCode: string; // code that is input by the user
   codeCorrect: boolean; // set to true if serverCode and userCode are the same
   newPassword: string; // new password input by the user
+  errorMessage: string;
 
   constructor(
     private router: Router,
@@ -36,31 +37,70 @@ export class RecoverComponent implements OnInit {
     this.authService.checkEmail(this.username).subscribe(res => {
       response = res;
       if (response.success) {
-        this.sent = true;
         this.error = false;
+
+        // verification here
+        this.verifyEmail();
+
+      } else {
+        this.error = true;
+      }
+
+    })
+  }
+
+  checkCode() {
+    // check if the code user entered is the same as the code sent
+    if (this.serverCode == this.userCode) {
+      this.codeCorrect = true;
+      this.error = false;
+    } else {
+      this.codeCorrect = false;
+      this.error = true;
+    }
+  }
+
+  verifyEmail() {
+    var response;
+
+    this.authService.validate(this.username).subscribe(res => {
+      response = res;
+      if (response.success) {
+        this.error = false;
+        this.sent = true;
         this.serverCode = response.code;
+        this.errorMessage = undefined;
+      } else if (response.error == 'Error occured when sending email') {
+        this.error = true;
+        this.errorMessage = response.error;
+
+      } else {
+        this.error = true;
+        this.errorMessage = undefined;
       }
 
     })
 
-
-    // this.error = true;
-    this.sent = true;
   }
 
-  checkCode() {
-    
-    // check if the code user entered is the same as the code sent
-    // send request to backend to change to a new password input by the user
-    this.codeCorrect = true;
-
-  }
-
+  // send request to backend to change to a new password input by the user
   newPass() {
     // this.error = true;
+    var response;
 
+    this.authService.changeEmail(this.username, this.newPassword).subscribe(res => {
+      response = res;
 
-    // if successful 
-    this.router.navigate(['/login']);
+      
+      if (response.success) { // if successful 
+        this.error = false;
+        this.router.navigate(['/login']);
+      } else {
+        this.error = true;
+        this.errorMessage = response.error;
+      }
+    })
+
+    
   }
 }
