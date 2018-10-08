@@ -14,4 +14,14 @@ export class ProfileService {
   getUserData() {
     return this.http.get(this.userDataUrl);
   }
+
+  updateUserData(name, username, bio, profile){
+    let obj = {
+      name: name,
+      username: username,
+      bio: bio,
+      profile: profile
+    }
+    return this.http.post(this.userDataUrl, obj);
+  }
 }

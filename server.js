@@ -167,6 +167,16 @@ app.get('/api/account/data', passport.authenticate('jwt', {session: false}), fun
   })
 })
 
+app.put('/api/account/data', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(USERS_COLLECTION).updateOne({_id: ObjectID(req.user._id)}, {$set : req.body}, function(err, doc){
+    if(doc == null || err){
+      returnError(res, "User not Found", "User not Found", 400);
+    } else {
+      res.status(200).json({success:true});
+    }
+  })
+})
+
 
 app.get('/api/account/check/:email', function(req, res) {
   db.collection(USERS_COLLECTION).findOne({email : req.params.email}, function(err, doc) {
