@@ -1,0 +1,15 @@
+.wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form {
+    margin-left: 10%;
+    width: 300px;
+  }
+  
+  .input-field {
+    display: block;
+    width: 300px;
+  }

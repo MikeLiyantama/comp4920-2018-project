@@ -7,12 +7,14 @@ import { TaskListComponent } from './task-list/task-list.component';
 
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { RecoverComponent } from './recover/recover.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
   { path: 'auth', component: AuthLayoutComponent, children: [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
+    { path: 'recover', component: RecoverComponent }
   ]},
   { path: 'app', component: AppLayoutComponent, children: [
     { path: '', component: TaskListComponent },
