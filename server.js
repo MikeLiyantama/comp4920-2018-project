@@ -157,7 +157,7 @@ app.get('/api/me', passport.authenticate('jwt', {session: false}), function (req
   res.status(200).json({"currUser": req.user._id});
 });
 
-app.get('/api/account/data', passport.authenticate('jwt', {session: false}), function(req, res){
+app.get('/api/account/data/:id', passport.authenticate('jwt', {session: false}), function(req, res){
   db.collection(USERS_COLLECTION).findOne({_id: ObjectID(req.user._id)}, function(err, doc){
     if(doc == null || err){
       returnError(res, "User not Found", "User not Found", 400);

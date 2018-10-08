@@ -24,4 +24,8 @@ export class ProfileService {
     }
     return this.http.post(this.userDataUrl, obj);
   }
+
+  getCurrentId(){
+    return this.http.get("https://comp4920-organiser.herokuapp.com/api/me")
+  }
 }

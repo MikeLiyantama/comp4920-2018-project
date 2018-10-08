@@ -33,7 +33,8 @@
                 </mat-form-field>
                 <br>
                 <div class="form-group">
-                    <button type="submit" (click)="updateData()" mat-raised-button>Submit</button>
+                    <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>
+                    <button type="submit" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
                 </div>
             </form>
         </mat-card>

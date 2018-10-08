@@ -37,6 +37,7 @@ import { TaskComponent } from './task/task.component';
 import { CompletedTaskListComponent } from './completed-task-list/completed-task-list.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ProfileImageUploadComponent } from './profile-image-upload/profile-image-upload.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -55,7 +56,8 @@ export function tokenGetter() {
     TaskListComponent,
     CompletedTaskListComponent,
     SettingsComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfileImageUploadComponent
   ],
   entryComponents: [
     CompletedTaskListComponent

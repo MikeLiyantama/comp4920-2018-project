@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-import { User } from '../user/user.model';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material'
 import { ProfileService } from '../profile.service';
 
@@ -20,10 +19,12 @@ export class ProfileComponent implements OnInit {
   email : String;
   constructor(
     private router: Router,
-    private customRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private profileService: ProfileService,
     private snackBar: MatSnackBar
-  ) { }
+  ) { 
+    
+  }
 
   ngOnInit() {
     let thisC = this;
@@ -55,15 +56,11 @@ export class ProfileComponent implements OnInit {
             thisC.snackBar.open("Error, Please Try again", "Close", {duration:3000});
           }
         })
-
-    
   }
 
   enterEditMode(){
     this.editMode = true;
   }
-
-
 
   leaveEditMode(){
     this.editMode = false;

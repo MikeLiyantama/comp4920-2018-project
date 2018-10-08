@@ -64,8 +64,6 @@ export class SettingsComponent implements OnInit {
           if(response.success){
             if(response.success){
               thisC.clearForm(true,"Email Updated!", "Close", {duration: 2000});
-              
-              //this.getNewToken(this.currEmail, this.newPass);
             } else {
               thisC.clearForm(false,"Error!", "Close", {duration: 2000});
             }
