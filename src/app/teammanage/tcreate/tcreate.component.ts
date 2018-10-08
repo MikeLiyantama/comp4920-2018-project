@@ -23,9 +23,11 @@ export class TeamCreateComponent implements OnInit {
     selectedTeamMembers: TeamMember [] = [];
     enteredTeamName: string;
     enteredTeamDescription: string;
+    givenTeamBanner: any;
     currentCreator: TeamMember;
+    summaryTeam: Team;
     // Till the backend supports user selecting, use dummy data
-    allUsers: User [];
+    allUsers;
     currentUser: User;
 
     constructor (private _formBuilder: FormBuilder, private teamService: TeamService) {}
@@ -33,33 +35,37 @@ export class TeamCreateComponent implements OnInit {
     public getAllUsers () {
         // Set the array for all users
         this.teamService.getAllUsers().then (data => {
-            data.forEach (function (ref, n) {
-                var dummyBio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit " + 
-                "Donec vitae elit aliquam, dignissim ex sed, fermentum ex. " + 
-                "Ut gravida sodales sagittis. Suspendisse lacus ipsum, maximus vitae " + 
-                "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
-                "justo eleifend, quis tincidunt sapien.";
-                if (!data[n].profile) {
-                    data[n].profile = 'assets/0.jpg';
-                }
-                if (!data[n].bio) {
-                    data[n].bio = dummyBio;
-                }
-            });
-            this.allUsers = data;
-
-            // Set the current user
-            this.teamService.getMe().then (idObj => {
-                this.currentUser = this.allUsers.find (function (user) {
-                    return user._id == idObj.currUser;
+            if (data) {
+                data.forEach (function (ref, n) {
+                    var dummyBio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit " + 
+                    "Donec vitae elit aliquam, dignissim ex sed, fermentum ex. " + 
+                    "Ut gravida sodales sagittis. Suspendisse lacus ipsum, maximus vitae " + 
+                    "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
+                    "justo eleifend, quis tincidunt sapien.";
+                    if (!data[n].profile) {
+                        data[n].profile = 'assets/0.jpg';
+                    }
+                    if (!data[n].bio) {
+                        data[n].bio = dummyBio;
+                    }
                 });
-                this.currentCreator = new TeamMember (this.currentUser, true, true);
-            });
-            // Set the filter for users for searching later
-            this.filteredUsers = this.myControl.valueChanges.pipe (
-                startWith(''),
-                map (user => user ? this._filter(user) : this.allUsers.slice())
-            );
+                this.allUsers = data;
+
+                // Set the current user
+                this.teamService.getMe().then (idObj => {
+                    if (idObj) {
+                        this.currentUser = this.allUsers.find (function (user) {
+                            return user._id == idObj.currUser;
+                        });
+                        this.currentCreator = new TeamMember (this.currentUser, true, true);
+                    }
+                });
+                // Set the filter for users for searching later
+                this.filteredUsers = this.myControl.valueChanges.pipe (
+                    startWith(''),
+                    map (user => user ? this._filter(user) : this.allUsers.slice())
+                );
+            }
         });
     }
 
@@ -82,14 +88,8 @@ export class TeamCreateComponent implements OnInit {
     }
 
     createTeam() {
-    //console.log (this.enteredTeamName);
-    //console.log (this.enteredTeamDescription);
-    //console.log (this.selectedTeamMembers);
-    //console.log (this.currentCreator);
     console.log ("creating team");
-    var newTeam = new Team (this.enteredTeamName, this.enteredTeamDescription, 
-                    this.currentCreator, this.selectedTeamMembers);
-    this.teamService.writeTeam (newTeam);
+    this.teamService.writeTeam (this.summaryTeam);
     console.log ("done creating team");
     }
 
@@ -101,9 +101,6 @@ export class TeamCreateComponent implements OnInit {
         });
         if (!exists) {
             this.selectedTeamMembers.push (new TeamMember (user, false, false));
-            console.log ("Added new team member");
-            console.log ("The team members are currently: ");
-            console.log (this.selectedTeamMembers);
         }
         this.secondFormGroup.controls["SearchCtrl"].reset();
     }
@@ -113,4 +110,16 @@ export class TeamCreateComponent implements OnInit {
         this.selectedTeamMembers.splice (n, 1);
     }
 
+    setSummaryTeam () {
+        this.summaryTeam = new Team (this.enteredTeamName, this.enteredTeamDescription, 
+                        this.currentCreator, this.selectedTeamMembers, this.givenTeamBanner);
+    }
+
+    setImage (givenFile) {
+        console.log ("Setting image");
+        this.givenTeamBanner = givenFile; 
+        if (this.givenTeamBanner) {
+            console.log ("image set");
+        }
+    }
 }

@@ -2,7 +2,7 @@
     <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Your team details</ng-template>
-            <mat-grid-list cols="1" rowHeight="10:1">
+            <mat-grid-list cols="1" rowHeight="100px">
                 <mat-grid-tile>
                     <mat-form-field id="teamName">
                         <input          [(ngModel)]="enteredTeamName" 
@@ -12,7 +12,7 @@
                     </mat-form-field>
                 </mat-grid-tile>
             </mat-grid-list>
-            <mat-grid-list cols="1" rowHeight="10:1">
+            <mat-grid-list cols="1" rowHeight="100px">
                 <mat-grid-tile>
                     <mat-form-field id="teamDescription">
                         <textarea matInput 
@@ -23,6 +23,14 @@
                                         matAutosizeMinRows=3
                                         ></textarea>
                     </mat-form-field>
+                </mat-grid-tile>
+                    <mat-grid-tile rowspan="3" *ngIf="givenTeamBanner">
+                        <img id="banner" [src]="givenTeamBanner">
+                    </mat-grid-tile>
+                <mat-grid-tile>
+                    <app-imgup 
+                        [buttonLine]="'Upload a team banner'" 
+                        (imgEmitter)="setImage($event)"></app-imgup>
                 </mat-grid-tile>
             </mat-grid-list>
         </form>
@@ -62,7 +70,8 @@
                 <mat-grid-tile>
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button (click)="setSummaryTeam()"
+                            matStepperNext>Next</button>
                     </div>
                 </mat-grid-tile>
             </mat-grid-list>
@@ -70,7 +79,7 @@
         <mat-divider></mat-divider>
         <!-- display current team members from here -->
         <!-- start first with the team leader -->
-        <mat-grid-list cols="3" rowHeight="400px">
+        <mat-grid-list cols="3" rowHeight="280px">
             <mat-grid-tile *ngIf="currentCreator">
                 <app-memcard 
                     [teamMember]="currentCreator"
@@ -92,9 +101,11 @@
     </mat-step>
     <mat-step>
         <ng-template matStepLabel>Team Summary</ng-template>
-        <mat-grid-list cols="1" rowHeight="12:1">
+        <mat-grid-list cols="1" rowHeight="100px">
             <mat-grid-tile>
-                <button mat-button (click)="createTeam()">Submit</button>
+                <a routerLink="/app/teamdash">
+                    <button mat-button (click)="createTeam()">Submit</button>
+                </a>
             </mat-grid-tile>
             <mat-grid-tile>
                 <mat-form-field appearance="fill" id="nameSummary">
@@ -108,6 +119,9 @@
                     <textarea matInput value="{{ enteredTeamDescription }}" disabled="true">
                     </textarea>
                 </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile *ngIf="givenTeamBanner" rowspan="3">
+                <img id="summarybanner" [src]="givenTeamBanner">
             </mat-grid-tile>
         </mat-grid-list>
         <!-- Display the members here again -->

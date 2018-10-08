@@ -11,7 +11,7 @@ export class TeamService {
     constructor (private http: HttpClient) {}
     
     // Get request for the current user
-    getMe (): Promise<void | User> {
+    getMe (): Promise<void | any> {
         return this.http.get(this.meUrl)
             .toPromise()
             .then (response => response as User)
@@ -19,7 +19,7 @@ export class TeamService {
     }
 
     // Get request for all users
-    getAllUsers (): Promise <void | User []> {
+    getAllUsers (): Promise <void | any> {
         return this.http.get(this.usersUrl)
             .toPromise()
             .then (response => response as User [])
@@ -30,6 +30,29 @@ export class TeamService {
         return this.http.post (this.teamsUrl, newTeam)
             .toPromise()
             .then(response => response as Team)
+            .catch (this.handleError);
+    }
+    
+    getAllTeams (): Promise <void | Team []> {
+        return this.http.get(this.teamsUrl)
+            .toPromise ()
+            .then (response => response as Team [])
+            .catch (this.handleError)
+    }
+
+    updateTeam (updatedTeam): Promise <any> {
+        const httpOptions = {
+        }
+        return this.http.put (this.teamsUrl + "/" + updatedTeam._id, updatedTeam, httpOptions)
+            .toPromise()
+            .then()
+            .catch(this.handleError);
+    }
+
+    deleteTeam (teamToDelete): Promise <any> {
+        return this.http.delete (this.teamsUrl + "/" + teamToDelete._id)
+            .toPromise()
+            .then()
             .catch (this.handleError);
     }
 

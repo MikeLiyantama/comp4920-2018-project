@@ -34,3 +34,14 @@
     font-size: 20px;
     min-width: 400px;
 }
+
+#banner {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+#summarybanner {
+    -webkit-filter: grayscale (100%);
+    max-width: 300px;
+    max-height: 300px;
+}

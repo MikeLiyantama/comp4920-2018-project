@@ -1,0 +1,66 @@
+<mat-tab-group>
+    <mat-tab label="Team Details">
+        <br>
+        <form [formGroup]="detailsGroup">
+        <mat-grid-list cols="1" rowHeight="100px">
+            <mat-grid-tile>
+                <button mat-stroked-button
+                        (click)="saveChanges()"
+                        color="accent">Save Changes</button>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" id="nameSummary">
+                    <mat-label>Team Name</mat-label>
+                    <input 
+                    matInput 
+                    formControlName="NameCtrl"
+                    value="{{ team.name }}">
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <mat-form-field appearance="fill" id="descriptionSummary">
+                    <mat-label>Team Description</mat-label>
+                    <textarea 
+                    matInput 
+                    formControlName="DescCtrl"
+                    value="{{ team.description
+                    }}"></textarea>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile rowspan="4">
+                <img id="banner" [src]="team.banner">
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <app-imgup 
+                    [buttonLine]="'Change team banner'" 
+                    (imgEmitter)="setImage($event)"></app-imgup>
+            </mat-grid-tile>
+        </mat-grid-list>
+        </form>
+    </mat-tab>
+    <mat-tab label="Add/Remove Members">
+        <br>
+        <app-memfinder></app-memfinder> 
+        <mat-divider></mat-divider>
+        <mat-grid-list cols="3" rowHeight="280px">
+            <mat-grid-tile>
+                <app-memcard [teamMember]="team.creator"
+                     [creatorDisabled]="true"
+                     [leaderDisabled]="true"
+                     [removeDisabled]="true"
+                     ></app-memcard>
+            </mat-grid-tile>
+            <mat-grid-tile *ngFor="let m of team.members">
+                <app-memcard [teamMember]="m"
+                    [creatorDisabled]="true"
+                     [leaderDisabled]="true"
+                     [removeDisabled]="true"
+                     ></app-memcard>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-tab>
+    <mat-tab label="Discussion Board">
+    
+    </mat-tab>
+</mat-tab-group>

@@ -22,6 +22,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -38,7 +39,12 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
 import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
 import { MemcardComponent } from './teammanage/memcard/memcard.component';
-
+import { ImageUploadComponent } from './teammanage/imgup/imgup.component';
+import { TeamCardComponent } from './teammanage/teamcard/teamcard.component';
+import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
+import { TeamDisplayComponent } from './teammanage/teamdash/teamdisp/teamdisp.component';
+import { TeamDetailsComponent } from './teammanage/teamdash/teamdetail/teamdetail.component';
+import { MemfinderComponent } from './teammanage/memfinder/memfinder.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -58,7 +64,13 @@ export function tokenGetter() {
     AuthLayoutComponent,
     TeamManagementComponent,
     TeamCreateComponent,
-    MemcardComponent
+    MemcardComponent,
+    ImageUploadComponent,
+    TeamCardComponent,
+    TeamDashComponent,
+    TeamDisplayComponent,
+    TeamDetailsComponent,
+    MemfinderComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +107,8 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
