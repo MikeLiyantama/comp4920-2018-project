@@ -85,8 +85,9 @@ export class RecoverComponent implements OnInit {
   }
 
   // send request to backend to change to a new password input by the user
-  newPass() {
+  newPass(event) {
     // this.error = true;
+    event.preventDefault();
     var response;
 
     this.authService.changeEmail(this.username, this.newPassword).subscribe(res => {
@@ -100,9 +101,10 @@ export class RecoverComponent implements OnInit {
       } else {
         this.error = true;
         this.errorMessage = response.error;
+      
       }
     })
-
     
   }
+
 }

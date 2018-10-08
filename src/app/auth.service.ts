@@ -12,9 +12,9 @@ export class AuthService{
 
   private returnValue;
   private authUrl = "https://comp4920-organiser.herokuapp.com/api/auth";
-  private checkUrl = "https://comp4920-organiser.herokuapp.com/api/check/" // add email
+  private checkUrl = "https://comp4920-organiser.herokuapp.com/api/account/check/" // add email
   private verifyUrl = "https://comp4920-organiser.herokuapp.com/api/account/email_verification"
-  private changeUrl = "https://comp4920-organiser.herokuapp.com/api/change" // add email
+  private changeUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/" // add email
   
 
   authenticate(user, pass):Observable<any> {
@@ -23,8 +23,7 @@ export class AuthService{
 
   checkEmail(email):Observable<any> {
     var checkUrl = this.checkUrl + email;
-    return this.http.get(this.checkUrl);
-
+    return this.http.get(checkUrl);
   }
 
   validate(email):Observable<any> {
@@ -32,8 +31,8 @@ export class AuthService{
   }
 
   changeEmail(email, newPassword):Observable<any> {
-    this.changeUrl = this.changeUrl + email;
-    return this.http.put(this.changeUrl, {newPassword});
+    var changeUrl = this.changeUrl + email;
+    return this.http.put(changeUrl, {"password": newPassword});
   }
 
   

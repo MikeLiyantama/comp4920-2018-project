@@ -1,9 +1,8 @@
 <div class="wrapper" *ngIf="success; else recover">
-
-  <div class="form-group">
-    <h1>You have successfully changed your password!</h1>
+  <form class="form">
+    <h1>You have changed your password!</h1>
     <a routerLink="/auth/login">Back to login</a> 
-  </div>
+  </form>
 
 </div>
 
@@ -29,8 +28,8 @@
 
 </div>
 <ng-template #codeSent>
-  <div class="wrapper" *ngIf="!codeCorrect; else newPass">
-    <form class="form" (submit)="checkCode()">
+  <div class="wrapper" *ngIf="!codeCorrect; else newPassTemplate">
+    <form class="form" (submit)="checkCode()" autocomplete="off" >
       <h1>Enter the code </h1>
       <mat-form-field class="form-group input-field">
         <mat-label>Code</mat-label>
@@ -49,13 +48,13 @@
   </div>
 </ng-template>
 
-<ng-template #newPass>
+<ng-template #newPassTemplate>
   <div class="wrapper">
-    <form class="form" (submit)="newPass()">
+    <form class="form" (submit)="newPass($event)">
       <h1>Enter a new password </h1>
       <mat-form-field class="form-group input-field">
         <mat-label>New Password</mat-label>
-        <input matInput [(ngModel)]="newPassword" name="newPassword" type="text">
+        <input matInput [(ngModel)]="newPassword" name="newPassword" type="password">
       </mat-form-field>
       <div *ngIf="error">
         You have made a grave mistake... {{errorMessage}}
