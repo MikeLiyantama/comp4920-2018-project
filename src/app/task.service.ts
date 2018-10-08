@@ -30,9 +30,9 @@ export class TaskService {
 
     // Get request for tasks
     getTasks(filters: Object = {}): Observable<Task []> {
-        const params = new HttpParams();
+        let params = new HttpParams();
         Object.entries(filters).forEach(([filter, value]) => {
-            params.set(filter, value);
+            params = params.append(filter, value);
         });
         const options = { params };
         return this.http.get<Task []>(this.tasksUrl, options)
