@@ -16,7 +16,9 @@ export class MemcardComponent implements OnInit {
     @Output () removeEmitter = new EventEmitter <TeamMember> ();
 
     ngOnInit () {
-        console.log ("card: ", this.teamMember);
+        if (!this.teamMember.user.profile) {
+            this.teamMember.user.profile = 'assets/0.jpg';
+        }
     }
 
     removeMember () {
