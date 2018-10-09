@@ -25,7 +25,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
 import { MatBadgeModule } from '@angular/material/badge';
 
 import { AppComponent } from './app.component';
@@ -67,7 +66,7 @@ export function tokenGetter() {
     TaskDetailComponent,
     TaskListComponent,
     CompletedTaskListComponent,
-    RecoverComponent
+    RecoverComponent,
     TeamManagementComponent,
     TeamCreateComponent,
     MemcardComponent,
@@ -115,7 +114,7 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
     MatBottomSheetModule,
     DragDropModule,
-    MatCardModule
+    MatCardModule,
     MatStepperModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
