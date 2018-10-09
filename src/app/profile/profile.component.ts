@@ -11,6 +11,7 @@ import { ProfileService } from '../profile.service';
 export class ProfileComponent implements OnInit {
   isUser : boolean;
   editMode : boolean = false;
+  id : String;
   name : String;
   bio : String;
   profile : String;
@@ -18,7 +19,6 @@ export class ProfileComponent implements OnInit {
   profilePicUrl : String;
   email : String;
   constructor(
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private profileService: ProfileService,
     private snackBar: MatSnackBar
@@ -28,19 +28,36 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     let thisC = this;
-    this.profileService.getUserData()
+
+    //Get ID from URL
+    this.id = thisC.activatedRoute.snapshot.paramMap.get('profileID')
+
+    //Get Data for id
+    thisC.profileService.getUserData(this.id)
+    .subscribe(function(res){
+      let response;
+      response = res;
+      console.log(res);
+      if(response._id){
+        thisC.name = response.name;
+        thisC.username = response.username;
+        thisC.bio = response.bio;
+        thisC.profile = response.profile;
+        thisC.email = response.email;
+
+        thisC.profileService.getCurrentId()
         .subscribe(function(res){
-          let response;
-          response = res;
-          console.log(res);
-          if(response._id){
-            thisC.name = response.name;
-            thisC.username = response.username;
-            thisC.bio = response.bio;
-            thisC.profile = response.profile;
-            thisC.email = response.email;
-          }
+            let response;
+            response = res;
+            let currentUserId = response.currUser;
+            if(currentUserId == thisC.id){
+              thisC.isUser = true;
+            } else {
+              thisC.isUser = false;
+            }
         });
+      }
+    });
   }
 
   updateData(username, name, bio, profile){

@@ -26,4 +26,8 @@ export class AuthService{
   updateEmail(email, n_email) : Observable<any>{
     return this.http.put( this.updateAccountUrl + email, {"email" : n_email} );
   }
+
+  getCurrentUser() : Observable<any>{
+    return this.http.get("https://comp4920-organiser.herokuapp.com/api/me");
+  }
 }

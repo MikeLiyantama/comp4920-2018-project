@@ -11,8 +11,8 @@ export class ProfileService {
     private http: HttpClient
   ) { }
 
-  getUserData() {
-    return this.http.get(this.userDataUrl);
+  getUserData(id) {
+    return this.http.get(this.userDataUrl + "/" + id);
   }
 
   updateUserData(name, username, bio, profile){

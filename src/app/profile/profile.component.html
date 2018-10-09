@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngIf="!editMode;else editCard">
+    <div *ngIf="!editMode && isUser;else editCard">
         <div layout="edit-button" layout-align="end center">
             <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
         </div>
