@@ -12,9 +12,9 @@ import { Task } from './task.model';
 })
 export class TaskService {
 
-    private tasksUrl = 'http://localhost:8080/api/task';
+    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
 
-    private listsUrl = 'http://localhost:8080/api/list';
+    private listsUrl = 'https://comp4920-organiser.herokuapp.com/api/list';
 
     private taskListValidSource = new Subject<boolean>();
 
