@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Team } from '../../team.model';
 import { TeamMember } from '../../teammember.model';
 import { TeamService } from '../../team.service';
@@ -50,6 +51,9 @@ export class TeamDisplayComponent implements OnInit {
         var n = this.teams.indexOf (event);
         this.teams.splice (n, 1);
         this.teamService.deleteTeam (event);
+        this.numTeams = this.numTeams - 1;
+
+        this.gridTiles = this.getNumGridTiles();
     }
 
     public switchToDetails (event) {
@@ -58,6 +62,7 @@ export class TeamDisplayComponent implements OnInit {
 
 
     ngOnInit () {
+        console.log ("Initialising team display");
         this.teamService.getAllTeams().then (data => this.setTeams(data));
     }
 

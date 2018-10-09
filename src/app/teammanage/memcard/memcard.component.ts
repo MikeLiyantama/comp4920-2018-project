@@ -16,8 +16,16 @@ export class MemcardComponent implements OnInit {
     @Output () removeEmitter = new EventEmitter <TeamMember> ();
 
     ngOnInit () {
+        var dummyBio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit " + 
+        "Donec vitae elit aliquam, dignissim ex sed, fermentum ex. " + 
+        "Ut gravida sodales sagittis. Suspendisse lacus ipsum, maximus vitae " + 
+        "gravida vulputate,  varius vulputate nulla. Phasellus gravida augue ac " + 
+        "justo eleifend, quis tincidunt sapien.";
         if (!this.teamMember.user.profile) {
             this.teamMember.user.profile = 'assets/0.jpg';
+        }
+        if (!this.teamMember.user.bio) {
+            this.teamMember.user.bio = dummyBio; 
         }
     }
 

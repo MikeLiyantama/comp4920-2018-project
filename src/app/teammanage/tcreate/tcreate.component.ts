@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { map, startWith  } from 'rxjs/operators';
 import { User } from '../../user/user.model';
 import { TeamService } from '../team.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-teamcreate',
@@ -30,7 +31,7 @@ export class TeamCreateComponent implements OnInit {
     allUsers;
     currentUser: User;
 
-    constructor (private _formBuilder: FormBuilder, private teamService: TeamService) {}
+    constructor (private _formBuilder: FormBuilder, private teamService: TeamService, private router: Router) {}
 
     public getAllUsers () {
         // Set the array for all users
@@ -87,10 +88,14 @@ export class TeamCreateComponent implements OnInit {
         return this.allUsers.filter (user => user.username.toLowerCase().indexOf(filterValue) ===0);
     }
 
+    public routeDash () {
+        this.router.navigate(['teamdash']);
+    }
+
     createTeam() {
-    console.log ("creating team");
-    this.teamService.writeTeam (this.summaryTeam);
-    console.log ("done creating team");
+    this.teamService.writeTeam (this.summaryTeam).then ((resp) => {
+    this.router.navigate(['app/teamdash']); 
+    });
     }
 
     addTeamMember (user: User) {

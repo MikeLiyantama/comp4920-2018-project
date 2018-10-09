@@ -37,9 +37,25 @@ export class TeamDetailsComponent implements OnInit {
     }
 
     saveChanges () {
-        console.log (this.team);
         this.team.name = this.detailsGroup.controls["NameCtrl"].value;
         this.team.description = this.detailsGroup.controls["DescCtrl"].value;
         this.teamService.updateTeam(this.team);
+    }
+
+    addToTeam (event) {
+        var exists = this.team.members.some (function (a) {
+            return a.user.username == event.username;
+        });
+        if (!exists) {
+            this.team.members.push (new TeamMember (event, false, false));
+            this.teamService.addMemberToTeam (event, this.team);
+        }
+    }
+
+    removeFromTeam (event) {
+        // event should be emitted member from memcard component
+        var n = this.team.members.indexOf(event);
+        this.team.members.splice (n, 1);
+        this.teamService.removeFromTeam(event, this.team);
     }
 }

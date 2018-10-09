@@ -41,8 +41,7 @@ export class TeamService {
     }
 
     updateTeam (updatedTeam): Promise <any> {
-        const httpOptions = {
-        }
+        const httpOptions = {};
         return this.http.put (this.teamsUrl + "/" + updatedTeam._id, updatedTeam, httpOptions)
             .toPromise()
             .then()
@@ -54,6 +53,29 @@ export class TeamService {
             .toPromise()
             .then()
             .catch (this.handleError);
+    }
+
+    addMemberToTeam (userToAdd, team): Promise <any> {
+        const httpOptions = {};
+        var url = this.teamsUrl + "/" + team._id + "/member";
+        return this.http.put (url, userToAdd, httpOptions)
+            .toPromise()
+            .then()
+            .catch(this.handleError);
+    }
+
+    removeFromTeam (memberToRemove, team): Promise <any> {
+        var teamID = team._id;
+        var deleteUrl = this.teamsUrl + "/" + teamID + "/member";
+        const httpOptions = {}
+        return this.http.request ('delete', deleteUrl, {body: memberToRemove.user})
+            .toPromise()
+            .then()
+            .catch(this.handleError);
+        //return this.http.delete (deleteUrl, httpOptions)
+        //    .toPromise()
+        //    .then()
+        //    .catch(this.handleError);
     }
 
     private handleError (error: any) {

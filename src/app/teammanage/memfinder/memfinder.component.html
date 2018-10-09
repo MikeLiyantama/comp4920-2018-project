@@ -1,5 +1,5 @@
 <form [formGroup]="userFormGroup">
-    <mat-grid-list cols="1" rowHeight="13:1">
+    <mat-grid-list cols="1" rowHeight="9:1">
         <mat-grid-tile>
             <mat-form-field id="memberSearch" appearance="outline">
                 <mat-label>Member Search</mat-label>
@@ -13,7 +13,7 @@
 
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let user of filteredUsers | async"
-                       [value]="user.username" (click)="selectMember()">
+                       [value]="user.username" (click)="selectMember(user)">
                     <img class="profileimg" [src]="user.profile">
                     <span>{{ user.username }}</span>
                     <mat-divider></mat-divider>

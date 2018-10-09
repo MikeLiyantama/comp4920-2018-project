@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -16,10 +16,15 @@ import { TeamService } from '../team.service';
 
 export class MemfinderComponent implements OnInit {
     myUserControl = new FormControl ();
+    // Note that the finder emits users because users added to a team after
+    // that team has been created are added by default as plain members and 
+    // not as leaders
+    @Output() newMemberEmitter = new EventEmitter <User>(); 
     allUsers: User [];
     userFormGroup: FormGroup;
     filteredUsers: Observable <User[]>;
     filteredMembers: Observable <TeamMember[]>;
+
 
     constructor (private _formBuilder: FormBuilder, private teamService: TeamService) {}
 
@@ -49,8 +54,11 @@ export class MemfinderComponent implements OnInit {
         });
     }
 
-    selectMember() {
-
+    selectMember(user) {
+        console.log ("Adding user: ", user);
+        this.newMemberEmitter.emit (user);
+        this.userFormGroup.controls["SearchCtrl"].reset();
+        // write it to db here
     }
 
     ngOnInit () {

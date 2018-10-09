@@ -38,9 +38,6 @@ export class TeamCardComponent implements OnInit {
             if (!this.team.hasOwnProperty('banner') || !this.team.banner) {
                 this.team['banner'] = 'assets/defaultteam.jpg';
             }
-
-            console.log ("in card: ");
-            console.log (this.team);
         }
     }
 }

@@ -19,12 +19,12 @@ const routes: Routes = [
   { path: 'app', component: AppLayoutComponent, children: [
       { path: '', component: TaskControlComponent },
       { path: 'teamcreate', component: TeamCreateComponent },
-      { path: 'teamdash', component: TeamDashComponent }
+      { path: 'teamdash', component: TeamDashComponent, runGuardsAndResolvers: 'always' }
   ]}
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+imports: [ RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'}) ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

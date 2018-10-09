@@ -43,7 +43,7 @@
     <mat-step [stepControl]="secondFormGroup">
         <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Add some members</ng-template>
-            <mat-grid-list cols="1" rowHeight="13:1">
+            <mat-grid-list cols="1" rowHeight="9:1">
                 <mat-grid-tile>
                     <mat-form-field id="memberSearch" appearance="outline">
                         <!-- drop search component here --> 
@@ -103,9 +103,9 @@
         <ng-template matStepLabel>Team Summary</ng-template>
         <mat-grid-list cols="1" rowHeight="100px">
             <mat-grid-tile>
-                <a routerLink="/app/teamdash">
+                <!--a routerLink="/app/teamdash"-->
                     <button mat-button (click)="createTeam()">Submit</button>
-                </a>
+                <!--/a-->
             </mat-grid-tile>
             <mat-grid-tile>
                 <mat-form-field appearance="fill" id="nameSummary">
