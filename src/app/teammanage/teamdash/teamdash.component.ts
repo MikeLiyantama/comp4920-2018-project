@@ -14,9 +14,8 @@ export class TeamDashComponent implements OnInit {
     showOverview: boolean = true;
     showDetail: boolean = false;
     receivedTeam: Team;
-    ngOnInit () {
 
-    }
+    ngOnInit () { }
 
     contextSwitch (event) {
     //console.log ("Inside context switch");

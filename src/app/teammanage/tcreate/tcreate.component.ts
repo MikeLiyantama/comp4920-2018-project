@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Team } from '../team.model';
-import { TeamMember } from '../teammember.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith  } from 'rxjs/operators';
+
+import { Team } from '../team.model';
+import { TeamMember } from '../teammember.model';
 import { User } from '../../user/user.model';
+
+import { AppbarService } from '../../appbar.service';
 import { TeamService } from '../team.service';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-teamcreate',
@@ -31,7 +33,12 @@ export class TeamCreateComponent implements OnInit {
     allUsers;
     currentUser: User;
 
-    constructor (private _formBuilder: FormBuilder, private teamService: TeamService, private router: Router) {}
+    constructor (
+        private appbarService: AppbarService,
+        private _formBuilder: FormBuilder,
+        private teamService: TeamService,
+        private router: Router
+    ) {}
 
     public getAllUsers () {
         // Set the array for all users
@@ -80,7 +87,7 @@ export class TeamCreateComponent implements OnInit {
             SearchCtrl: ['', Validators.required]
         });
 
-
+        this.appbarService.setTitle('Create a Team');
     }
 
     private _filter (value: string): User[] {

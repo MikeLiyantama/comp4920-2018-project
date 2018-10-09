@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SignupserviceService } from '../signupservice.service';
+import { SignupService } from '../signup.service';
 import { User } from '../user/user.model';
 
 
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private signupservice: SignupserviceService
+    private signupService: SignupService
   ) { }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class SignupComponent implements OnInit {
 
     if (this.checkValid(user, pass, cpass)) {
       this.invalid = undefined;
-      this.signupservice.register(newUser)
+      this.signupService.register(newUser)
         .subscribe(res => {
           response = res;
           if (response.success) {

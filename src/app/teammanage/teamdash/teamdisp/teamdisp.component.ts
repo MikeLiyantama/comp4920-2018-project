@@ -1,7 +1,10 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Team } from '../../team.model';
 import { TeamMember } from '../../teammember.model';
+
+import { AppbarService } from '../../../appbar.service';
 import { TeamService } from '../../team.service';
 
 @Component({
@@ -18,7 +21,7 @@ export class TeamDisplayComponent implements OnInit {
     numTeams = 0;
     gridTiles = 0;
 
-    constructor (private teamService: TeamService) {}
+    constructor (private appbarService: AppbarService, private teamService: TeamService) {}
 
     public getNumGridTiles () {
         var size;
@@ -58,12 +61,13 @@ export class TeamDisplayComponent implements OnInit {
 
     public switchToDetails (event) {
         this.detailsContextEmitter.emit (event);
+        this.appbarService.setTitle(event.name);
     }
-
 
     ngOnInit () {
         console.log ("Initialising team display");
         this.teamService.getAllTeams().then (data => this.setTeams(data));
+        this.appbarService.setTitle('My Teams');
     }
 
 }

@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
-
+import { switchMap } from 'rxjs/operators';
 
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatBottomSheet } from '@angular/material';
 
 import { CompletedTaskListComponent } from '../completed-task-list/completed-task-list.component';
 
+import { List } from '../list.model';
 import { Task } from '../task.model';
+
+import { AppbarService } from '../appbar.service';
 import { TaskService } from '../task.service';
 
 @Component({
@@ -18,36 +22,56 @@ import { TaskService } from '../task.service';
 export class TaskListComponent {
 
   subscription: Subscription;
+
+  listId: string;
   quickAddTask: string;
   loading: boolean = true;
   tasks: Task[] = [];
   loadingCompletedTasks: boolean = false;
   completedTasks: Task[] = [];
 
-  constructor(private taskService: TaskService, private bottomSheet: MatBottomSheet) { 
+  constructor(
+    private appbarService: AppbarService,
+    private taskService: TaskService,
+    private bottomSheet: MatBottomSheet,
+    private route: ActivatedRoute,
+    private router: Router,
+    ) { 
     this.subscription = taskService.taskListValid$.subscribe(
       taskListValid => {
         if (!taskListValid) {
           taskService.validateTaskListStatus();
-          this.getTasks();
+          this.getTasks(this.listId);
         }
       }
     )
   }
 
   ngOnInit() {
-    this.getTasks();
+    this.route.paramMap.subscribe((params) => {
+      this.listId = params.get('listId');
+      if (this.listId === 'today') {
+        this.appbarService.setTitle('Today');
+      }
+      this.loading = true;
+      this.getTasks(this.listId);
+    });
   }
   
-  async getTasks() {
-    this.taskService.getTasks().subscribe((tasks: Task[]) => {
+  getTasks(listId: string) {
+    const filters = { listId };
+    this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
       this.loading = false;
-      this.tasks = tasks;
+      this.tasks = tasks || [];
     });
   }
 
   addTask() {
-    this.taskService.addTask({ title: this.quickAddTask }).subscribe(() => {
+    const newTask = <Task>{ title: this.quickAddTask };    
+    if (this.listId !== 'today') {
+      newTask.listId = this.listId;
+    }
+    this.taskService.addTask(newTask).subscribe(() => {
       this.taskService.invalidateTaskListStatus();
       this.quickAddTask = '';
     }) 
@@ -68,7 +92,12 @@ export class TaskListComponent {
 
   openCompletedTasks() {
     this.loadingCompletedTasks = true;
-    this.taskService.getTasks({ completed: true }).subscribe((tasks: Task[]) => {
+
+    const filters = <any>{ completed: true };
+    if (this.listId !== 'today') {
+      filters.listId = this.listId;
+    }
+    this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
       this.loadingCompletedTasks = false;
       this.bottomSheet.open(CompletedTaskListComponent, {
         data: { completedTasks: tasks },

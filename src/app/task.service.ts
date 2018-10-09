@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/comm
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { List } from './list.model';
 import { Task } from './task.model';
 
 // Adapted from: https://devcenter.heroku.com/articles/mean-apps-restful-api#create-the-contact-service-to-make-requests-to-the-api-server
@@ -11,14 +12,39 @@ import { Task } from './task.model';
 })
 export class TaskService {
 
-    // Fix url later
-    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
+    private tasksUrl = 'http://localhost:8080/api/task';
+
+    private listsUrl = 'http://localhost:8080/api/list';
 
     private taskListValidSource = new Subject<boolean>();
 
     taskListValid$ = this.taskListValidSource.asObservable();
 
+    private taskListsValidSource = new Subject<boolean>();
+
+    taskListsValid$ = this.taskListsValidSource.asObservable();
+
+    currentList: List;
+
     constructor (private http: HttpClient) {}
+
+    addList(newList: List): Observable<List> {
+        return this.http.post<List>(this.listsUrl, newList)
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
+    getList(listId: string): Observable<List> {
+        return this.http.get<List>(`${this.listsUrl}/${listId}`)
+    }
+
+    getLists(): Observable<List[]> {
+        return this.http.get<List[]>(this.listsUrl)
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
 
     // Post request for tasks
     addTask(newTask: Task): Observable<Task> {
@@ -95,6 +121,14 @@ export class TaskService {
 
     validateTaskListStatus() {
         this.taskListValidSource.next(true);
+    }
+
+    invalidateTaskListsStatus() {
+        this.taskListsValidSource.next(false);
+    }
+
+    validateTaskListsStatus() {
+        this.taskListsValidSource.next(true);
     }
 
     private handleError (error: any) {

@@ -1,0 +1,63 @@
+<mat-nav-list>
+    <!---List of Task Lists here-->
+  <h3 matSubheader>Lists</h3>
+  <a mat-list-item 
+    routerLink="/app/today"
+    routerLinkActive="active-list-item"
+    (click)="changeAppTitle($event)"
+  >
+    Today
+  </a>
+  <a mat-list-item 
+    *ngFor="let taskList of taskLists"
+    class="taskList"
+    routerLink="/app/{{taskList._id}}"
+    routerLinkActive="active-list-item"
+    (click)="changeAppTitle($event)"
+  >
+    {{taskList.title}}
+  </a>
+  <mat-list-item *ngIf="!showAddListInput" (click)="toggleAddListInput()">
+      <mat-icon matListIcon>add</mat-icon>
+      Add List
+  </mat-list-item>
+  <mat-list-item *ngIf="showAddListInput">
+    <form (submit)="addList()">
+      <mat-form-field floatLabel="never">
+        <input 
+          matInput 
+          placeholder="Add List" 
+          name="addListName" 
+          type="text" 
+          [(ngModel)]="addListName"
+          [(disabled)]="addListDisabled"
+        >
+      </mat-form-field>
+    </form>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <!---List of Collaborative Task Lists here-->
+  <h3 matSubheader>Collaborative Lists</h3>
+  <mat-list-item>Fake Collaborative List</mat-list-item>
+  <mat-list-item>Another FakeCollaborative List</mat-list-item>
+  <mat-list-item>Yet Another Collaborative List</mat-list-item>
+  <mat-divider></mat-divider>
+  <!---List of Teams here-->
+  <h3 matSubheader>Teams</h3>
+  <a 
+    mat-list-item 
+    routerLink="/app/teamcreate"
+    routerLinkActive="active-list-item"
+    (click)="changeAppTitle($event)"
+  >
+    Create a Team
+  </a>
+  <a
+    mat-list-item
+    routerLink="/app/teamdash"
+    routerLinkActive="active-list-item"
+    (click)="changeAppTitle($event)"
+  >
+    My Teams
+  </a>
+</mat-nav-list>

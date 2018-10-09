@@ -19,9 +19,10 @@ const routes: Routes = [
     { path: 'recover', component: RecoverComponent }
   ]},
   { path: 'app', component: AppLayoutComponent, children: [
-    { path: '', component: TaskListComponent },
-      { path: 'teamcreate', component: TeamCreateComponent },
-      { path: 'teamdash', component: TeamDashComponent, runGuardsAndResolvers: 'always' }
+    { path: '', redirectTo: 'today', pathMatch: 'full' },
+    { path: 'teamcreate', component: TeamCreateComponent },
+    { path: 'teamdash', component: TeamDashComponent, runGuardsAndResolvers: 'always' },
+    { path: ':listId', component: TaskListComponent },
   ]}
 ];
 

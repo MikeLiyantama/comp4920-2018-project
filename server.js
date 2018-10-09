@@ -224,6 +224,99 @@ app.post('/api/account/email_verification', function(req, res){
 });
 
 
+
+/**
+ * ************************ LISTS ************************
+ */
+
+let LISTS_COLLECTION = 'LISTS';
+
+// Create list
+app.post('/api/list', passport.authenticate('jwt', {session: false}), function (req, res) {
+  var newList = req.body;
+  newList.createdAt = new Date();
+  newList.createdBy = req.user._id;
+  if (!req.body.title) {
+    returnError(res, 'Invalid user input', 'Must provide a title', 400);
+  } else {
+    db.collection(LISTS_COLLECTION).insertOne(newList, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to create new list");
+      } else {
+        res.status(201).json(doc.ops[0]);
+      }
+    });
+  }
+});
+
+// Get all lists a user has created
+app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (req, res) {
+  db.collection(LISTS_COLLECTION).find({createdBy : req.user._id}).toArray(function (err, docs) {
+    if (err) {
+      returnError(res, err.message, "Failed to retieve lists");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+// Get a list with specific id
+app.get('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve list");
+      } else {
+        if (doc) {
+          res.status(200).json(doc);
+        } else {
+          returnError(res, 'No list found', 'No list found', 404);
+        }
+      }
+    });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+});
+
+// Delete list with specific id
+app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).deleteOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+                  if (err) {
+                    returnError(res, err.message, "Failed to delete list");
+                  } else {
+        if(doc.deletedCount > 0) {
+          res.status(200).json({"message": "success"});
+        } else {
+          returnError(res, 'No list found', 'No list found', 404);
+        }
+      }
+    });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+});
+
+// Update a list
+app.put('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
+      if (err) {
+        returnError(res, err.message, "Failed to update list");
+      } else if (result.result.n === 1) {
+        res.status(204).send({});
+      } else {
+        returnError(res, 'No list found', 'No list found', 404);
+      }
+    });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+});
+
+
+
 /**
  * ******************************** TASKS ********************************
  */
@@ -237,6 +330,10 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
   newTask.createdAt = now;
   newTask.orderDate = now;
   newTask.createdBy = ObjectID(req.user._id);
+
+  if (newTask.listId) {
+    newTask.listId = ObjectID(newTask.listId);
+  }
 
   if (!req.body.title) {
     returnError(res, 'Invalid user input', 'Must provide a title', 400);
@@ -255,14 +352,20 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
 app.get('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
   const filterParams = { 
     createdBy: ObjectID(req.user._id),
-    completed: { $in: [null, false] }, 
+    completed: { $in: [null, false] },
     deleted: { $in: [null, false] },
   };
+
   if (req.query.completed === 'true') {
     filterParams.completed = true;
   }
+
   if (req.query.deleted === 'true') {
     filterParams.deleted = true;
+  }
+
+  if (req.query.listId) {
+    filterParams.listId = req.query.listId === 'today' ? null : ObjectID(req.query.listId);
   }
 
   db.collection(TASKS_COLLECTION)
@@ -555,127 +658,6 @@ app.delete('/api/team/:id/list', passport.authenticate('jwt', {session: false}),
     returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
   }
 });
-
-/**
- * ************************ LISTS ************************
- */
-
-let LISTS_COLLECTION = 'LISTS';
-
-// Create list
-app.post('/api/list', passport.authenticate('jwt', {session: false}), function (req, res) {
-  var newList = req.body;
-  newList.createdAt = new Date();
-  newList.createdBy = req.user._id;
-  if (!req.body.title) {
-    returnError(res, 'Invalid user input', 'Must provide a title', 400);
-  } else {
-    db.collection(LISTS_COLLECTION).insertOne(newList, function (err, doc) {
-      if (err) {
-        returnError(res, err.message, "Failed to create new list");
-      } else {
-        res.status(201).json(doc.ops[0]);
-      }
-    });
-  }
-});
-
-// Get all lists a user has created
-app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(LISTS_COLLECTION).find({createdBy : req.user._id}).toArray(function (err, docs) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve lists");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
-});
-
-// Get a list with specific id
-app.get('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-  if (ObjectID.isValid(req.params.id)) {
-    db.collection(LISTS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
-      if (err) {
-        returnError(res, err.message, "Failed to retieve list");
-      } else {
-        if (doc) {
-          res.status(200).json(doc);
-        } else {
-          returnError(res, 'No list found', 'No list found', 404);
-        }
-      }
-    });
-  } else {
-    returnError(res, 'No list found', 'No list found', 404);
-  }
-});
-
-// Delete list with specific id
-app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-  if (ObjectID.isValid(req.params.id)) {
-    db.collection(LISTS_COLLECTION).deleteOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
-                  if (err) {
-                    returnError(res, err.message, "Failed to delete list");
-                  } else {
-        if(doc.deletedCount > 0) {
-          res.status(200).json({"message": "success"});
-        } else {
-          returnError(res, 'No list found', 'No list found', 404);
-        }
-      }
-    });
-  } else {
-    returnError(res, 'No list found', 'No list found', 404);
-  }
-});
-
-// Update a list
-app.put('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
-  if (ObjectID.isValid(req.params.id)) {
-    db.collection(LISTS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
-      if (err) {
-        returnError(res, err.message, "Failed to update list");
-      } else if (result.result.n === 1) {
-        res.status(204).send({});
-      } else {
-        returnError(res, 'No list found', 'No list found', 404);
-      }
-    });
-  } else {
-    returnError(res, 'No list found', 'No list found', 404);
-  }
-});
-
-// Add a task to a list
-app.put('/api/list/:id/task', passport.authenticate('jwt', {session: false}), function(req, res){
-  if (ObjectID.isValid(req.params.id)) {
-    db.collection(LISTS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{tasks : req.body._id}}, function(err, doc){
-      if (err){
-        returnError(res, err.message, "Failed to add task");
-      } else{
-        res.status(200).json({ message: "success" });
-      }
-    });
-  } else {
-    returnError(res, 'No list found', 'No list found', 404);
-  }
-});
-
-// Delete a task from a list
-app.delete('/api/list/:id/task', passport.authenticate('jwt', {session: false}), function(req, res){
-  if (ObjectID.isValid(req.params.id)) {
-    db.collection(LISTS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{tasks : req.body._id}}, function(err, doc){
-      if (err){
-        returnError(res, err.message, "Failed to delete task");
-      } else{
-        res.status(200).json({ message: "success" });
-      }
-    });
-  } else {
-    returnError(res, 'No list found', 'No list found', 404);
-  }
-});
-
 
 /**
  * ************************ OTHER ************************

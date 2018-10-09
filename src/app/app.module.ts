@@ -49,6 +49,7 @@ import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
 import { TeamDisplayComponent } from './teammanage/teamdash/teamdisp/teamdisp.component';
 import { TeamDetailsComponent } from './teammanage/teamdash/teamdetail/teamdetail.component';
 import { MemfinderComponent } from './teammanage/memfinder/memfinder.component';
+import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -75,7 +76,8 @@ export function tokenGetter() {
     TeamDashComponent,
     TeamDisplayComponent,
     TeamDetailsComponent,
-    MemfinderComponent
+    MemfinderComponent,
+    LeftSidebarComponent
   ],
   entryComponents: [
     CompletedTaskListComponent

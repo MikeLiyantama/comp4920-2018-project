@@ -6,6 +6,7 @@ import { Task } from './task.model';
   providedIn: 'root'
 })
 export class RightPaneService {
+  
   opened: boolean = false;
   task: Task;
   type: string = '';

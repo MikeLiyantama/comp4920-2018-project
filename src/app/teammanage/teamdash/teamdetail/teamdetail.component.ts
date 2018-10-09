@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Team } from '../../team.model';
 import { TeamMember } from '../../teammember.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-import { TeamService } from '../../team.service';
 import { User } from '../../../user/user.model';
+
+import { AppbarService } from '../../../appbar.service';
+import { TeamService } from '../../team.service';
 
 @Component({
     selector: 'app-teamdetail',
@@ -20,7 +22,11 @@ export class TeamDetailsComponent implements OnInit {
     allUsers: User [];
     detailsGroup: FormGroup;
     membersGroup: FormGroup;
-    constructor (private _formBuilder: FormBuilder, private teamService: TeamService){}
+    constructor (
+        private appbarService: AppbarService,
+        private _formBuilder: FormBuilder,
+        private teamService: TeamService
+    ) { }
 
     ngOnInit () {
         this.detailsGroup = this._formBuilder.group({
