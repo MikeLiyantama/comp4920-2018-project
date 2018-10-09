@@ -60,9 +60,9 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  updateData(username, name, bio, profile){
+  updateData(){
     let thisC = this;
-    this.profileService.updateUserData(name, username, bio, profile)
+    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile)
         .subscribe(function(res){
           let response;
           response = res;
