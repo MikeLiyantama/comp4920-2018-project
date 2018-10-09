@@ -12,6 +12,7 @@ export class AuthService{
 
   private returnValue;
   private authUrl = "https://comp4920-organiser.herokuapp.com/api/auth";
+  private updateAccountUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/";
   private checkUrl = "https://comp4920-organiser.herokuapp.com/api/account/check/" // add email
   private verifyUrl = "https://comp4920-organiser.herokuapp.com/api/account/email_verification"
   private changeUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/" // add email
@@ -21,6 +22,10 @@ export class AuthService{
     return  this.http.post(this.authUrl, {"email": user, "password": pass});
   }
 
+  updatePassword(email, n_pass): Observable<any>{
+    return this.http.put( this.updateAccountUrl + email, {"password" : n_pass} );
+  }
+  
   checkEmail(email):Observable<any> {
     var checkUrl = this.checkUrl + email;
     return this.http.get(checkUrl);
@@ -35,14 +40,11 @@ export class AuthService{
     return this.http.put(changeUrl, {"password": newPassword});
   }
 
-  
+  updateEmail(email, n_email) : Observable<any>{
+    return this.http.put( this.updateAccountUrl + email, {"email" : n_email} );
+  }
 
-  // private username = "user"; private password = "pass";              // local testing
-  // authenticateLocally(user, pass) {
-  //   if (user === this.username && pass === this.password) {        
-  //       return 1;
-  //     } else {
-  //       return 0;
-  //     }
-  // }
+  getCurrentUser() : Observable<any>{
+    return this.http.get("https://comp4920-organiser.herokuapp.com/api/me");
+  }
 }

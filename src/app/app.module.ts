@@ -39,6 +39,9 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskComponent } from './task/task.component';
 import { CompletedTaskListComponent } from './completed-task-list/completed-task-list.component';
+import { SettingsComponent } from './settings/settings.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ProfileImageUploadComponent } from './profile-image-upload/profile-image-upload.component';
 import { RecoverComponent } from './recover/recover.component';
 import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
 import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
@@ -67,6 +70,9 @@ export function tokenGetter() {
     TaskDetailComponent,
     TaskListComponent,
     CompletedTaskListComponent,
+    SettingsComponent,
+    ProfileComponent,
+    ProfileImageUploadComponent
     RecoverComponent,
     TeamManagementComponent,
     TeamCreateComponent,

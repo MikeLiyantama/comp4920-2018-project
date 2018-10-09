@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 
 import { AppbarService } from '../appbar.service';
 import { RightPaneService } from '../rightpane.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ import { RightPaneService } from '../rightpane.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  currentUserId: String;
 
   drawerOpened: boolean = false;
   title: string = '';
@@ -26,8 +28,19 @@ export class NavbarComponent {
     private appbarService: AppbarService,
     private breakpointObserver: BreakpointObserver,
     private rightPaneService: RightPaneService,
+    private authService: AuthService,
     private router: Router,
   ) { }
+
+  ngOnInit(){
+    let thisC = this;
+    this.authService.getCurrentUser()
+        .subscribe(function(res){
+          if(res.currUser){
+            thisC.currentUserId = res.currUser;
+          }
+        })
+  }
 
   logout() {
     localStorage.removeItem('token');

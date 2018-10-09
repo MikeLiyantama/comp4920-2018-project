@@ -159,6 +159,26 @@ app.get('/api/me', passport.authenticate('jwt', {session: false}), function (req
   res.status(200).json({"currUser": req.user._id});
 });
 
+app.get('/api/account/data/:id', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(USERS_COLLECTION).findOne({_id: ObjectID(req.params.id)}, function(err, doc){
+    if(doc == null || err){
+      returnError(res, "User not Found", "User not Found", 400);
+    } else {
+      res.status(200).json(doc);
+    }
+  })
+})
+
+app.put('/api/account/data', passport.authenticate('jwt', {session: false}), function(req, res){
+  db.collection(USERS_COLLECTION).updateOne({_id: ObjectID(req.user._id)}, {$set : req.body}, function(err, doc){
+    if(doc == null || err){
+      returnError(res, "User not Found", "User not Found", 400);
+    } else {
+      res.status(200).json({success:true});
+    }
+  })
+})
+
 
 app.get('/api/account/check/:email', function(req, res) {
   db.collection(USERS_COLLECTION).findOne({email : req.params.email}, function(err, doc) {
@@ -222,6 +242,25 @@ app.post('/api/account/email_verification', function(req, res){
     }
   })
 });
+
+app.get('/api/assets/:type/:id', passport.authenticate('jwt', {session : false}), function(req, res){
+  if(req.params.type == profile_picture){
+    let path = 'assets/user/' + req.params.id;
+    if (!fs.existsSync(path)){
+      returnError(res, "User not found", "User not found", 400);
+    } else{
+        path = path + "/profile_picture.jpg"
+        if (!fs.existsSync(path)){
+          //No profile pic found, Use default
+          res.sendFile("assets/user/default/profile_picture.jpg");
+        } else {
+          res.sendFile(path);
+        }
+    }
+  } else {
+    returnError(res, "Bad Request", "Bad Request", 400);
+  }
+})
 
 
 
