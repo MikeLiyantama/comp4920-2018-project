@@ -589,7 +589,22 @@ app.delete('/api/team/:id', passport.authenticate('jwt', {session: false}), func
 // Update a team
 app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(TEAMS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: req.body }, function (err, result) {
+    // Only description, banner and name can be updated
+    if(req.body.banner) {
+      // Has banner
+      var toUse = {
+        "banner": req.body.banner,
+        "description": req.body.description,
+        "name": req.body.name
+      };
+    } else {
+      // No banner
+      var toUse = {
+        "description": req.body.description,
+        "name": req.body.name
+      };
+    }
+    db.collection(TEAMS_COLLECTION).updateOne({ _id: ObjectID(req.params.id)}, { $set: toUse }, function (err, result) {
       if (err) {
         returnError(res, err.message, "Failed to update teams");
       } else if (result.result.n === 1) {

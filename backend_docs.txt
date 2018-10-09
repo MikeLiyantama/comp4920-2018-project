@@ -239,8 +239,7 @@ DELETE /api/team/:id
 
 PUT /api/team/:id
     Update a team. 
-    Usually, only the name and the description should be updated.
-    But there is no restriction on what can be updated.
+    Only description, banner and name can be updated.
     Required Payload: A JSON containing "name" and/or "description" field.
     Return Value:
         204 - Success (No Content)
