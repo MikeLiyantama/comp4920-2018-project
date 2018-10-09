@@ -14,8 +14,20 @@
       <mat-list-item mat-list-icon>Collaborative List</mat-list-item>
        <!---List of Collaborative List here-->
       <mat-divider></mat-divider>
-      <mat-list-item mat-list-icon>Teams</mat-list-item>
-       <!---List of Teams here-->
+      <!--<mat-list-item mat-list-icon><a
+          routerLink="/app/team">Teams</a></mat-list-item-->
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Teams</mat-panel-title>
+                </mat-expansion-panel-header>
+                <!-- Team items -->
+                <mat-list-item><a routerLink="/app/teamcreate">Create a
+                        Team</a></mat-list-item>
+                <mat-list-item><a routerLink="/app/teamdash">My Teams</a></mat-list-item>
+            </mat-expansion-panel>
+        </mat-accordion>
+
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
