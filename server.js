@@ -159,6 +159,8 @@ app.get('/api/me', passport.authenticate('jwt', {session: false}), function (req
   res.status(200).json({"currUser": req.user._id});
 });
 
+
+//Get user data by user id param
 app.get('/api/account/data/:id', passport.authenticate('jwt', {session: false}), function(req, res){
   db.collection(USERS_COLLECTION).findOne({_id: ObjectID(req.params.id)}, function(err, doc){
     if(doc == null || err){
@@ -169,6 +171,8 @@ app.get('/api/account/data/:id', passport.authenticate('jwt', {session: false}),
   })
 })
 
+
+//change user data by token ID
 app.put('/api/account/data', passport.authenticate('jwt', {session: false}), function(req, res){
   db.collection(USERS_COLLECTION).updateOne({_id: ObjectID(req.user._id)}, {$set : req.body}, function(err, doc){
     if(doc == null || err){
@@ -179,7 +183,7 @@ app.put('/api/account/data', passport.authenticate('jwt', {session: false}), fun
   })
 })
 
-
+//Check user if exists by email
 app.get('/api/account/check/:email', function(req, res) {
   db.collection(USERS_COLLECTION).findOne({email : req.params.email}, function(err, doc) {
     if(doc == null){
@@ -190,6 +194,7 @@ app.get('/api/account/check/:email', function(req, res) {
   });
 });
 
+//Change user data by email param
 app.put('/api/account/change/:email', function(req, res) { 
   db.collection(USERS_COLLECTION).updateOne({email: req.params.email}, { $set: req.body }, function (err, doc){
     if (err){
@@ -200,6 +205,7 @@ app.put('/api/account/change/:email', function(req, res) {
   })
 });
 
+//Get account data by token ID
 app.get('/api/account/data', passport.authenticate('jwt', {session: false}), function(req, res){
   db.collection(USERS_COLLECTION).findOne({_id: ObjectID(req.user._id)}, function(err, doc){
     if(doc == null || err){
@@ -210,6 +216,7 @@ app.get('/api/account/data', passport.authenticate('jwt', {session: false}), fun
   })
 })
 
+//Send email verification, returns verification code
 app.post('/api/account/email_verification', function(req, res){
   db.collection(USERS_COLLECTION).findOne({email : req.body.email}, function(err, doc){
     if(err){
@@ -242,26 +249,6 @@ app.post('/api/account/email_verification', function(req, res){
     }
   })
 });
-
-app.get('/api/assets/:type/:id', passport.authenticate('jwt', {session : false}), function(req, res){
-  if(req.params.type == profile_picture){
-    let path = 'assets/user/' + req.params.id;
-    if (!fs.existsSync(path)){
-      returnError(res, "User not found", "User not found", 400);
-    } else{
-        path = path + "/profile_picture.jpg"
-        if (!fs.existsSync(path)){
-          //No profile pic found, Use default
-          res.sendFile("assets/user/default/profile_picture.jpg");
-        } else {
-          res.sendFile(path);
-        }
-    }
-  } else {
-    returnError(res, "Bad Request", "Bad Request", 400);
-  }
-})
-
 
 
 /**
