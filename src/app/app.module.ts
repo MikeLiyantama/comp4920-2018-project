@@ -72,7 +72,7 @@ export function tokenGetter() {
     CompletedTaskListComponent,
     SettingsComponent,
     ProfileComponent,
-    ProfileImageUploadComponent
+    ProfileImageUploadComponent,
     RecoverComponent,
     TeamManagementComponent,
     TeamCreateComponent,
