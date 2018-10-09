@@ -19,7 +19,6 @@ const routes: Routes = [
   { path: 'app', component: AppLayoutComponent, children: [
     { path: '', component: TaskListComponent },
     { path: 'settings', component: SettingsComponent},
-    { path: 'profile', component: ProfileComponent},
     { path: 'profile/:profileID', component: ProfileComponent},
   ]}
 ];
