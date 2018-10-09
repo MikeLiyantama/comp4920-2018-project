@@ -3,11 +3,10 @@ import { HttpClient } from '../../node_modules/@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { User } from './user/user.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
-export class SignupserviceService {
+export class SignupService {
 
   constructor(
     private http: HttpClient

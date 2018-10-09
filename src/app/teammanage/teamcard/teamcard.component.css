@@ -1,0 +1,29 @@
+mat-card {
+    max-width: 300px;
+}
+
+#teambanner {
+    width: 300px;
+    height: 300px;
+}
+
+#membericon {
+    vertical-align: middle;
+}
+
+mat-card-title {
+    text-align: middle;
+}
+
+mat-icon {
+    display: block;
+    float: right!important;
+}
+
+#removebutton {
+    margin-left: 25px;
+}
+
+#detailsbutton {
+    margin-left: 35px;
+}

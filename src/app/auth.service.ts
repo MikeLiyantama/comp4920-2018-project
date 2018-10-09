@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '../../node_modules/@angular/common/http';
+import { HttpClient, HttpParams } from '../../node_modules/@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, subscribeOn } from 'rxjs/operators';
 
@@ -13,6 +13,9 @@ export class AuthService{
   private returnValue;
   private authUrl = "https://comp4920-organiser.herokuapp.com/api/auth";
   private updateAccountUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/";
+  private checkUrl = "https://comp4920-organiser.herokuapp.com/api/account/check/" // add email
+  private verifyUrl = "https://comp4920-organiser.herokuapp.com/api/account/email_verification"
+  private changeUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/" // add email
   
 
   authenticate(user, pass):Observable<any> {
@@ -21,6 +24,20 @@ export class AuthService{
 
   updatePassword(email, n_pass): Observable<any>{
     return this.http.put( this.updateAccountUrl + email, {"password" : n_pass} );
+  }
+  
+  checkEmail(email):Observable<any> {
+    var checkUrl = this.checkUrl + email;
+    return this.http.get(checkUrl);
+  }
+
+  validate(email):Observable<any> {
+    return this.http.post(this.verifyUrl, {"email": email});
+  }
+
+  changeEmail(email, newPassword):Observable<any> {
+    var changeUrl = this.changeUrl + email;
+    return this.http.put(changeUrl, {"password": newPassword});
   }
 
   updateEmail(email, n_email) : Observable<any>{

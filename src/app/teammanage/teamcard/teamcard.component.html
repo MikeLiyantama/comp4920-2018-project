@@ -1,0 +1,32 @@
+<mat-card *ngIf="team">
+    <mat-card-header>
+        <mat-card-title>
+            <b>{{ team.name }}</b>
+        </mat-card-title>
+        <mat-icon 
+            matBadgePosition="after"
+            matBadgeSize="medium"
+            matBadgeColor="warn"
+            matBadge="{{ team.members.length + 1}}">people</mat-icon>
+            <!--span id="populationIndicator">
+                {{team.members.length + 1}}<span><mat-icon
+                        id="membericon" svgIcon="people"></mat-icon></span>
+            </span-->
+    </mat-card-header>
+    <img mat-card-image id="teambanner" [src]="team.banner">
+    <mat-card-content>
+        <p>
+            {{ team.description }}
+        </p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-stroked-button
+                (click)="triggerDetails()"
+                id="detailsbutton"
+                color="primary">Details</button>
+        <button mat-stroked-button
+                (click)="triggerRemove()"
+                id="removebutton"
+                color="accent">Remove</button>
+    </mat-card-actions>
+</mat-card>

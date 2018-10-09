@@ -6,17 +6,11 @@
     fixedInViewport="false"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="over"
+    [(opened)]="drawerOpened"
     >
-    <h1>Organise.me</h1>
-    <mat-nav-list>
-      <!---List of Task Groups here-->
-      <mat-divider></mat-divider>
-      <mat-list-item mat-list-icon>Collaborative List</mat-list-item>
-       <!---List of Collaborative List here-->
-      <mat-divider></mat-divider>
-      <mat-list-item mat-list-icon>Teams</mat-list-item>
-       <!---List of Teams here-->
-    </mat-nav-list>
+    <h1 class="logo">Organise.me</h1>
+    <mat-divider></mat-divider>
+    <app-left-sidebar (drawerCloseRequested)="onDrawerCloseRequested($event)"></app-left-sidebar>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
@@ -25,12 +19,12 @@
         type="button"
         aria-label="Toggle Menu"
         mat-icon-button
-        (click)="drawer.toggle()"
+        (click)="openDrawer()"
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <div class="container">
-        <span>Today</span>
+        <span>{{appbarService.title}}</span>
         <button class="profileIcon" [matMenuTriggerFor]="profileMenu" mat-icon-button>
           U
         </button>

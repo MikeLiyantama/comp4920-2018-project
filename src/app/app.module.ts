@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +22,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatCardModule } from '@angular/material/card';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -38,6 +42,17 @@ import { CompletedTaskListComponent } from './completed-task-list/completed-task
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileImageUploadComponent } from './profile-image-upload/profile-image-upload.component';
+import { RecoverComponent } from './recover/recover.component';
+import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
+import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
+import { MemcardComponent } from './teammanage/memcard/memcard.component';
+import { ImageUploadComponent } from './teammanage/imgup/imgup.component';
+import { TeamCardComponent } from './teammanage/teamcard/teamcard.component';
+import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
+import { TeamDisplayComponent } from './teammanage/teamdash/teamdisp/teamdisp.component';
+import { TeamDetailsComponent } from './teammanage/teamdash/teamdetail/teamdetail.component';
+import { MemfinderComponent } from './teammanage/memfinder/memfinder.component';
+import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -58,6 +73,17 @@ export function tokenGetter() {
     SettingsComponent,
     ProfileComponent,
     ProfileImageUploadComponent
+    RecoverComponent,
+    TeamManagementComponent,
+    TeamCreateComponent,
+    MemcardComponent,
+    ImageUploadComponent,
+    TeamCardComponent,
+    TeamDashComponent,
+    TeamDisplayComponent,
+    TeamDetailsComponent,
+    MemfinderComponent,
+    LeftSidebarComponent
   ],
   entryComponents: [
     CompletedTaskListComponent
@@ -96,7 +122,12 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
     MatBottomSheetModule,
     DragDropModule,
-    MatCardModule
+    MatCardModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatGridListModule,
+    MatBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

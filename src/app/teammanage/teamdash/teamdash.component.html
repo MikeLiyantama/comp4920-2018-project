@@ -1,0 +1,8 @@
+<main class="container">
+    <app-teamdisp 
+        (detailsContextEmitter)="contextSwitch($event)"
+        *ngIf="showOverview">
+    </app-teamdisp>
+
+    <app-teamdetail *ngIf="showDetail" [team]="receivedTeam"></app-teamdetail>
+</main>

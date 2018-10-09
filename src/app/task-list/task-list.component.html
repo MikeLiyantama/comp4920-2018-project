@@ -1,39 +1,40 @@
 <mat-nav-list class="container">
-  <form (submit)="addTask()">
-    <mat-form-field class="quickAdd" appearance="outline">
-      <mat-label>Add New Task</mat-label>
-      <input matInput [(ngModel)]="quickAddTask" name="quickAddTask">
-      <mat-icon matSuffix>add</mat-icon>
-    </mat-form-field>  
-  </form>
   <mat-spinner
     *ngIf="loading"
     class="loading"
     color="primary"
     diameter="40">
   </mat-spinner>
-  <cdk-drop lockAxis="y" (dropped)="taskDrop($event)">
-    <app-task
-      *ngFor="let task of tasks"
-      cdkDrag
-      class="task"
-      [task]="task"
-      (markedAsComplete)="onTaskMarkedAsComplete($event)"
-      (toggledImportance)="onTaskImportanceToggled($event)"
-    >
-      <mat-icon cdkDragHandle drag-handle>drag_handle</mat-icon>
-      <span *cdkDragPreview drag-preview class="task taskPreview">
-        <mat-checkbox></mat-checkbox>
-        {{ task.title }}
-      </span>
-    </app-task>
-  </cdk-drop>
-  <button
-    *ngIf="!loading"
-    mat-flat-button 
-    class="completedHint" 
-    [disabled]="loadingCompletedTasks" 
-    (click)="openCompletedTasks()">
-    View Completed Tasks
-  </button>
+  <div *ngIf="!loading">
+    <form (submit)="addTask()">
+      <mat-form-field class="quickAdd" appearance="outline">
+        <mat-label>Add New Task</mat-label>
+        <input matInput [(ngModel)]="quickAddTask" name="quickAddTask">
+        <mat-icon matSuffix>add</mat-icon>
+      </mat-form-field>  
+    </form>
+    <cdk-drop lockAxis="y" (dropped)="taskDrop($event)">
+      <app-task
+        *ngFor="let task of tasks"
+        cdkDrag
+        class="task"
+        [task]="task"
+        (markedAsComplete)="onTaskMarkedAsComplete($event)"
+        (toggledImportance)="onTaskImportanceToggled($event)"
+      >
+        <mat-icon cdkDragHandle drag-handle>drag_handle</mat-icon>
+        <span *cdkDragPreview drag-preview class="task taskPreview">
+          <mat-checkbox></mat-checkbox>
+          {{ task.title }}
+        </span>
+      </app-task>
+    </cdk-drop>
+    <button
+      mat-flat-button 
+      class="completedHint" 
+      [disabled]="loadingCompletedTasks" 
+      (click)="openCompletedTasks()">
+      View Completed Tasks
+    </button>
+  </div>
 </mat-nav-list>
