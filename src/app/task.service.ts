@@ -67,6 +67,15 @@ export class TaskService {
             )
     }
 
+    // Get a specific task
+    getTask(id){
+        return this.http.get(this.tasksUrl + '/' + id)
+            .pipe(
+                catchError(this.handleError)
+            );
+
+    }
+
     editTask(editedTask): Observable<Task> {
         return this.http.put<Task>(
                 `${this.tasksUrl}/${editedTask._id}`, 
