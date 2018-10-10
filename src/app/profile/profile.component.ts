@@ -44,6 +44,7 @@ export class ProfileComponent implements OnInit {
         thisC.bio = response.bio;
         thisC.profile = response.profile;
         thisC.email = response.email;
+        thisC.profilePic = response.profilePic;
 
         thisC.profileService.getCurrentId()
         .subscribe(function(res){
@@ -62,7 +63,7 @@ export class ProfileComponent implements OnInit {
 
   updateData(){
     let thisC = this;
-    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile)
+    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile, this.profilePic)
         .subscribe(function(res){
           let response;
           response = res;

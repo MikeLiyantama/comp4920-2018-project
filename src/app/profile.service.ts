@@ -15,12 +15,13 @@ export class ProfileService {
     return this.http.get(this.userDataUrl + "/" + id);
   }
 
-  updateUserData(name, username, bio, profile){
+  updateUserData(name, username, bio, profile, profilePic){
     let obj = {
       name: name,
       username: username,
       bio: bio,
-      profile: profile
+      profile: profile,
+      profilePic : profilePic
     }
     return this.http.post(this.userDataUrl, obj);
   }
