@@ -22,7 +22,7 @@ export class ProfileService {
       bio: bio,
       profile: profile
     }
-    return this.http.post("https://comp4920-organiser.herokuapp.com/api/account/change/" + email, obj);
+    return this.http.put("https://comp4920-organiser.herokuapp.com/api/account/change/" + email, obj);
   }
 
   getCurrentId(){
