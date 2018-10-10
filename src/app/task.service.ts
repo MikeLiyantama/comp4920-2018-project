@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/comm
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import omit from 'lodash/omit';
+
 import { List } from './list.model';
 import { Task } from './task.model';
 
@@ -68,13 +70,7 @@ export class TaskService {
     }
 
     editTask(editedTask): Observable<Task> {
-        return this.http.put<Task>(
-                `${this.tasksUrl}/${editedTask._id}`, 
-                { 
-                    title: editedTask.title, 
-                    description: editedTask.description,
-                }
-            )
+        return this.http.put<Task>(`${this.tasksUrl}/${editedTask._id}`, omit(editedTask, '_id'))
             .pipe(
                 catchError(this.handleError)
             )
