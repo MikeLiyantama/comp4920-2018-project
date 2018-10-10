@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   bio : String;
   profile : String;
   username : String;
-  profilePicUrl : String;
+  profilePic : any;
   email : String;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,9 +60,9 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  updateData(username, name, bio, profile){
+  updateData(){
     let thisC = this;
-    this.profileService.updateUserData(name, username, bio, profile)
+    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile)
         .subscribe(function(res){
           let response;
           response = res;
@@ -74,6 +74,14 @@ export class ProfileComponent implements OnInit {
           }
         })
   }
+
+  setImage (givenFile) {
+    console.log ("Setting image");
+    this.profilePic = givenFile; 
+    if (this.profilePic) {
+        console.log ("image set");
+    }
+}
 
   enterEditMode(){
     this.editMode = true;
