@@ -57,6 +57,7 @@ import { CreateTaskListComponent } from './create-task-list/create-task-list.com
 import { UserSelectComponent } from './user-select/user-select.component';
 import { ManageCollaboratorsComponent } from './manage-collaborators/manage-collaborators.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { MessageComponent } from './discussion/message/message.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -91,6 +92,8 @@ export function tokenGetter() {
     UserSelectComponent,
     ManageCollaboratorsComponent,
     AvatarComponent,
+    LeftSidebarComponent,
+    MessageComponent,
   ],
   entryComponents: [
     CompletedTaskListComponent,
