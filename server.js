@@ -700,6 +700,35 @@ app.delete('/api/team/:id/list', passport.authenticate('jwt', {session: false}),
   }
 });
 
+// Set a team member as a leader
+app.put('/api/team/:id/leader', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{leaders : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to add leader");
+      } else{
+        res.status(200).json({ "message": "success" });
+      }
+    });
+  } else {
+    returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
+  }
+});
+
+// Remove leader status from a team leader
+app.delete('/api/team/:id/leader', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{leaders : req.body._id}}, function(err, doc){
+      if (err){
+        returnError(res, err.message, "Failed to delete leader");
+      } else{
+        res.status(200).json({ "message": "success" });
+      }
+    });
+  } else {
+    returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
+  }
+});
 /**
  * ************************ OTHER ************************
  */

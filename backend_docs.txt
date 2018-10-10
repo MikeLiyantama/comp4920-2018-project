@@ -298,6 +298,28 @@ DELETE /api/team/:id/list
         500 - Database error
                 with { message: "Failed to delete list" }
 
+PUT /api/team/:id/leader
+    Set a team member as a leader.
+    Required Payload: { "_id": ObjectID of the member }
+    Return Value:
+        200 - Success
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
+        500 - Database error
+                with { message: "Failed to add leader" }
+
+DELETE /api/team/:id/leader
+    Remove leader status from a team leader.
+    Required Payload: { "_id": ObjectID of the leader }
+    Return Value:
+        200 - Success
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
+        500 - Database error
+                with { message: "Failed to delete leader" }
+
 -------------------------------- SCHEMA --------------------------------
 
 collection USERS {
