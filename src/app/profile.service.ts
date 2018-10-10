@@ -15,14 +15,14 @@ export class ProfileService {
     return this.http.get(this.userDataUrl + "/" + id);
   }
 
-  updateUserData(name, username, bio, profile){
+  updateUserData(name, username, bio, profile, email){
     let obj = {
       name: name,
       username: username,
       bio: bio,
       profile: profile
     }
-    return this.http.post(this.userDataUrl, obj);
+    return this.http.post("https://comp4920-organiser.herokuapp.com/api/account/change/" + email, obj);
   }
 
   getCurrentId(){
