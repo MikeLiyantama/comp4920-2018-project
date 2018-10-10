@@ -9,6 +9,7 @@ import { ProfileService } from '../profile.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  loading: boolean = true;
   isUser : boolean;
   editMode : boolean = false;
   id : String;
@@ -55,6 +56,7 @@ export class ProfileComponent implements OnInit {
             } else {
               thisC.isUser = false;
             }
+            thisC.loading = false;
         });
       }
     });

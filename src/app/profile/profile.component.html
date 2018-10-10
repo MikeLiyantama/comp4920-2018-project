@@ -1,42 +1,52 @@
 <div class="container">
-    <div *ngIf="!editMode && isUser;else editCard">
-        <div layout="edit-button" layout-align="end center">
-            <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
-        </div>
-        <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
-        <h1 class="headline heading-component">{{this.name}}</h1>
-        <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
-        <h4 class="subheading-1">Profile: {{this.profile}}</h4>
-    </div>
+    <mat-spinner
+        *ngIf="loading"
+        class="loading"
+        color="primary"
+        diameter="40"
+        style="margin:0 auto">
+    </mat-spinner>
 
-    <ng-template #editCard>
-        <mat-card>
-            <form class="form" (submit)="changeCredentials()">
-                <mat-form-field class="form-group input-field">
-                    <mat-label>Name</mat-label>
-                    <input matInput [(ngModel)]="name" placeholder="Full name" name="name" type="text">
-                </mat-form-field>
-                <br>
-                <mat-form-field class="form-group input-field">
-                    <mat-label>Username</mat-label>
-                    <input matInput [(ngModel)]="username" placeholder="User name" name="username" type="text">
-                </mat-form-field>
-                <br>
-                <mat-form-field class="form-group input-field">
-                        <mat-label>Bio</mat-label>
-                        <input matInput [(ngModel)]="bio" placeholder="Bio" name="bio" type="text">
-                </mat-form-field>
-                <br>
-                <mat-form-field class="form-group input-field">
-                        <mat-label>Profile</mat-label>
-                        <input matInput [(ngModel)]="profile" placeholder="profile" name="profile" type="text">
-                </mat-form-field>
-                <br>
-                <div class="form-group">
-                    <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>
-                    <button type="button" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
-                </div>
-            </form>
-        </mat-card>
-    </ng-template>
+    <div *ngIf="!loading">
+        <div *ngIf="!editMode && isUser;else editCard">
+            <div layout="edit-button" layout-align="end center">
+                <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
+            </div>
+            <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
+            <h1 class="headline heading-component">{{this.name}}</h1>
+            <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
+            <h4 class="subheading-1">Profile: {{this.profile}}</h4>
+        </div>
+
+        <ng-template #editCard>
+            <mat-card>
+                <form class="form" (submit)="changeCredentials()">
+                    <mat-form-field class="form-group input-field">
+                        <mat-label>Name</mat-label>
+                        <input matInput [(ngModel)]="name" placeholder="Full name" name="name" type="text">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field class="form-group input-field">
+                        <mat-label>Username</mat-label>
+                        <input matInput [(ngModel)]="username" placeholder="User name" name="username" type="text">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field class="form-group input-field">
+                            <mat-label>Bio</mat-label>
+                            <input matInput [(ngModel)]="bio" placeholder="Bio" name="bio" type="text">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field class="form-group input-field">
+                            <mat-label>Profile</mat-label>
+                            <input matInput [(ngModel)]="profile" placeholder="profile" name="profile" type="text">
+                    </mat-form-field>
+                    <br>
+                    <div class="form-group">
+                        <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>
+                        <button type="button" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
+                    </div>
+                </form>
+            </mat-card>
+        </ng-template>
+    </div>
 </div>
