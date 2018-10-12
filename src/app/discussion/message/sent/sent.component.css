@@ -1,0 +1,25 @@
+mat-list-item {
+    max-width: 420px;
+    float: right;
+}
+
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+#profileAvatar {
+    padding-left: 16px;
+}
+
+.msgContent {
+   background-color: #f0e3fc;  
+   background-clip: padding-box;
+   padding: 7px 10px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
+

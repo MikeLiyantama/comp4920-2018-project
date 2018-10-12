@@ -1,0 +1,30 @@
+mat-list-item {
+    max-width: 420px;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+#profileAvatar {
+    padding-right: 16px;
+}
+
+.msgContent {
+   background-color: #e3e5e5;  
+   background-clip: padding-box;
+   padding: 7px 10px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
+#uname {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+mat-list-item:hover #uname {
+    opacity: 0.7;
+}

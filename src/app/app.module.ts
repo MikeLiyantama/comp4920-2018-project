@@ -26,7 +26,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatBadgeModule } from '@angular/material/badge';
+<<<<<<< master
 import { MatChipsModule } from '@angular/material/chips';
+=======
+import { MatPaginatorModule } from '@angular/material/paginator';
+>>>>>>> added extra styling for messages and structure for the discussion board
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -57,7 +61,9 @@ import { CreateTaskListComponent } from './create-task-list/create-task-list.com
 import { UserSelectComponent } from './user-select/user-select.component';
 import { ManageCollaboratorsComponent } from './manage-collaborators/manage-collaborators.component';
 import { AvatarComponent } from './avatar/avatar.component';
-import { MessageComponent } from './discussion/message/message.component';
+import { DiscussionComponent } from './discussion/discussion.component';
+import { ReceivedComponent } from './discussion/message/received/received.component';
+import { SentComponent } from './discussion/message/sent/sent.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -93,7 +99,9 @@ export function tokenGetter() {
     ManageCollaboratorsComponent,
     AvatarComponent,
     LeftSidebarComponent,
-    MessageComponent,
+    DiscussionComponent,
+    SentComponent,
+    ReceivedComponent,
   ],
   entryComponents: [
     CompletedTaskListComponent,
@@ -139,7 +147,11 @@ export function tokenGetter() {
     MatAutocompleteModule,
     MatGridListModule,
     MatBadgeModule,
+<<<<<<< master
     MatChipsModule,
+=======
+    MatPaginatorModule
+>>>>>>> added extra styling for messages and structure for the discussion board
   ],
   providers: [],
   bootstrap: [AppComponent]
