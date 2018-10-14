@@ -17,6 +17,8 @@ import { TeamService } from '../../team.service';
 export class TeamDisplayComponent implements OnInit {
     @Output () teamEmitter = new EventEmitter <Team> ();
     @Output () detailsContextEmitter = new EventEmitter <Team> ();
+
+    loading: Boolean = true;
     teams: Team [];
     numTeams = 0;
     gridTiles = 0;
@@ -66,7 +68,7 @@ export class TeamDisplayComponent implements OnInit {
 
     ngOnInit () {
         console.log ("Initialising team display");
-        this.teamService.getAllTeams().then (data => this.setTeams(data));
+        this.teamService.getAllTeams().then((data) =>{ this.setTeams(data); this.loading = false; });
         this.appbarService.setTitle('My Teams');
     }
 

@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '../../node_modules/@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, subscribeOn } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+import { User } from './user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +13,6 @@ export class AuthService{
  
   constructor(private http: HttpClient) { }
 
-  private returnValue;
   private authUrl = "https://comp4920-organiser.herokuapp.com/api/auth";
   private updateAccountUrl = "https://comp4920-organiser.herokuapp.com/api/account/change/";
   private checkUrl = "https://comp4920-organiser.herokuapp.com/api/account/check/" // add email
@@ -44,7 +46,17 @@ export class AuthService{
     return this.http.put( this.updateAccountUrl + email, {"email" : n_email} );
   }
 
-  getCurrentUser() : Observable<any>{
+  getCurrentUser(): Observable<any>{
     return this.http.get("https://comp4920-organiser.herokuapp.com/api/me");
+  }
+
+  getDecodedToken(): User {
+    const encodedToken = localStorage.getItem('token');
+    if (encodedToken) {
+      const helper = new JwtHelperService();
+      const decodedToken = helper.decodeToken(encodedToken);
+      return decodedToken;
+    }
+    return null;
   }
 }

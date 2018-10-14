@@ -29,12 +29,35 @@
         </span>
       </app-task>
     </cdk-drop>
-    <button
-      mat-flat-button 
-      class="completedHint" 
-      [disabled]="loadingCompletedTasks" 
-      (click)="openCompletedTasks()">
-      View Completed Tasks
-    </button>
+    <div class="bottompanel"> 
+      <button
+        mat-flat-button
+        [disabled]="loadingCompletedTasks"
+        (click)="openCompletedTasks()"
+      >
+        <mat-icon>
+          assignment_turned_in
+        </mat-icon>
+        View Completed Tasks
+      </button>
+      <div *ngIf="listId && listId !== 'today'" class="collaboration">
+        <button
+          mat-stroked-button
+          (click)="openCollaborationDialog()"
+        >
+          <mat-icon>
+            group_work
+          </mat-icon>
+          {{ collaborationPanelTitle }}
+        </button>
+        <span *ngIf="list.collaborators" class="collaborators">          
+          <app-avatar
+            *ngFor="let collaborator of list.collaborators.slice(0, 4)"
+            matListAvatar 
+            [user]="collaborator">
+          </app-avatar>
+        </span>
+      </div>
+    </div>
   </div>
 </mat-nav-list>

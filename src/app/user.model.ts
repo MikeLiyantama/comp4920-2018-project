@@ -1,4 +1,5 @@
 export class User {
+    public _id;
     public name;
     public username;
     public email;

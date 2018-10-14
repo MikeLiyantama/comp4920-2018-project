@@ -26,6 +26,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,8 +52,11 @@ import { TeamCardComponent } from './teammanage/teamcard/teamcard.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
 import { TeamDisplayComponent } from './teammanage/teamdash/teamdisp/teamdisp.component';
 import { TeamDetailsComponent } from './teammanage/teamdash/teamdetail/teamdetail.component';
-import { MemfinderComponent } from './teammanage/memfinder/memfinder.component';
 import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
+import { CreateTaskListComponent } from './create-task-list/create-task-list.component';
+import { UserSelectComponent } from './user-select/user-select.component';
+import { ManageCollaboratorsComponent } from './manage-collaborators/manage-collaborators.component';
+import { AvatarComponent } from './avatar/avatar.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -82,11 +86,15 @@ export function tokenGetter() {
     TeamDashComponent,
     TeamDisplayComponent,
     TeamDetailsComponent,
-    MemfinderComponent,
-    LeftSidebarComponent
+    LeftSidebarComponent,
+    CreateTaskListComponent,
+    UserSelectComponent,
+    ManageCollaboratorsComponent,
+    AvatarComponent,
   ],
   entryComponents: [
-    CompletedTaskListComponent
+    CompletedTaskListComponent,
+    ManageCollaboratorsComponent,
   ],
   imports: [
     BrowserModule,
@@ -127,7 +135,8 @@ export function tokenGetter() {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatGridListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

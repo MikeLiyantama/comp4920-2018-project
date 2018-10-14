@@ -9,16 +9,19 @@ import { AppbarService } from '../appbar.service';
 import { RightPaneService } from '../rightpane.service';
 import { AuthService } from '../auth.service';
 
+import { User } from '../user.model';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  currentUserId: String;
 
+  currentUser: User;
   drawerOpened: boolean = false;
   title: string = '';
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
@@ -32,14 +35,8 @@ export class NavbarComponent {
     private router: Router,
   ) { }
 
-  ngOnInit(){
-    let thisC = this;
-    this.authService.getCurrentUser()
-        .subscribe(function(res){
-          if(res.currUser){
-            thisC.currentUserId = res.currUser;
-          }
-        })
+  ngOnInit() {
+    this.currentUser = this.authService.getDecodedToken();
   }
 
   logout() {

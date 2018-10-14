@@ -1,0 +1,18 @@
+
+<mat-list>
+  <h2 mat-subheader>{{data.title}}</h2>
+  <app-user-select
+    (userSelected)="onUserSelected($event)"
+    [excludedUsers]="usersToExcludeFromUserSelector"
+  >
+  </app-user-select>
+  <mat-list-item *ngFor="let collaborator of data.collaborators">
+    <app-avatar matListAvatar [user]="collaborator"></app-avatar>
+    <p matLine>{{collaborator.username}}</p>
+    <button mat-icon-button (click)="removeCollaborator(collaborator._id)">
+      <mat-icon>
+        remove_circle_outline
+      </mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>

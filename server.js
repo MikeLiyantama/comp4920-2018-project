@@ -275,9 +275,17 @@ app.post('/api/list', passport.authenticate('jwt', {session: false}), function (
   }
 });
 
-// Get all lists a user has created
+// Get all lists a user is a part of (created or added as a collaborator)
 app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(LISTS_COLLECTION).find({createdBy : req.user._id}).toArray(function (err, docs) {
+  db.collection(LISTS_COLLECTION)
+    .find({ 
+      $or: [
+        { createdBy: req.user._id },
+        { collaborators: { $in: [ req.user._id ] } },
+      ],
+    })
+    .sort({ important: -1, createdAt: 1 })
+    .toArray(function (err, docs) {
     if (err) {
       returnError(res, err.message, "Failed to retieve lists");
     } else {
@@ -289,12 +297,25 @@ app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (
 // Get a list with specific id
 app.get('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
-    db.collection(LISTS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
+    db.collection(LISTS_COLLECTION).findOne({ _id: ObjectID(req.params.id) }, function (err, list) {
       if (err) {
         returnError(res, err.message, "Failed to retieve list");
       } else {
-        if (doc) {
-          res.status(200).json(doc);
+        if (list) {
+          if (list.collaborators && list.collaborators.length > 0) {
+            db.collection(USERS_COLLECTION)
+              .find({ _id: { $in: [...list.collaborators, list.createdBy].map(user => ObjectID(user)) } })
+              .toArray(function (err, users) {
+                const listWithUsers = { ...list };
+                listWithUsers.createdBy = users.find(user => ObjectID(list.createdBy).equals(user._id) );
+                listWithUsers.collaborators = list.collaborators.map(collaborator =>
+                  users.find(user => ObjectID(collaborator).equals(user._id))
+                );
+                res.status(200).json(listWithUsers);
+              });
+          } else {
+            res.status(200).json(list);
+          }
         } else {
           returnError(res, 'No list found', 'No list found', 404);
         }
@@ -309,15 +330,15 @@ app.get('/api/list/:id', passport.authenticate('jwt', {session: false}), functio
 app.delete('/api/list/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     db.collection(LISTS_COLLECTION).deleteOne({ _id: ObjectID(req.params.id) }, function (err, doc) {
-                  if (err) {
-                    returnError(res, err.message, "Failed to delete list");
-                  } else {
-        if(doc.deletedCount > 0) {
-          res.status(200).json({"message": "success"});
+        if (err) {
+          returnError(res, err.message, "Failed to delete list");
         } else {
-          returnError(res, 'No list found', 'No list found', 404);
+          if (doc.deletedCount > 0) {
+            res.status(200).json({"message": "success"});
+          } else {
+            returnError(res, 'No list found', 'No list found', 404);
+          }
         }
-      }
     });
   } else {
     returnError(res, 'No list found', 'No list found', 404);
@@ -341,6 +362,45 @@ app.put('/api/list/:id', passport.authenticate('jwt', {session: false}), functio
   }
 });
 
+// Add a user to a list
+app.post('/api/list/:id/collaborators/:userId', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).updateOne({ 
+      _id: ObjectID(req.params.id)},
+      { $push: { collaborators: req.params.userId } },
+      function (err, result) {
+        if (err) {
+          returnError(res, err.message, "Failed to update list");
+        } else if (result.result.n === 1) {
+          res.status(204).send({});
+        } else {
+          returnError(res, 'No list found', 'No list found', 404);
+        }
+      });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+});
+
+// Remove a user from a list
+app.delete('/api/list/:id/collaborators/:userId', passport.authenticate('jwt', {session: false}), function (req, res) {
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(LISTS_COLLECTION).updateOne({ 
+      _id: ObjectID(req.params.id)},
+      { $pull: { collaborators: req.params.userId } },
+      function (err, result) {
+        if (err) {
+          returnError(res, err.message, "Failed to update list");
+        } else if (result.result.n === 1) {
+          res.status(204).send({});
+        } else {
+          returnError(res, 'No list found', 'No list found', 404);
+        }
+      });
+  } else {
+    returnError(res, 'No list found', 'No list found', 404);
+  }
+});
 
 
 /**
@@ -486,44 +546,44 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
 
 // Get all teams a user is in
 app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(TEAMS_COLLECTION).find({"$or": [{members : req.user._id}, {createdBy: req.user._id}]}).toArray(function (err, teams) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve teams");
-    } else {
-      let teamCreators = [];
-      let teamMembers = [];
-      teams.forEach((team) => {
-        teamCreators.push(team.createdBy);
-        if(team.members) {
-          teamMembers.push(team.members);
-        }
-      });
-      teamMembers = _.flatten(teamMembers);
-      let users = _.concat(teamCreators, teamMembers);
-      users = _.uniq(users);
-
-      db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}, {_id:1}).toArray(function (err, users) {
-        
-        let finalTeams = teams.map(team => {
-          team.creator = {
-            "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
-            "isCreator": true,
-            "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
-          };
+  db.collection(TEAMS_COLLECTION)
+    .find({"$or": [{ members: req.user._id}, { createdBy: req.user._id }]})
+    .toArray(function (err, teams) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve teams");
+      } else {
+        let teamCreators = [];
+        let teamMembers = [];
+        teams.forEach((team) => {
+          teamCreators.push(team.createdBy);
           if(team.members) {
-            team.members = team.members.map(member => member = {
-              "user": users.find(user => ObjectID(member).equals(user._id)),
-              "isCreator": false,
-              "isLeader": _.includes(team.leaders, member) ? true : false
-            });
+            teamMembers.push(team.members);
           }
-          return team;
         });
-        
-        res.status(200).json(finalTeams);
-      });
-    }
-  });
+        teamMembers = _.flatten(teamMembers);
+        let users = _.concat(teamCreators, teamMembers);
+        users = _.uniq(users);
+
+        db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}, {_id:1}).toArray(function (err, users) {        
+          let finalTeams = teams.map(team => {
+            team.creator = {
+              "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
+              "isCreator": true,
+              "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
+            };
+            if(team.members) {
+              team.members = team.members.map(member => member = {
+                "user": users.find(user => ObjectID(member).equals(user._id)),
+                "isCreator": false,
+                "isLeader": _.includes(team.leaders, member) ? true : false
+              });
+            }
+            return team;
+          });          
+          res.status(200).json(finalTeams);
+        });
+      }
+    });
 });
 
 // Get team with specific id

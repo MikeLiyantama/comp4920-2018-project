@@ -1,10 +1,11 @@
 import { Task } from './task.model';
+import { User } from './user.model';
 
 export interface List {
     _id?: string;
     title: string;
     createdAt?: string;
-    createdBy?: string;
+    createdBy?: User;
     deleted?: boolean;
-    tasks?: Task[];
+    collaborators?: string[] | User[];
 }
