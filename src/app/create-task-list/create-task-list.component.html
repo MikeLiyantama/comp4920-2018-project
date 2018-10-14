@@ -12,21 +12,19 @@
     </form>
   </mat-step>
   <mat-step optional>
-    <form>
-      <ng-template matStepLabel>Add Users</ng-template>
-      <p>You can create collaborative lists that allow multiple users to add tasks to the one list!</p>
-      <p>Create a collaborative list by adding users below, or skip ahead to create a private list.</p>
-      <app-user-select
-        [chips]="true"
-        (userSelected)="onUserSelected($event)"
-        [excludedUsers]="usersToExcludeFromUserSelector"
-      >
-      </app-user-select>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-flat-button matStepperNext>Next</button>
-      </div>
-    </form>
+    <ng-template matStepLabel>Add Users</ng-template>
+    <p>You can create collaborative lists that allow multiple users to add tasks to the one list!</p>
+    <p>Create a collaborative list by adding users below, or skip ahead to create a private list.</p>
+    <app-user-select
+      [chips]="true"
+      (userSelected)="onUserSelected($event)"
+      [excludedUsers]="usersToExcludeFromUserSelector"
+    >
+    </app-user-select>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-flat-button matStepperNext>Next</button>
+    </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Review</ng-template>

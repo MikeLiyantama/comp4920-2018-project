@@ -25,13 +25,11 @@
       <div class="container">
         <span>{{appbarService.title}}</span>
         <button class="profileIcon" [matMenuTriggerFor]="profileMenu" mat-icon-button>
-          {{firstLetterOfUserName}}
+          <app-avatar [user]="currentUser"></app-avatar>
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-          <button mat-menu-item routerLink="/app">Home</button>
           <button mat-menu-item routerLink="/app/profile/{{currentUserId}}">Profile</button>
           <button mat-menu-item routerLink="/app/settings">Settings</button>
-          <button mat-menu-item>Help</button>
           <button mat-menu-item (click)="logout()">Log Out</button>
         </mat-menu>
       </div>

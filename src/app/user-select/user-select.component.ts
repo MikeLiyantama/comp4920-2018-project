@@ -19,6 +19,8 @@ import { User } from '../user.model';
 export class UserSelectComponent implements OnInit {
   
   @Input() chips: boolean = false;
+  @Input() label: string = 'User Search';
+  @Input() placeholder: string = 'Search for a user';
   @Output() userSelected = new EventEmitter<User>();
 
   private _excludedUsers: User[] = [];
@@ -35,8 +37,8 @@ export class UserSelectComponent implements OnInit {
 
   @Input()
   set excludedUsers(excludedUsers: User[]) {
-    this._excludedUsers = [ ...this._excludedUsers, ...excludedUsers];
-    this.users = differenceWith(this.users, this._excludedUsers, (a, b) => a._id === b._id);
+    this._excludedUsers = excludedUsers;
+    this.users = this._excludeUsers();
   }
 
   constructor(private userService: UserService) {
@@ -46,8 +48,13 @@ export class UserSelectComponent implements OnInit {
         map((user: string | null) => user ? this._filterUsers(user) : this.users.slice())
       );
   }
+  
   ngOnInit() {
     this._getAllUsers();
+  }
+
+  private _excludeUsers(): User[] {
+    return differenceWith(this.users, this._excludedUsers, (a, b) => a._id === b._id);
   }
 
   private _filterUsers(value: string): User[] {
@@ -55,12 +62,11 @@ export class UserSelectComponent implements OnInit {
     return this.users.filter(user => user.username.toLowerCase().indexOf(filterValue) === 0);
   }
 
-
   private _getAllUsers() {
     this.userService.getUsers().subscribe((users: User[]) => {
       this.users = users || [];
       if (this._excludedUsers.length > 0) {
-        this.users = differenceWith(this.users, this._excludedUsers, (a, b) => a._id === b._id);
+        this.users = this._excludeUsers();
       }
       this.loading = false;
     });
@@ -69,7 +75,6 @@ export class UserSelectComponent implements OnInit {
   addUser(event: MatChipInputEvent): void {
     const value = event.value;
 
-    // Add our fruit
     const trimmedValue = (value || '').trim();
     if (trimmedValue) {
       const user = this.users.find((user => user.username === trimmedValue));    
@@ -82,13 +87,11 @@ export class UserSelectComponent implements OnInit {
   }
 
   removeUser(user: User): void {
-    const index = this.selectedUsers.findIndex(element => element._id === user._id);
-    if (index >= 0) {
-      this.selectedUsers.splice(index, 1);
-    }
+    this.selectedUsers = this.selectedUsers.filter(selectedUser => selectedUser._id !== user._id);
   }
 
   resetInput(): void {
+    this.users = this._excludeUsers();
     this.userInput.nativeElement.value = '';
     this.userCtrl.setValue(null);
   }

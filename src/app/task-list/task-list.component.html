@@ -50,13 +50,12 @@
           </mat-icon>
           {{ collaborationPanelTitle }}
         </button>
-        <span *ngIf="list.collaborators" class="collaborators">
-          <div
+        <span *ngIf="list.collaborators" class="collaborators">          
+          <app-avatar
             *ngFor="let collaborator of list.collaborators.slice(0, 4)"
-            class="collaborator"
-          >
-            {{collaborator.username.charAt(0)}}
-          </div>
+            matListAvatar 
+            [user]="collaborator">
+          </app-avatar>
         </span>
       </div>
     </div>

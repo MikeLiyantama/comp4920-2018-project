@@ -42,7 +42,7 @@ export class CreateTaskListComponent implements OnInit {
     this.usersToExcludeFromUserSelector = [ 
       ...this.usersToExcludeFromUserSelector,
       ...this.collaborators,
-    ]
+    ];
   }
 
   addList() {

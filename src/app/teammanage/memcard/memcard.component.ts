@@ -15,12 +15,10 @@ export class MemcardComponent implements OnInit {
     @Input () removeDisabled: boolean;
     @Output () removeEmitter = new EventEmitter <TeamMember> ();
 
-    constructor() { }
+    constructor() {        
+    }
 
-    ngOnInit() {
-        if (!this.teamMember.user.profile) {
-            this.teamMember.user.profile = 'assets/0.jpg';
-        }
+    ngOnInit() {        
     }
 
     removeMember() {

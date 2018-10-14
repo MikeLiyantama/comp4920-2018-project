@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>{{ teamMember.user.username }}</mat-card-title>
         <mat-card-subtitle>{{ teamMember.user.name }}</mat-card-subtitle>
-        <img mat-card-avatar [src]="teamMember.user.profile">
+        <app-avatar mat-card-avatar [user]="teamMember.user"></app-avatar>
     </mat-card-header>
     <mat-card-content *ngIf="teamMember.user.bio">
         <p>

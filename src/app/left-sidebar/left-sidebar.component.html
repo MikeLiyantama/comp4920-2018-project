@@ -35,25 +35,27 @@
     (click)="changeAppTitle($event)"
   >
       <mat-icon matListIcon>add</mat-icon>
-      <h3 matLine>Add List</h3>
+      <h3 matLine>Create List</h3>
   </a>
   <mat-divider></mat-divider>
   <!---List of Teams here-->
   <h3 matSubheader>Teams</h3>
+  <a
+    mat-list-item
+    routerLink="/app/teams"
+    routerLinkActive="active-list-item"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="changeAppTitle($event)"
+  >
+    My Teams
+  </a>
   <a 
     mat-list-item 
     routerLink="/app/teams/create"
     routerLinkActive="active-list-item"
     (click)="changeAppTitle($event)"
   >
-    Create a Team
-  </a>
-  <a
-    mat-list-item
-    routerLink="/app/teams"
-    routerLinkActive="active-list-item"
-    (click)="changeAppTitle($event)"
-  >
-    My Teams
+    <mat-icon matListIcon>add</mat-icon>
+    <h3 matLine>Create Team</h3>
   </a>
 </mat-nav-list>

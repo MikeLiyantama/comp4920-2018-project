@@ -7,10 +7,7 @@
   >
   </app-user-select>
   <mat-list-item *ngFor="let collaborator of data.collaborators">
-    <img *ngIf="collaborator.profile || collaborator.profile !== ''" matListAvatar src="{{collaborator.profile}}">
-    <div *ngIf="!collaborator.profile" matListAvatar class="avatar">
-      {{collaborator.username.charAt(0)}}
-    </div>
+    <app-avatar matListAvatar [user]="collaborator"></app-avatar>
     <p matLine>{{collaborator.username}}</p>
     <button mat-icon-button (click)="removeCollaborator(collaborator._id)">
       <mat-icon>

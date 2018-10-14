@@ -34,10 +34,7 @@
 }
 
 .profileIcon {
-  border: 2px solid white;
-  line-height: 38px;
   margin-left: auto;
-  text-transform: capitalize;
 }
 
 .rightPane {

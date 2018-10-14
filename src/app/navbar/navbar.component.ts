@@ -9,17 +9,18 @@ import { AppbarService } from '../appbar.service';
 import { RightPaneService } from '../rightpane.service';
 import { AuthService } from '../auth.service';
 
+import { User } from '../user.model';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  currentUserId: String;
 
+  currentUser: User;
   drawerOpened: boolean = false;
   title: string = '';
-  firstLetterOfUserName: string = '';
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -35,10 +36,7 @@ export class NavbarComponent {
   ) { }
 
   ngOnInit() {
-    const currentUser = this.authService.getDecodedToken();
-    if (!currentUser.profile || currentUser.profile === '') {
-      this.firstLetterOfUserName = currentUser.username.charAt(0);
-    }
+    this.currentUser = this.authService.getDecodedToken();
   }
 
   logout() {

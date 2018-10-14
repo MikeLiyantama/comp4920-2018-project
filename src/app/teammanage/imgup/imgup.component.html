@@ -1,9 +1,13 @@
 <input
+    #fileInput
+    accept="image/*"
     style="display: none"
     type="file"
     (change)="fileChanged($event)"
-    #fileInput>
-
-<button mat-stroked-button 
+>
+<button 
+    mat-stroked-button 
     color="primary" 
-    (click)="fileInput.click()">{{ buttonLine }}</button>
+    (click)="fileInput.click()">
+    {{ buttonLine }}
+</button>
