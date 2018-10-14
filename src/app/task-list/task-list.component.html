@@ -29,27 +29,36 @@
         </span>
       </app-task>
     </cdk-drop>
-    <button
-      mat-flat-button 
-      class="bottomButton"
-      [disabled]="loadingCompletedTasks"
-      (click)="openCompletedTasks()"
-    >
-      <mat-icon>
-        assignment_turned_in
-      </mat-icon>
-      View Completed Tasks
-    </button>
-    <button
-      mat-button 
-      class="bottomButton"
-      (click)="openCollaborationDialog()"
-      matBadgeColor="primary"
-    >
-      <mat-icon>
-        group_work
-      </mat-icon>
-      Manage Collaboration
-    </button>
+    <div class="bottompanel"> 
+      <button
+        mat-flat-button
+        [disabled]="loadingCompletedTasks"
+        (click)="openCompletedTasks()"
+      >
+        <mat-icon>
+          assignment_turned_in
+        </mat-icon>
+        View Completed Tasks
+      </button>
+      <div class="collaboration">
+        <button
+          mat-stroked-button
+          (click)="openCollaborationDialog()"
+        >
+          <mat-icon>
+            group_work
+          </mat-icon>
+          Manage Collaboration
+        </button>
+        <span class="collaborators">
+          <div
+            *ngFor="let collaborator of list.collaborators.slice(0, 4)"
+            class="collaborator"
+          >
+            {{collaborator.username.charAt(0)}}   
+          </div>
+        </span>
+      </div>
+    </div>
   </div>
 </mat-nav-list>

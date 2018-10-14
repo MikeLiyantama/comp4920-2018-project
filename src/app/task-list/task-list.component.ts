@@ -61,6 +61,7 @@ export class TaskListComponent {
       this.loading = true;
       this.getTasks(this.listId);
       this.taskService.getList(this.listId).subscribe((list) => {
+        this.loading = false;
         this.list = list;
         this.appbarService.setTitle(list.title);
 
@@ -73,7 +74,6 @@ export class TaskListComponent {
   getTasks(listId: string) {
     const filters = { listId: listId || 'today' };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
-      this.loading = false;
       this.tasks = tasks || [];
     });
   }
