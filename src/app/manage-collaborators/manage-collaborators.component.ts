@@ -19,7 +19,7 @@ export class ManageCollaboratorsComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private taskService: TaskService,
   ) {
-    this.usersToExcludeFromUserSelector = this.data.collaborators;
+    this.usersToExcludeFromUserSelector = [ ...data.collaborators, data.createdBy ];
   }
 
   ngOnInit() {
@@ -32,6 +32,7 @@ export class ManageCollaboratorsComponent implements OnInit {
         user,
       ];
       this.changeDetectorRef.markForCheck();
+      this.taskService.invalidateTaskListsStatus();
     });
   }
 
@@ -41,6 +42,7 @@ export class ManageCollaboratorsComponent implements OnInit {
         collaborator._id !== collaboratorIdToRemove
       );
       this.changeDetectorRef.markForCheck();
+      this.taskService.invalidateTaskListsStatus();
     });
   }
 

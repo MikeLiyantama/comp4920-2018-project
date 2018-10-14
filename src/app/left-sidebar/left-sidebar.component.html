@@ -1,6 +1,5 @@
 <mat-nav-list>
-    <!---List of Task Lists here-->
-  <h3 matSubheader>Lists</h3>
+  <mat-divider></mat-divider>
   <a 
     mat-list-item 
     routerLink="/app/today"
@@ -9,6 +8,8 @@
   >
     Today
   </a>
+  <mat-divider></mat-divider>
+  <h3 matSubheader>Lists</h3>
   <a 
     mat-list-item 
     *ngFor="let taskList of taskLists"

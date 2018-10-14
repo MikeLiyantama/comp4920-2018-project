@@ -284,6 +284,7 @@ app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (
         { collaborators: { $in: [ req.user._id ] } },
       ],
     })
+    .sort({ important: -1, createdAt: 1 })
     .toArray(function (err, docs) {
     if (err) {
       returnError(res, err.message, "Failed to retieve lists");

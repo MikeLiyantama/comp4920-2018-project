@@ -119,7 +119,11 @@ export class TaskListComponent {
 
   openCollaborationDialog() {
     this.bottomSheet.open(ManageCollaboratorsComponent, {
-      data: { collaborators: this.list.collaborators, listId: this.listId },
+      data: { 
+        collaborators: this.list.collaborators || [], 
+        createdBy: this.list.createdBy, 
+        listId: this.listId,
+      },
     })
   }
 
