@@ -41,23 +41,31 @@
     </mat-tab>
     <mat-tab label="Add/Remove Members">
         <br>
-        <app-memfinder (newMemberEmitter)="addToTeam($event)"></app-memfinder> 
+        <app-user-select
+            (userSelected)="addToTeam($event)"
+            [excludedUsers]="usersToExcludeFromUserSelector"
+        >
+        </app-user-select>
         <mat-divider></mat-divider>
-        <mat-grid-list cols="3" rowHeight="280px">
+        <mat-grid-list cols="3" rowHeight="200px">
             <mat-grid-tile>
-                <app-memcard [teamMember]="team.creator"
-                     [creatorDisabled]="true"
-                     [leaderDisabled]="true"
-                     [removeDisabled]="true"
-                     ></app-memcard>
-            </mat-grid-tile>
-            <mat-grid-tile *ngFor="let m of team.members">
-                <app-memcard [teamMember]="m"
+                <app-memcard
+                    [teamMember]="team.creator"
                     [creatorDisabled]="true"
-                     [leaderDisabled]="false"
-                     [removeDisabled]="false"
+                    [leaderDisabled]="true"
+                    [removeDisabled]="true"
+                >
+                </app-memcard>
+            </mat-grid-tile>
+            <mat-grid-tile *ngFor="let member of team.members">
+                <app-memcard 
+                    [teamMember]="member"
+                    [creatorDisabled]="true"
+                    [leaderDisabled]="false"
+                    [removeDisabled]="false"
                     (removeEmitter)="removeFromTeam($event)"
-                     ></app-memcard>
+                >
+            </app-memcard>
             </mat-grid-tile>
         </mat-grid-list>
     </mat-tab>

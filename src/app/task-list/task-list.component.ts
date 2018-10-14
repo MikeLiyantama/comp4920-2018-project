@@ -50,16 +50,19 @@ export class TaskListComponent {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.listId = params.get('listId');
-      if (this.listId === 'today') {
+      if (!this.listId || this.listId === 'today') {
         this.appbarService.setTitle('Today');
       }
       this.loading = true;
       this.getTasks(this.listId);
+      this.taskService.getList(this.listId).subscribe((list) => {
+        this.appbarService.setTitle(list.title);
+      })
     });
   }
   
   getTasks(listId: string) {
-    const filters = { listId };
+    const filters = { listId: listId || 'today' };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
       this.loading = false;
       this.tasks = tasks || [];
@@ -68,7 +71,7 @@ export class TaskListComponent {
 
   addTask() {
     const newTask = <Task>{ title: this.quickAddTask };    
-    if (this.listId !== 'today') {
+    if (this.listId && this.listId !== 'today') {
       newTask.listId = this.listId;
     }
     this.taskService.addTask(newTask).subscribe(() => {

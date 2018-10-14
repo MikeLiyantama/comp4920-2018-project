@@ -1,0 +1,70 @@
+<mat-horizontal-stepper #stepper linear class="container">
+  <mat-step [stepControl]="detailsFormGroup">
+    <form [formGroup]="detailsFormGroup">
+      <ng-template matStepLabel>List Details</ng-template>
+      <mat-form-field appearance="outline" class="fullwidth">
+        <mat-label>List name</mat-label>
+        <input matInput required placeholder="List name" formControlName="listName">
+      </mat-form-field>
+      <div>
+        <button mat-flat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step optional>
+    <form>
+      <ng-template matStepLabel>Add Users</ng-template>
+      <p>You can create collaborative lists that allow multiple users to add tasks to the one list!</p>
+      <p>Create a collaborative list by adding users below, or skip ahead to create a private list.</p>
+      <app-user-select
+        [chips]="true"
+        (userSelected)="onUserSelected($event)"
+        [excludedUsers]="usersToExcludeFromUserSelector"
+      >
+      </app-user-select>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-flat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Review</ng-template>
+    <mat-card class="confirm-card">
+      <h3 class="confirm-card-header">{{detailsFormGroup.value.listName}}</h3>
+      <mat-card-content>
+        <div class="faketask">
+          <div class="faketask-checkbox"></div>
+          <div class="faketask-title"></div>
+        </div>
+        <div class="faketask">
+          <div class="faketask-checkbox"></div>
+          <div class="faketask-title"></div>
+        </div>
+        <div class="faketask">
+          <div class="faketask-checkbox"></div>
+          <div class="faketask-title"></div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-chip-list>
+          <mat-chip
+            *ngFor="let user of collaborators"
+            disabled
+            removable="false"
+            selectable="false"
+          >
+            {{user.username}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-card-actions>
+    </mat-card>
+    <div class="center">
+      <p>Does this look correct?</p>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-flat-button (click)="addList()">Create</button>
+      </div>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

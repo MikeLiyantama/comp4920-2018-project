@@ -1,52 +1,42 @@
 <mat-nav-list>
     <!---List of Task Lists here-->
   <h3 matSubheader>Lists</h3>
-  <a mat-list-item 
+  <a 
+    mat-list-item 
     routerLink="/app/today"
     routerLinkActive="active-list-item"
     (click)="changeAppTitle($event)"
   >
     Today
   </a>
-  <a mat-list-item 
+  <a 
+    mat-list-item 
     *ngFor="let taskList of taskLists"
     class="taskList"
-    routerLink="/app/{{taskList._id}}"
+    routerLink="/app/lists/{{taskList._id}}"
+    routerLinkActive="active-list-item"
+    (click)="requestDrawerClose()"
+  >
+    <mat-icon *ngIf="taskList.collaborators && taskList.collaborators.length > 0" matListIcon>
+      group_work
+    </mat-icon>
+    <h3 matLine>{{taskList.title}}</h3>
+  </a>
+  <a 
+    mat-list-item 
+    routerLink="/app/lists/create"
     routerLinkActive="active-list-item"
     (click)="changeAppTitle($event)"
   >
-    {{taskList.title}}
-  </a>
-  <mat-list-item *ngIf="!showAddListInput" (click)="toggleAddListInput()">
       <mat-icon matListIcon>add</mat-icon>
-      Add List
-  </mat-list-item>
-  <mat-list-item *ngIf="showAddListInput">
-    <form (submit)="addList()">
-      <mat-form-field floatLabel="never">
-        <input 
-          matInput 
-          placeholder="Add List" 
-          name="addListName" 
-          type="text" 
-          [(ngModel)]="addListName"
-          [(disabled)]="addListDisabled"
-        >
-      </mat-form-field>
-    </form>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <!---List of Collaborative Task Lists here-->
-  <h3 matSubheader>Collaborative Lists</h3>
-  <mat-list-item>Fake Collaborative List</mat-list-item>
-  <mat-list-item>Another FakeCollaborative List</mat-list-item>
-  <mat-list-item>Yet Another Collaborative List</mat-list-item>
+      <h3 matLine>Add List</h3>
+  </a>
   <mat-divider></mat-divider>
   <!---List of Teams here-->
   <h3 matSubheader>Teams</h3>
   <a 
     mat-list-item 
-    routerLink="/app/teamcreate"
+    routerLink="/app/teams/create"
     routerLinkActive="active-list-item"
     (click)="changeAppTitle($event)"
   >
@@ -54,7 +44,7 @@
   </a>
   <a
     mat-list-item
-    routerLink="/app/teamdash"
+    routerLink="/app/teams"
     routerLinkActive="active-list-item"
     (click)="changeAppTitle($event)"
   >

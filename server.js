@@ -275,9 +275,16 @@ app.post('/api/list', passport.authenticate('jwt', {session: false}), function (
   }
 });
 
-// Get all lists a user has created
+// Get all lists a user is a part of (created or added as a collaborator)
 app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (req, res) {
-  db.collection(LISTS_COLLECTION).find({createdBy : req.user._id}).toArray(function (err, docs) {
+  db.collection(LISTS_COLLECTION)
+    .find({ 
+      $or: [
+        { createdBy: req.user._id },
+        { collaborators: { $in: [ req.user._id ] }},
+      ],
+    )
+    .toArray(function (err, docs) {
     if (err) {
       returnError(res, err.message, "Failed to retieve lists");
     } else {

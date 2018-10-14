@@ -3,9 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Team } from '../../team.model';
 import { TeamMember } from '../../teammember.model';
-import { User } from '../../../user/user.model';
+import { User } from '../../../user.model';
 
 import { AppbarService } from '../../../appbar.service';
+import { AuthService } from '../../../auth.service';
 import { TeamService } from '../../team.service';
 
 @Component({
@@ -19,12 +20,15 @@ import { TeamService } from '../../team.service';
 export class TeamDetailsComponent implements OnInit {
     @Input () team: Team;
     myControl = new FormControl ();
-    allUsers: User [];
+    allUsers: User[];
     detailsGroup: FormGroup;
     membersGroup: FormGroup;
+    usersToExcludeFromUserSelector: User[] = [];
+
     constructor (
-        private appbarService: AppbarService,
         private _formBuilder: FormBuilder,
+        private appbarService: AppbarService,
+        private authService: AuthService,
         private teamService: TeamService
     ) { }
 
@@ -36,6 +40,11 @@ export class TeamDetailsComponent implements OnInit {
         this.membersGroup = this._formBuilder.group({
             SearchCtrl: ['', Validators.required]
         });
+
+        this.usersToExcludeFromUserSelector = [ 
+            this.authService.getDecodedToken(),
+            ...this.team.members.map(member => member.user),
+        ];
     }
     
     setImage (givenFile) {
@@ -48,13 +57,11 @@ export class TeamDetailsComponent implements OnInit {
         this.teamService.updateTeam(this.team);
     }
 
-    addToTeam (event) {
-        var exists = this.team.members.some (function (a) {
-            return a.user.username == event.username;
-        });
+    addToTeam(user) {
+        const exists = this.team.members.some((member) => member.user.username == user.username);
         if (!exists) {
-            this.team.members.push (new TeamMember (event, false, false));
-            this.teamService.addMemberToTeam (event, this.team);
+            this.team.members = [ ...this.team.members, (new TeamMember (user, false, false)) ];
+            this.teamService.addMemberToTeam(user, this.team);
         }
     }
 

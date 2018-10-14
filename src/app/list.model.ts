@@ -6,5 +6,5 @@ export interface List {
     createdAt?: string;
     createdBy?: string;
     deleted?: boolean;
-    tasks?: Task[];
+    collaborators?: string[];
 }

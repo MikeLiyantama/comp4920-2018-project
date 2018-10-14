@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-//import { User } from '../user/user.model';
+//import { User } from '../user.model';
 import { AuthService } from '../auth.service';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef} from '@angular/material';
 

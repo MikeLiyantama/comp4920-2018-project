@@ -1,0 +1,45 @@
+<mat-form-field appearance="outline" class="fullwidth">
+  <mat-label>Username</mat-label>
+  <mat-chip-list *ngIf="chips" #selectedUsersList>
+      <mat-chip
+        *ngFor="let user of selectedUsers"
+        removable
+        selectable="false"
+        (removed)="removeUser(user)"
+      >
+        {{user.username}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        #userInput
+        matInput
+        placeholder="Username"
+        aria-label="Username"
+        [disabled]="loading"
+        [formControl]="userCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="selectedUsersList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="addUser($event)"
+      >
+  </mat-chip-list>
+  <input
+    *ngIf="!chips"
+    #userInput
+    matInput
+    placeholder="Username"
+    aria-label="Username"
+    [disabled]="loading"
+    [formControl]="userCtrl"
+    [matAutocomplete]="auto"
+  >
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectUser($event)">
+    <mat-option 
+      *ngFor="let user of filteredUsers | async"
+      [value]="user.username"      
+    >
+      <img class="profileimg" aria-hidden [src]="user.profile" height="25">
+      <span>{{ user.username }} </span>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

@@ -1,10 +1,10 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title> {{ teamMember?.user.username }}</mat-card-title>
+        <mat-card-title>{{ teamMember.user.username }}</mat-card-title>
         <mat-card-subtitle>{{ teamMember.user.name }}</mat-card-subtitle>
         <img mat-card-avatar [src]="teamMember.user.profile">
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="teamMember.user.bio">
         <p>
             {{ teamMember.user.bio }}
         </p>
@@ -13,20 +13,22 @@
         <mat-checkbox
             [checked]="teamMember.isCreator"
             [disabled]="creatorDisabled" 
-            >
+        >
             Creator
         </mat-checkbox>
         <mat-checkbox
             [checked]="teamMember.isLeader"
             [disabled]="leaderDisabled" 
             (click)="changeLeadership()"
-            >
+        >
             Leader
         </mat-checkbox>
-        <button mat-stroked-button 
+        <button 
+            mat-stroked-button 
             [disabled]="removeDisabled"
             (click)="removeMember()"
-            color="accent">
+            color="accent"
+        >
             Remove
         </button>
     </mat-card-actions>
