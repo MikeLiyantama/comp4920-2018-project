@@ -33,6 +33,7 @@ export class TaskListComponent {
   loadingCompletedTasks: boolean = false;
   completedTasks: Task[] = [];
   showCollaborationButton: boolean = false;
+  collaborationPanelTitle: string = '';
 
   constructor(
     private authService: AuthService,
@@ -55,26 +56,35 @@ export class TaskListComponent {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.listId = params.get('listId');
+      this.loading = true;
+
       if (!this.listId || this.listId === 'today') {
         this.appbarService.setTitle('Today');
-      }
-      this.loading = true;
-      this.getTasks(this.listId);
-      this.taskService.getList(this.listId).subscribe((list) => {
-        this.loading = false;
-        this.list = list;
-        this.appbarService.setTitle(list.title);
+        this.getTasks(this.listId, true);
+      } else {
+        this.getTasks(this.listId, false);
+        this.taskService.getList(this.listId).subscribe((list) => {
+          this.loading = false;
+          this.list = list;
+          this.appbarService.setTitle(list.title);
 
-        const authedUser = this.authService.getDecodedToken();
-        this.showCollaborationButton = this.list.createdBy._id === authedUser._id;
-      })
+          const authedUser = this.authService.getDecodedToken();
+          this.showCollaborationButton = this.list.createdBy._id === authedUser._id;
+          this.collaborationPanelTitle = this.list.collaborators && this.list.collaborators.length > 0
+            ? 'Manage Collaboration'
+            : 'Add Collaborators';
+        });
+      }
     });
   }
   
-  getTasks(listId: string) {
+  getTasks(listId: string, setLoading?: boolean) {
     const filters = { listId: listId || 'today' };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
       this.tasks = tasks || [];
+      if (setLoading) {
+        this.loading = false;
+      }
     });
   }
 
@@ -123,6 +133,7 @@ export class TaskListComponent {
         collaborators: this.list.collaborators || [], 
         createdBy: this.list.createdBy, 
         listId: this.listId,
+        title: this.collaborationPanelTitle,
       },
     })
   }

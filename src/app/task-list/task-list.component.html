@@ -40,7 +40,7 @@
         </mat-icon>
         View Completed Tasks
       </button>
-      <div class="collaboration">
+      <div *ngIf="listId && listId !== 'today'" class="collaboration">
         <button
           mat-stroked-button
           (click)="openCollaborationDialog()"
@@ -48,14 +48,14 @@
           <mat-icon>
             group_work
           </mat-icon>
-          Manage Collaboration
+          {{ collaborationPanelTitle }}
         </button>
-        <span class="collaborators">
+        <span *ngIf="list.collaborators" class="collaborators">
           <div
             *ngFor="let collaborator of list.collaborators.slice(0, 4)"
             class="collaborator"
           >
-            {{collaborator.username.charAt(0)}}   
+            {{collaborator.username.charAt(0)}}
           </div>
         </span>
       </div>

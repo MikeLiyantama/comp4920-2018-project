@@ -1,6 +1,6 @@
 
 <mat-list>
-  <h2 mat-subheader>Manage Collaborators</h2>
+  <h2 mat-subheader>{{data.title}}</h2>
   <app-user-select
     (userSelected)="onUserSelected($event)"
     [excludedUsers]="usersToExcludeFromUserSelector"
