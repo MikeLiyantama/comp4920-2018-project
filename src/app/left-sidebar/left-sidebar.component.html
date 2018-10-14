@@ -17,7 +17,12 @@
     routerLinkActive="active-list-item"
     (click)="requestDrawerClose()"
   >
-    <mat-icon *ngIf="taskList.collaborators && taskList.collaborators.length > 0" matListIcon>
+    <mat-icon 
+      *ngIf="taskList.collaborators && taskList.collaborators.length > 0"
+      matListIcon
+      [matBadge]="taskList.collaborators.length"
+      matBadgeColor="primary"
+    >
       group_work
     </mat-icon>
     <h3 matLine>{{taskList.title}}</h3>
