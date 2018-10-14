@@ -8,6 +8,16 @@
   >
     <mat-icon aria-label="Close pane">arrow_back</mat-icon>
   </button>
+  <button 
+  class="copyButton"
+  type="button"
+  mat-icon-button
+  (click)="this.copyTask()"
+  
+  >
+  <mat-icon>content_copy</mat-icon>
+  </button>
+
   <button
     class="deleteButton"
     type="button"
@@ -17,6 +27,7 @@
   >
     <mat-icon aria-label="Delete task">delete</mat-icon>
   </button>
+ 
 </div>
 <form class="form" (submit)="checkAuth()">
   <mat-form-field class="form-group form-field">

@@ -48,4 +48,17 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
+  async copyTask() {
+    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res=> {
+      let newTask = Object.assign({}, res);
+      newTask['_id']=undefined;
+
+      this.taskService.addTask(<Task>newTask).subscribe(res => {      
+        this.taskService.invalidateTaskListStatus();
+
+        // console.log(res);
+        // console.log(newTask);
+      });
+    });
+  }
 }
