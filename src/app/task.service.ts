@@ -7,6 +7,7 @@ import omit from 'lodash/omit';
 
 import { List } from './list.model';
 import { Task } from './task.model';
+import { User } from './user.model';
 
 // Adapted from: https://devcenter.heroku.com/articles/mean-apps-restful-api#create-the-contact-service-to-make-requests-to-the-api-server
 @Injectable({
@@ -16,7 +17,7 @@ export class TaskService {
 
     private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
 
-    private listsUrl = 'https://comp4920-organiser.herokuapp.com/api/list';
+    private listsUrl = 'http://localhost:8080/api/list';
 
     private taskListValidSource = new Subject<boolean>();
 
@@ -43,6 +44,20 @@ export class TaskService {
 
     getLists(): Observable<List[]> {
         return this.http.get<List[]>(this.listsUrl)
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
+    addUserToList(listId: string, userId: string): Observable<void> {
+        return this.http.post<void>(`${this.listsUrl}/${listId}/collaborators/${userId}`, {})
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
+    removeUserFromList(listId: string, userId: string): Observable<void> {
+        return this.http.delete<void>(`${this.listsUrl}/${listId}/collaborators/${userId}`)
             .pipe(
                 catchError(this.handleError)
             )

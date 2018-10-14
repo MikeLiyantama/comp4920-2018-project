@@ -47,7 +47,6 @@ export class UserSelectComponent implements OnInit {
       );
   }
   ngOnInit() {
-    console.log(this.chips);
     this._getAllUsers();
   }
 

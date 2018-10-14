@@ -7,11 +7,13 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatBottomSheet } from '@angular/material';
 
 import { CompletedTaskListComponent } from '../completed-task-list/completed-task-list.component';
+import { ManageCollaboratorsComponent } from '../manage-collaborators/manage-collaborators.component';
 
 import { List } from '../list.model';
 import { Task } from '../task.model';
 
 import { AppbarService } from '../appbar.service';
+import { AuthService } from '../auth.service';
 import { TaskService } from '../task.service';
 
 @Component({
@@ -24,13 +26,16 @@ export class TaskListComponent {
   subscription: Subscription;
 
   listId: string;
+  list: List;
   quickAddTask: string;
   loading: boolean = true;
   tasks: Task[] = [];
   loadingCompletedTasks: boolean = false;
   completedTasks: Task[] = [];
+  showCollaborationButton: boolean = false;
 
   constructor(
+    private authService: AuthService,
     private appbarService: AppbarService,
     private taskService: TaskService,
     private bottomSheet: MatBottomSheet,
@@ -56,7 +61,11 @@ export class TaskListComponent {
       this.loading = true;
       this.getTasks(this.listId);
       this.taskService.getList(this.listId).subscribe((list) => {
+        this.list = list;
         this.appbarService.setTitle(list.title);
+
+        const authedUser = this.authService.getDecodedToken();
+        this.showCollaborationButton = this.list.createdBy._id === authedUser._id;
       })
     });
   }
@@ -106,6 +115,12 @@ export class TaskListComponent {
         data: { completedTasks: tasks },
       });
     });
+  }
+
+  openCollaborationDialog() {
+    this.bottomSheet.open(ManageCollaboratorsComponent, {
+      data: { collaborators: this.list.collaborators, listId: this.listId },
+    })
   }
 
   taskDrop(event: CdkDragDrop<string[]>) {

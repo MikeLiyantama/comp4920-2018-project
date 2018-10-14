@@ -55,6 +55,7 @@ import { TeamDetailsComponent } from './teammanage/teamdash/teamdetail/teamdetai
 import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 import { CreateTaskListComponent } from './create-task-list/create-task-list.component';
 import { UserSelectComponent } from './user-select/user-select.component';
+import { ManageCollaboratorsComponent } from './manage-collaborators/manage-collaborators.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -87,9 +88,11 @@ export function tokenGetter() {
     LeftSidebarComponent,
     CreateTaskListComponent,
     UserSelectComponent,
+    ManageCollaboratorsComponent,
   ],
   entryComponents: [
-    CompletedTaskListComponent
+    CompletedTaskListComponent,
+    ManageCollaboratorsComponent,
   ],
   imports: [
     BrowserModule,

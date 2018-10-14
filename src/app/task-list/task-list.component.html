@@ -31,10 +31,25 @@
     </cdk-drop>
     <button
       mat-flat-button 
-      class="completedHint" 
-      [disabled]="loadingCompletedTasks" 
-      (click)="openCompletedTasks()">
+      class="bottomButton"
+      [disabled]="loadingCompletedTasks"
+      (click)="openCompletedTasks()"
+    >
+      <mat-icon>
+        assignment_turned_in
+      </mat-icon>
       View Completed Tasks
+    </button>
+    <button
+      *ngIf="showCollaborationButton"
+      mat-button 
+      class="bottomButton"
+      (click)="openCollaborationDialog()"
+    >
+      <mat-icon>
+        group_work
+      </mat-icon>
+      Manage Collaboration
     </button>
   </div>
 </mat-nav-list>

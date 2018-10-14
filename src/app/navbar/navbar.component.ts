@@ -19,6 +19,8 @@ export class NavbarComponent {
 
   drawerOpened: boolean = false;
   title: string = '';
+  firstLetterOfUserName: string = '';
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
@@ -32,14 +34,11 @@ export class NavbarComponent {
     private router: Router,
   ) { }
 
-  ngOnInit(){
-    let thisC = this;
-    this.authService.getCurrentUser()
-        .subscribe(function(res){
-          if(res.currUser){
-            thisC.currentUserId = res.currUser;
-          }
-        })
+  ngOnInit() {
+    const currentUser = this.authService.getDecodedToken();
+    if (!currentUser.profile || currentUser.profile === '') {
+      this.firstLetterOfUserName = currentUser.username.charAt(0);
+    }
   }
 
   logout() {

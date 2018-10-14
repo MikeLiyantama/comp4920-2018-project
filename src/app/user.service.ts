@@ -19,17 +19,6 @@ export class UserService {
     return this.http.get<User[]>(this.usersUrl)
         .pipe(
             catchError(this.handleError),
-            map((users) => {
-                return users.map((user) => {
-                    if (!user.profile) {
-                        user = {
-                            ...user,
-                            profile: 'assets/0.jpg',
-                        }
-                    }
-                    return user;
-                });
-            })
         );
   }
 

@@ -9,7 +9,6 @@
     [(opened)]="drawerOpened"
     >
     <h1 class="logo">Organise.me</h1>
-    <mat-divider></mat-divider>
     <app-left-sidebar (drawerCloseRequested)="onDrawerCloseRequested($event)"></app-left-sidebar>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -26,7 +25,7 @@
       <div class="container">
         <span>{{appbarService.title}}</span>
         <button class="profileIcon" [matMenuTriggerFor]="profileMenu" mat-icon-button>
-          U
+          {{firstLetterOfUserName}}
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before" [overlapTrigger]="false">
           <button mat-menu-item routerLink="/app">Home</button>

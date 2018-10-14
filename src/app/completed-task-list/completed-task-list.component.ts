@@ -1,5 +1,4 @@
 import { Component, ChangeDetectorRef, Inject, OnInit } from '@angular/core';
-
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material';
 
 import { TaskService } from '../task.service';
@@ -13,7 +12,6 @@ export class CompletedTaskListComponent implements OnInit {
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
-    private bottomSheetRef: MatBottomSheetRef<CompletedTaskListComponent>,
     private changeDetectorRef: ChangeDetectorRef,
     private taskService: TaskService,
   ) { }

@@ -3,19 +3,19 @@
     mat-list-item
     class="task"
     [class.selected]="rightPaneService.opened && rightPaneService.task._id === task._id"    
-    (click)="this.openDetailPane()"    
+    (click)="openDetailPane()"    
 >
     <ng-content select="[drag-handle]"></ng-content>
     <mat-checkbox
         class="task-checkbox"
-        (change)="this.toggleTaskCompleted($event)" 
+        (change)="toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
     <span class="task-title">{{ task.title }}</span>
     <mat-icon
         *ngIf="!task.completed"
         class="task-important" 
-        (click)="this.toggleTaskImportance($event)"
+        (click)="toggleTaskImportance($event)"
     >
         {{ important ? 'star' : 'star_outline' }}
     </mat-icon>
@@ -26,7 +26,7 @@
     <mat-checkbox 
         checked="true"
         class="task-checkbox"
-        (change)="this.toggleTaskCompleted($event)" 
+        (change)="toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
     <span class="task-title completed">{{ task.title }}</span>
