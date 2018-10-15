@@ -280,7 +280,7 @@ app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (
   db.collection(LISTS_COLLECTION)
     .find({ 
       $or: [
-        { createdBy: req.user._id },
+        { createdBy: ObjectID(req.user._id) },
         { collaborators: { $in: [ req.user._id ] } },
       ],
     })
