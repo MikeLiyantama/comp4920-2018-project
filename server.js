@@ -753,6 +753,20 @@ app.put('/api/team/:id/list', passport.authenticate('jwt', {session: false}), fu
   }
 });
 
+// Get all lists for a team
+app.get('/api/team/:id/lists' , passport.authenticate('jwt', { session: false }), function (req, res) {
+  db.collection(LISTS_COLLECTION)
+    .find({ "teamID" : ObjectID(req.params.id) })
+    .sort({ important: -1, createdAt: 1 })
+    .toArray(function (err, docs) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve lists");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
+});
+
 // Remove a list from a team
 app.delete('/api/team/:id/list', passport.authenticate('jwt', {session: false}), function(req, res){
   if (ObjectID.isValid(req.params.id)) {
