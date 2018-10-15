@@ -10,8 +10,36 @@ import { User } from '../user/user.model';
 })
 
 export class DiscussionComponent implements OnInit {
+
+    /* Using dummy input for now. uncomment the @Input() lines 
+    and delete the dummy data when the backend begins to 
+    support team messages */
+    dummyUser1 = {
+                    "_id" : "5bb6963454bc32001333a179",
+                    "name" : "Tyrion Lannister",
+                    "username" : "dwarfking32",
+                    "email" : "gold@gmail.com",
+                    "password" : "pass",
+                    "bio" : "",
+                    "profile" : ""
+                };
+    dummyUser2 = {
+                    "_id" : "5bb6966c54bc32001333a17a",
+                    "name" : "Eddard Stark",
+                    "username" : "wolfboy6534",
+                    "email" : "winter@gmail.com",
+                    "password" : "pass",
+                    "bio" : "",
+                    "profile" : ""
+                };
+    messagesToRender = [
+    new Message ("Yo", this.dummyUser1, ""),
+    new Message ("Hey there", this.dummyUser2, ""),
+    new Message ("Did you watch the new movie?", this.dummyUser1, ""),
+    new Message ("Yeah, I didn't get the ending though", this.dummyUser2, "")
+    ];
+    //@Input () messagesToRender;
     @Input () currentUser: User;
-    @Input () messagesToRender;
     @Output () commentEmitter = new EventEmitter <Message>();
     sendHighlight="primary"
     comment: string;

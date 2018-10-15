@@ -1,11 +1,11 @@
-<mat-list-item>
-    <span>
-        <div class="msgContent">
-            <p matLine>Just a test matLine</p>
-            <p matLine><i>Catty McCatCat</i></p>
-        </div>
-    </span>
-    <span id="profileAvatar" >
-        <img matListAvatar src="assets/0.jpg">
-    </span>
+<mat-list-item role="listitem">
+<span>
+    <div class="msgContent">
+        <p matLine>{{message.content}}</p>
+        <p matLine><i>{{message.author.username}}</i></p>
+    </div>
+</span>
+<span id="profileAvatar" >
+    <img matListAvatar src="assets/0.jpg">
+</span>
 </mat-list-item>

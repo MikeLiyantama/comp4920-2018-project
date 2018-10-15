@@ -20,8 +20,12 @@
         </form>
     </mat-grid-tile>
 </mat-grid-list>
-<mat-list>
+<mat-list role="list">
     <!-- input box for comments -->
-    <app-received></app-received>
-    <app-sent></app-sent>
+    <div id="msgItem" *ngFor="let msg of messagesToRender">
+        <app-sent *ngIf="msg.author._id == currentUser._id"
+            [message]="msg"></app-sent>
+        <app-received *ngIf="msg.author._id != currentUser._id"
+            [message]="msg"></app-received>
+    </div>
 </mat-list>

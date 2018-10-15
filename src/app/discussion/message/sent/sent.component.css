@@ -1,6 +1,7 @@
 mat-list-item {
     max-width: 420px;
     float: right;
+    display: block;
 }
 
 
