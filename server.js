@@ -279,10 +279,18 @@ app.post('/api/list', passport.authenticate('jwt', {session: false}), function (
 app.get('/api/list' , passport.authenticate('jwt', { session: false }), function (req, res) {
   db.collection(LISTS_COLLECTION)
     .find({ 
-      $or: [
-        { createdBy: req.user._id },
-        { collaborators: { $in: [ `${req.user._id}` ] } },
-      ],
+      $and: [
+        {
+          // Team lists are not included
+          "teamID" : { "$exists" : false }
+        },
+        {
+          $or: [
+            { createdBy: req.user._id },
+            { collaborators: { $in: [ `${req.user._id}` ] } },
+          ]
+        }
+      ]
     })
     .sort({ important: -1, createdAt: 1 })
     .toArray(function (err, docs) {
