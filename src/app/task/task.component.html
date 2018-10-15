@@ -11,7 +11,10 @@
         (change)="toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
-    <span class="task-title">{{ task.title }}</span>
+    <div class="task-info">
+        <span matLine class="task-title">{{ task.title }}</span>
+        <span *ngIf="task.dueDate" matLine class="task-duedate">{{ formattedDueDate }}</span>
+    </div>
     <mat-icon
         *ngIf="!task.completed"
         class="task-important" 

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 
 import { Task } from '../task.model';
 
 import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
-import * as moment from 'moment';
 
 export interface Option {
   value: string;
@@ -23,11 +23,12 @@ export class TaskDetailComponent implements OnInit {
   dueDate: string;
   isChecked: boolean;
   options: Option[] = [
-    {value: "daily-0", viewValue: "Daily for a week"},
-    {value: "weekly-1", viewValue: "Weekly for a month"},
-    {value: "monthly-2", viewValue: "Monthly for a year"}
+    { value: "daily", viewValue: "Daily for a week" },
+    { value: "weekly", viewValue: "Weekly for a month" },
+    { value: "monthly", viewValue: "Monthly for a year" }
   ]
-  choice: string;
+  repeatChoice: string;
+  
   constructor(
     private taskService: TaskService,
     private rightPaneService: RightPaneService,
@@ -36,7 +37,7 @@ export class TaskDetailComponent implements OnInit {
   ngOnInit() {
   }
 
-  async maybeSaveAndClose() {
+  maybeSaveAndClose() {
     const editedTask = {
       _id: this.rightPaneService.task._id,
       title: this.title,
@@ -53,91 +54,61 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-  async maybeDeleteAndClose() {
+  maybeDeleteAndClose() {
     this.taskService.deleteTask(this.rightPaneService.task._id).subscribe(() => {
       this.taskService.invalidateTaskListStatus();
       this.rightPaneService.close();
     });
   }
 
-  async copyTask() {
-    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res=> {
-      let newTask = Object.assign({}, res);
-      newTask['_id']=undefined;
-
-      this.taskService.addTask(<Task>newTask).subscribe(res => {      
-        this.taskService.invalidateTaskListStatus();
-
-        // console.log(res);
-
-        // console.log(newTask);
-      });
-    });
-  }
-
-  async repeat() {
-    if (this.choice == "daily-0") {
-      this.repeatDaily();
-    } else if (this.choice == "weekly-1") {
-      this.repeatWeekly();
-    } else if (this.choice == "monthly-2") {
-      this.repeatMonthly();
-    } 
-  }
-
-  async repeatDaily() {
-    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
-      var i = 0;
-      //change date
-      const date = moment(res['dueDate']);
-      while (i < 7) {
-        let newTask = Object.assign({}, res);
-        newTask["_id"] = undefined;
-        newTask['dueDate'] = date.add(i + 1, 'day');
-
-        this.taskService.addTask(<Task>newTask).subscribe(res => {});
-          
-      }
-      
+  copyTask() {
+    const newTask = {
+      ...this.rightPaneService.task,
+      _id: undefined,
+    };
+    this.taskService.addTask(newTask).subscribe(() => {      
       this.taskService.invalidateTaskListStatus();
     });
   }
 
-  async repeatWeekly() {
-    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
-      var i = 0;
-      //change date
-      const date = moment(res['dueDate']);
-      while (i < 4) {
-        let newTask = Object.assign({}, res);
-        newTask["_id"] = undefined;
-        newTask['dueDate'] = date.add(i + 1, 'week');
-
-        this.taskService.addTask(<Task>newTask).subscribe(res => {});
-          
+  repeat() {
+    const dueDate = moment(this.rightPaneService.task.dueDate);
+    if (dueDate) {
+      if (this.repeatChoice === "daily") {
+        let i = 0;
+        while (i < 7) {
+          const newTask = { 
+            ...this.rightPaneService.task,
+            _id: undefined,
+            dueDate: moment.utc(dueDate.add(i + 1, 'day')).format(),
+          }
+          this.taskService.addTask(newTask).subscribe(() => {});     
+          i += 1;
+        }
+      } else if (this.repeatChoice === "weekly") {
+        let i = 0;
+        while (i < 4) {
+          const newTask = { 
+            ...this.rightPaneService.task,
+            _id: undefined,
+            dueDate: moment.utc(dueDate.add(i + 1, 'week')).format(),
+          }
+          this.taskService.addTask(newTask).subscribe(() => {});    
+          i += 1;
+        }
+      } else if (this.repeatChoice === "monthly") {
+        let i = 0;
+        while (i < 12) {
+          const newTask = { 
+            ...this.rightPaneService.task,
+            _id: undefined,
+            dueDate: moment.utc(dueDate.add(i + 1, 'month')).format(),
+          }
+          this.taskService.addTask(newTask).subscribe(() => {});   
+          i += 1;  
+        }
       }
-      
       this.taskService.invalidateTaskListStatus();
-    });
-
-  }
-
-  async repeatMonthly() {
-    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
-      var i = 0;
-      //change date
-      const date = moment(res['dueDate']);
-      while (i < 12) {
-        let newTask = Object.assign({}, res);
-        newTask["_id"] = undefined;
-        newTask['dueDate'] = date.add(i + 1, 'month');
-
-        this.taskService.addTask(<Task>newTask).subscribe(res => {});
-          
-      }
-      
-      this.taskService.invalidateTaskListStatus();
-    });
-
+    }
   }
 }

@@ -4,32 +4,30 @@
     type="button"
     aria-label="Toggle Right Pane"
     mat-icon-button
-    (click)="this.maybeSaveAndClose()"
+    (click)="maybeSaveAndClose()"
   >
     <mat-icon aria-label="Close pane">arrow_back</mat-icon>
   </button>
   <button 
-  class="copyButton"
-  type="button"
-  mat-icon-button
-  (click)="this.copyTask()"
-  
+    class="copyButton"
+    type="button"
+    mat-icon-button
+    (click)="copyTask()"
   >
-  <mat-icon>content_copy</mat-icon>
+    <mat-icon>content_copy</mat-icon>
   </button>
-
   <button
     class="deleteButton"
     type="button"
     aria-label="Delete Task"
     mat-icon-button
-    (click)="this.maybeDeleteAndClose()"
+    (click)="maybeDeleteAndClose()"
   >
     <mat-icon aria-label="Delete task">delete</mat-icon>
   </button>
  
 </div>
-<form class="form" (submit)="checkAuth()">
+<form class="form">
   <mat-form-field class="form-group form-field">
     <mat-label>Title</mat-label>
     <input matInput [(ngModel)]="title" value="{{ rightPaneService.task && rightPaneService.task.title || '' }}" name="title" type="text">
@@ -40,26 +38,26 @@
   </mat-form-field>
   <mat-form-field class="form-group form-field">
     <mat-label>Set Due Date</mat-label>
-    <input matInput [(ngModel)]="dueDate" [matDatepicker]="datepicker" name="dueDate">
+    <input matInput [(ngModel)]="dueDate" [matDatepicker]="datepicker" name="dueDate" value="{{ rightPaneService.task && rightPaneService.task.dueDate }}">
     <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
     <mat-datepicker #datepicker></mat-datepicker>
   </mat-form-field>
   
-  <div *ngIf="dueDate">
-  <mat-checkbox (click)="isChecked = !isChecked" color="primary">
+  <div *ngIf="(rightPaneService.task && rightPaneService.task.dueDate) || dueDate">
+    <mat-checkbox (click)="isChecked = !isChecked" color="primary">
       <mat-label>Repeat this task</mat-label>
-  </mat-checkbox>
+    </mat-checkbox>
   <div *ngIf="isChecked">
-  <mat-form-field class="form-group form-field">
-  <mat-select placeholder="Choose an option">
-    <mat-option [(ngModel)]="choice" *ngFor="let option of options" [value]="option.value">
-      {{option.viewValue}}
-    </mat-option>
-  </mat-select>
-  </mat-form-field>
-  <button mat-flat-button (click)="this.repeat()">
-    Repeat task
-  </button>
+    <mat-form-field class="form-group form-field">
+    <mat-select placeholder="Choose an option" [(ngModel)]="repeatChoice" name="repeatChoice">
+      <mat-option *ngFor="let option of options" [value]="option.value">
+        {{option.viewValue}}
+      </mat-option>
+    </mat-select>
+    </mat-form-field>
+    <button mat-flat-button (click)="repeat()">
+      Repeat task
+    </button>
   </div>
 </div>
   
