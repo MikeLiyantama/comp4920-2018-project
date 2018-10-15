@@ -1,0 +1,80 @@
+<main class="container">
+    <mat-spinner
+        *ngIf="loading"
+        class="loading"
+        color="primary"
+        diameter="40"
+    >
+    </mat-spinner>
+    <mat-tab-group *ngIf="team">
+        <mat-tab label="Team Details">
+            <form class="tabContent" [formGroup]="detailsGroup">
+                <mat-form-field appearance="outline" class="form-field" id="teamName">
+                    <mat-label>Team name</mat-label>
+                    <input
+                        matInput
+                        required
+                        value="{{ team.name }}"
+                        placeholder="Philadelphia Eagles"
+                        formControlName="NameCtrl" 
+                    >
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="form-field" id="teamDescription">
+                    <mat-label>Team description</mat-label>
+                    <textarea 
+                        matInput 
+                        value="{{ team.description }}"
+                        placeholder="Superbowl LII Champions"
+                        formControlName="DescCtrl"
+                        matTextareaAutosize
+                        matAutosizeMinRows=3
+                    >
+                    </textarea>
+                </mat-form-field>
+                <img class="form-field image" id="banner" [src]="team.banner">
+                <app-imgup 
+                    class="form-field"
+                    [buttonLine]="'Upload a team banner'" 
+                    (imgEmitter)="setImage($event)"
+                >
+                </app-imgup>
+            </form>
+        </mat-tab>
+        <mat-tab label="Add/Remove Members">
+            <div class="tabContent">
+                <app-user-select
+                    (userSelected)="addToTeam($event)"
+                    [excludedUsers]="usersToExcludeFromUserSelector"
+                >
+                </app-user-select>
+                <mat-divider></mat-divider>
+                <mat-grid-list cols="3" rowHeight="200px">
+                    <mat-grid-tile>
+                        <app-memcard
+                            [teamMember]="team.creator"
+                            [creatorDisabled]="true"
+                            [leaderDisabled]="true"
+                            [removeDisabled]="true"
+                        >
+                        </app-memcard>
+                    </mat-grid-tile>
+                    <mat-grid-tile *ngFor="let member of team.members">
+                        <app-memcard 
+                            [teamMember]="member"
+                            [creatorDisabled]="true"
+                            [leaderDisabled]="false"
+                            [removeDisabled]="false"
+                            (removeEmitter)="removeFromTeam($event)"
+                        >
+                    </app-memcard>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+        </mat-tab>
+        <mat-tab label="Discussion Board">
+            <div class="tabContent">
+                <app-discussion [currentUser]="currentUser"></app-discussion>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</main>   

@@ -1,8 +1,18 @@
 <main class="container">
-    <app-teamdisp 
-        (detailsContextEmitter)="contextSwitch($event)"
-        *ngIf="showOverview">
-    </app-teamdisp>
-
-    <app-teamdetail *ngIf="showDetail" [team]="receivedTeam"></app-teamdetail>
+    <mat-spinner
+        *ngIf="loading"
+        class="loading"
+        color="primary"
+        diameter="40"
+    >
+    </mat-spinner>
+    <mat-grid-list *ngIf="gridTiles" cols="{{ gridTiles }}" rowHeight="600px">
+        <mat-grid-tile *ngFor="let team of teams">
+            <app-teamcard 
+                [team]="team"
+                (teamEmitter)="deleteTeam($event)"
+            >
+            </app-teamcard>
+        </mat-grid-tile>
+    </mat-grid-list>
 </main>

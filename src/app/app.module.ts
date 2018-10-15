@@ -26,11 +26,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatBadgeModule } from '@angular/material/badge';
-<<<<<<< master
 import { MatChipsModule } from '@angular/material/chips';
-=======
 import { MatPaginatorModule } from '@angular/material/paginator';
->>>>>>> added extra styling for messages and structure for the discussion board
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -49,21 +46,19 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProfileImageUploadComponent } from './profile-image-upload/profile-image-upload.component';
 import { RecoverComponent } from './recover/recover.component';
 import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
-import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
+import { CreateTeamComponent } from './teammanage/create-team/create-team.component';
 import { MemcardComponent } from './teammanage/memcard/memcard.component';
 import { ImageUploadComponent } from './teammanage/imgup/imgup.component';
 import { TeamCardComponent } from './teammanage/teamcard/teamcard.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
-import { TeamDisplayComponent } from './teammanage/teamdash/teamdisp/teamdisp.component';
-import { TeamDetailsComponent } from './teammanage/teamdash/teamdetail/teamdetail.component';
+import { TeamDetailComponent } from './teammanage/teamdetail/teamdetail.component';
 import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 import { CreateTaskListComponent } from './create-task-list/create-task-list.component';
 import { UserSelectComponent } from './user-select/user-select.component';
 import { ManageCollaboratorsComponent } from './manage-collaborators/manage-collaborators.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { DiscussionComponent } from './discussion/discussion.component';
-import { ReceivedComponent } from './discussion/message/received/received.component';
-import { SentComponent } from './discussion/message/sent/sent.component';
+import { MessageComponent } from './discussion/message/message.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -86,13 +81,12 @@ export function tokenGetter() {
     ProfileImageUploadComponent,
     RecoverComponent,
     TeamManagementComponent,
-    TeamCreateComponent,
+    CreateTeamComponent,
     MemcardComponent,
     ImageUploadComponent,
     TeamCardComponent,
     TeamDashComponent,
-    TeamDisplayComponent,
-    TeamDetailsComponent,
+    TeamDetailComponent,
     LeftSidebarComponent,
     CreateTaskListComponent,
     UserSelectComponent,
@@ -100,8 +94,7 @@ export function tokenGetter() {
     AvatarComponent,
     LeftSidebarComponent,
     DiscussionComponent,
-    SentComponent,
-    ReceivedComponent,
+    MessageComponent,
   ],
   entryComponents: [
     CompletedTaskListComponent,
@@ -147,11 +140,8 @@ export function tokenGetter() {
     MatAutocompleteModule,
     MatGridListModule,
     MatBadgeModule,
-<<<<<<< master
     MatChipsModule,
-=======
-    MatPaginatorModule
->>>>>>> added extra styling for messages and structure for the discussion board
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

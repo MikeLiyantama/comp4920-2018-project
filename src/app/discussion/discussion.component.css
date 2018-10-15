@@ -1,13 +1,9 @@
-mat-list {
-    max-width: 900px;
+.messages {
+    max-width: 750px;
     margin: 0 auto;
 }
 
-textarea {
-    font-size: 18px;
-}
-
-#comment {
-    min-width: 500px;
+.commentInput {
+    width: 100%;
 }
 

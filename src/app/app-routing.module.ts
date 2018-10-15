@@ -11,8 +11,9 @@ import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { CreateTaskListComponent } from './create-task-list/create-task-list.component';
-import { TeamCreateComponent } from './teammanage/tcreate/tcreate.component';
+import { CreateTeamComponent } from './teammanage/create-team/create-team.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
+import { TeamDetailComponent } from './teammanage/teamdetail/teamdetail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
@@ -25,8 +26,9 @@ const routes: Routes = [
     { path: '', redirectTo: '/app/today', pathMatch: 'full' },
     { path: 'settings', component: SettingsComponent},
     { path: 'profile/:profileID', component: ProfileComponent},
-    { path: 'teams/create', component: TeamCreateComponent },
+    { path: 'teams/create', component: CreateTeamComponent },
     { path: 'teams', component: TeamDashComponent, runGuardsAndResolvers: 'always' },
+    { path: 'teams/:teamId', component: TeamDetailComponent },
     { path: 'today', component: TaskListComponent },
     { path: 'lists/create', component: CreateTaskListComponent },
     { path: 'lists/:listId', component: TaskListComponent },

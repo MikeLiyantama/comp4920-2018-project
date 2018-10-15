@@ -1,0 +1,16 @@
+.loading {
+    margin: 0 auto;
+}
+
+.tabContent {
+    margin-top: 24px;
+}
+
+.form-field {
+    display: block;
+}
+
+.image {
+    max-width: 400px;
+    margin-bottom: 24px;
+}

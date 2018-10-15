@@ -1,31 +1,19 @@
-<br>
-<mat-grid-list cols="1" rowHeight="7:1">
-    <mat-grid-tile>
-        <form [formGroup]="commentFormGroup">
-            <mat-form-field appearance="outline" id="comment">
-                <mat-label>Write a comment</mat-label>
-                <textarea matInput
-                    (keydown.enter)="postComment();resetComment()"
-                    formControlName="CommentCtrl"
-                    cdkTextareaAutosize
-                    cdkAutosizeMinRows="4"
-                    ></textarea>
-                <mat-icon 
-                    [color]="sendHighlight" 
-                    matSuffix 
-                    (mouseover)="sendHighlight='accent'"
-                    (mouseout)="sendHighlight='primary'"
-                    (click)="postComment();resetComment()">send</mat-icon>
-            </mat-form-field>
-        </form>
-    </mat-grid-tile>
-</mat-grid-list>
-<mat-list role="list">
-    <!-- input box for comments -->
-    <div id="msgItem" *ngFor="let msg of messagesToRender">
-        <app-sent *ngIf="msg.author._id == currentUser._id"
-            [message]="msg"></app-sent>
-        <app-received *ngIf="msg.author._id != currentUser._id"
-            [message]="msg"></app-received>
-    </div>
-</mat-list>
+<form [formGroup]="commentFormGroup">
+    <mat-form-field appearance="outline" class="commentInput">
+        <input 
+            matInput
+            (keydown.enter)="postComment();resetComment()"
+            formControlName="CommentCtrl"
+            placeholder="Type a message"
+        >
+        <mat-icon 
+            matSuffix
+            [color]="sendHighlight"
+            (mouseover)="sendHighlight='accent'"
+            (mouseout)="sendHighlight='primary'"
+            (click)="postComment();resetComment()">send</mat-icon>
+    </mat-form-field>
+</form>
+<div class="messages">
+    <app-message *ngFor="let msg of messagesToRender" [message]="msg"></app-message>
+</div>
