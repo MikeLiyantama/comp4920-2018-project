@@ -4,6 +4,7 @@ import { Task } from '../task.model';
 
 import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
+import * as moment from 'moment';
 
 export interface Option {
   value: string;
@@ -67,7 +68,8 @@ export class TaskDetailComponent implements OnInit {
       this.taskService.addTask(<Task>newTask).subscribe(res => {      
         this.taskService.invalidateTaskListStatus();
 
-        console.log(res);
+        // console.log(res);
+
         // console.log(newTask);
       });
     });
@@ -87,9 +89,11 @@ export class TaskDetailComponent implements OnInit {
     this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
       var i = 0;
       //change date
+      const date = moment(res['dueDate']);
       while (i < 7) {
         let newTask = Object.assign({}, res);
         newTask["_id"] = undefined;
+        newTask['dueDate'] = date.add(i + 1, 'day');
 
         this.taskService.addTask(<Task>newTask).subscribe(res => {});
           
@@ -100,10 +104,40 @@ export class TaskDetailComponent implements OnInit {
   }
 
   async repeatWeekly() {
+    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
+      var i = 0;
+      //change date
+      const date = moment(res['dueDate']);
+      while (i < 4) {
+        let newTask = Object.assign({}, res);
+        newTask["_id"] = undefined;
+        newTask['dueDate'] = date.add(i + 1, 'week');
+
+        this.taskService.addTask(<Task>newTask).subscribe(res => {});
+          
+      }
+      
+      this.taskService.invalidateTaskListStatus();
+    });
 
   }
 
   async repeatMonthly() {
+    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
+      var i = 0;
+      //change date
+      const date = moment(res['dueDate']);
+      while (i < 12) {
+        let newTask = Object.assign({}, res);
+        newTask["_id"] = undefined;
+        newTask['dueDate'] = date.add(i + 1, 'month');
+
+        this.taskService.addTask(<Task>newTask).subscribe(res => {});
+          
+      }
+      
+      this.taskService.invalidateTaskListStatus();
+    });
 
   }
 }
