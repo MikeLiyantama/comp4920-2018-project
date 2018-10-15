@@ -13,7 +13,14 @@
     ></mat-checkbox>
     <div class="task-info">
         <span matLine class="task-title">{{ task.title }}</span>
-        <span *ngIf="task.dueDate" matLine class="task-duedate">{{ formattedDueDate }}</span>
+        <span 
+            *ngIf="task.dueDate"
+            matLine 
+            class="task-duedate"
+            [ngClass]="{'task-duedate-close': isNearDueDate, 'task-duedate-past': isPastDueDate }"
+        >
+            {{ formattedDueDate }}
+        </span>
     </div>
     <mat-icon
         *ngIf="!task.completed"

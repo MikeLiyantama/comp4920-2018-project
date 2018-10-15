@@ -21,6 +21,8 @@ export class TaskComponent {
 
     completed: boolean = false;
     formattedDueDate: string = '';
+    isNearDueDate: boolean = false;
+    isPastDueDate: boolean = false;
     important: boolean = false;
     importantIcon: string = 'star_outline';
 
@@ -35,7 +37,11 @@ export class TaskComponent {
         this.important = !!this.task.important;
 
         if (this.task.dueDate) {
-            this.formattedDueDate= moment(this.task.dueDate).format("DD-MM-YYYY");
+            this.formattedDueDate = moment(this.task.dueDate).format("DD-MM-YYYY");
+            this.isPastDueDate = moment(this.task.dueDate).isSameOrBefore(moment());
+            if (!this.isPastDueDate) {                
+                this.isNearDueDate = moment(this.task.dueDate).diff(moment(), 'days') <= 7;
+            }
         }
     }
 

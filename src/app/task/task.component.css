@@ -10,6 +10,15 @@
     text-decoration: line-through;
 }
 
+.task-duedate-close {
+    color: #ff4444;
+}
+
+.task-duedate-past {
+    font-style: italic;
+    text-decoration: line-through;
+}
+
 .task-important {
     margin-left: auto;
 }

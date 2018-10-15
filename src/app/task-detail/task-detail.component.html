@@ -28,16 +28,16 @@
  
 </div>
 <form class="form">
-  <mat-form-field class="form-group form-field">
+  <mat-form-field appearance="outline" class="form-field">
     <mat-label>Title</mat-label>
     <input matInput [(ngModel)]="title" value="{{ rightPaneService.task && rightPaneService.task.title || '' }}" name="title" type="text">
   </mat-form-field>
-  <mat-form-field class="form-group form-field">
+  <mat-form-field appearance="outline" class="form-field">
     <mat-label>Notes</mat-label>
     <textarea matInput [(ngModel)]="description" value="{{ rightPaneService.task && rightPaneService.task.description || '' }}" name="description"></textarea>
   </mat-form-field>
-  <mat-form-field class="form-group form-field">
-    <mat-label>Set Due Date</mat-label>
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Due Date</mat-label>
     <input matInput [(ngModel)]="dueDate" [matDatepicker]="datepicker" name="dueDate" value="{{ rightPaneService.task && rightPaneService.task.dueDate }}">
     <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
     <mat-datepicker #datepicker></mat-datepicker>
@@ -49,11 +49,11 @@
     </mat-checkbox>
   <div *ngIf="isChecked">
     <mat-form-field class="form-group form-field">
-    <mat-select placeholder="Choose an option" [(ngModel)]="repeatChoice" name="repeatChoice">
-      <mat-option *ngFor="let option of options" [value]="option.value">
-        {{option.viewValue}}
-      </mat-option>
-    </mat-select>
+      <mat-select placeholder="Choose an option" [(ngModel)]="repeatChoice" name="repeatChoice">
+        <mat-option *ngFor="let option of options" [value]="option.value">
+          {{option.viewValue}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <button mat-flat-button (click)="repeat()">
       Repeat task
