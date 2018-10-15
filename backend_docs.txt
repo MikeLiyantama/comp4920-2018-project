@@ -330,6 +330,37 @@ DELETE /api/team/:id/leader
         500 - Database error
                 with { message: "Failed to delete leader" }
 
+
+-------------------------------- MESSAGES --------------------------------
+
+POST /api/messages/team/:id
+    Create a new message
+    Required Payload: A JSON containing the message, e.g. { "content": "hello world" }
+    Return Value:
+        201 - New message created
+                with a JSON representing the message record
+        500 - Database error
+                with { message: "Failed to create new message" }
+
+GET /api/messages/team/:id
+    Get all messages for a team. Messages will be sorted in chronological order.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                an array of all messages
+        500 - Database error
+                with { message: "Failed to retieve messages" }
+
+DELETE /api/messages/:mid
+    Delete a message.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with { message: "success" }
+        500 - Database error
+                with { message: "Failed to delete message" }
+
+
 -------------------------------- SCHEMA --------------------------------
 
 collection USERS {
@@ -366,6 +397,14 @@ collection LISTS {
         createdAt: date,
         createdBy: ObjectId,
         tasks: array(ObjectId)
+}
+
+collection MESSAGES {
+    _id: ObjectId,
+    content: string,
+    createdAt: date,
+    createdBy: ObjectId,
+    team: ObjectId
 }
 
 class TeamMember {

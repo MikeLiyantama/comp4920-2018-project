@@ -811,6 +811,53 @@ app.delete('/api/team/:id/leader', passport.authenticate('jwt', {session: false}
     returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
   }
 });
+
+/**
+ * ******************************** MESSAGES ********************************
+ */
+
+let MESSAGES_COLLECTION = 'MESSAGES';
+
+// Create a new message
+app.post('/api/messages/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  var newMessage = req.body;
+  newMessage.createdAt = new Date();
+  newMessage.createdBy = req.user._id;
+  newMessage.teamID = ObjectID(req.params.id);
+  db.collection(MESSAGES_COLLECTION).insertOne(newMessage, function (err, doc) {
+    if (err) {
+      returnError(res, err.message, "Failed to create new message");
+    } else {
+      res.status(201).json(doc.ops[0]);
+    }
+  });
+});
+
+// Get all messages for a team
+app.get('/api/messages/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
+  db.collection(MESSAGES_COLLECTION)
+    .find({ "teamID" : ObjectID(req.params.id) })
+    .sort({ createdAt: 1 })
+    .toArray(function (err, docs) {
+      if (err) {
+        returnError(res, err.message, "Failed to retieve messages");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
+});
+
+// Delete a message
+app.delete('/api/messages/:mid', passport.authenticate('jwt', {session: false}), function (req, res) {
+  db.collection(MESSAGES_COLLECTION).deleteOne({_id : ObjectID(req.params.mid)}, function(err, doc){
+    if (err){
+      returnError(res, err.message, "Failed to delete message");
+    } else {
+      res.status(200).json({ "message": "success" });
+    }
+  });
+});
+
 /**
  * ************************ OTHER ************************
  */
