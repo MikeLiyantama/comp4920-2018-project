@@ -35,6 +35,7 @@
     "hammerjs": "^2.0.8",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
+    "moment": "^2.22.2",
     "mongodb": "^3.1.4",
     "nodemailer": "^4.6.8",
     "passport": "^0.4.0",

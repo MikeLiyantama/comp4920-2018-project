@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import * as moment from 'moment';
 
 import { Task } from '../task.model';
 
@@ -12,13 +13,16 @@ import { TaskService } from '../task.service';
 })
 
 export class TaskComponent {
+
     @Input() task: Task;
     @Output() markedAsComplete = new EventEmitter<string>();
     @Output() markedAsIncomplete = new EventEmitter<string>();
     @Output() toggledImportance = new EventEmitter<Task>();
-    importantIcon: string = 'star_outline';
+
     completed: boolean = false;
+    formattedDueDate: string = '';
     important: boolean = false;
+    importantIcon: string = 'star_outline';
 
     constructor (    
         private rightPaneService: RightPaneService,
@@ -29,6 +33,10 @@ export class TaskComponent {
     ngOnInit() {
         this.completed = !!this.task.completed;
         this.important = !!this.task.important;
+
+        if (this.task.dueDate) {
+            this.formattedDueDate= moment(this.task.dueDate).format("DD-MM-YYYY");
+        }
     }
 
     openDetailPane() {
