@@ -1,6 +1,27 @@
 <br>
-<br>
+<mat-grid-list cols="1" rowHeight="7:1">
+    <mat-grid-tile>
+        <form [formGroup]="commentFormGroup">
+            <mat-form-field appearance="outline" id="comment">
+                <mat-label>Write a comment</mat-label>
+                <textarea matInput
+                    (keydown.enter)="postComment();resetComment()"
+                    formControlName="CommentCtrl"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="4"
+                    ></textarea>
+                <mat-icon 
+                    [color]="sendHighlight" 
+                    matSuffix 
+                    (mouseover)="sendHighlight='accent'"
+                    (mouseout)="sendHighlight='primary'"
+                    (click)="postComment();resetComment()">send</mat-icon>
+            </mat-form-field>
+        </form>
+    </mat-grid-tile>
+</mat-grid-list>
 <mat-list>
+    <!-- input box for comments -->
     <app-received></app-received>
     <app-sent></app-sent>
 </mat-list>

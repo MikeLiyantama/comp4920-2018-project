@@ -2,3 +2,12 @@ mat-list {
     max-width: 900px;
     margin: 0 auto;
 }
+
+textarea {
+    font-size: 18px;
+}
+
+#comment {
+    min-width: 500px;
+}
+
