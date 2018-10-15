@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs'
 import * as moment from 'moment';
 
 import { Task } from '../task.model';
@@ -74,15 +75,16 @@ export class TaskDetailComponent implements OnInit {
   repeat() {
     const dueDate = moment(this.rightPaneService.task.dueDate);
     if (dueDate) {
+      let observables = [];
       if (this.repeatChoice === "daily") {
         let i = 0;
         while (i < 7) {
           const newTask = { 
             ...this.rightPaneService.task,
             _id: undefined,
-            dueDate: moment.utc(dueDate.add(i + 1, 'day')).format(),
+            dueDate: moment.utc(dueDate.add(1, 'day')).format(),
           }
-          this.taskService.addTask(newTask).subscribe(() => {});     
+          observables = [ ...observables, this.taskService.addTask(newTask) ];  
           i += 1;
         }
       } else if (this.repeatChoice === "weekly") {
@@ -91,9 +93,9 @@ export class TaskDetailComponent implements OnInit {
           const newTask = { 
             ...this.rightPaneService.task,
             _id: undefined,
-            dueDate: moment.utc(dueDate.add(i + 1, 'week')).format(),
+            dueDate: moment.utc(dueDate.add(1, 'week')).format(),
           }
-          this.taskService.addTask(newTask).subscribe(() => {});    
+          observables = [ ...observables, this.taskService.addTask(newTask) ];   
           i += 1;
         }
       } else if (this.repeatChoice === "monthly") {
@@ -102,13 +104,16 @@ export class TaskDetailComponent implements OnInit {
           const newTask = { 
             ...this.rightPaneService.task,
             _id: undefined,
-            dueDate: moment.utc(dueDate.add(i + 1, 'month')).format(),
+            dueDate: moment.utc(dueDate.add(1, 'month')).format(),
           }
-          this.taskService.addTask(newTask).subscribe(() => {});   
+          observables = [ ...observables, this.taskService.addTask(newTask) ];   
           i += 1;  
         }
       }
-      this.taskService.invalidateTaskListStatus();
+
+      if (observables.length > 0) {
+        forkJoin(observables).subscribe(() => { this.taskService.invalidateTaskListStatus(); });
+      }
     }
   }
 }
