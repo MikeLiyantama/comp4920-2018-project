@@ -44,4 +44,23 @@
     <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
     <mat-datepicker #datepicker></mat-datepicker>
   </mat-form-field>
+  
+  <div *ngIf="dueDate">
+  <mat-checkbox (click)="isChecked = !isChecked" color="primary">
+      <mat-label>Repeat this task</mat-label>
+  </mat-checkbox>
+  <div *ngIf="isChecked">
+  <mat-form-field class="form-group form-field">
+  <mat-select placeholder="Choose an option">
+    <mat-option [(ngModel)]="choice" *ngFor="let option of options" [value]="option.value">
+      {{option.viewValue}}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
+  <button mat-flat-button (click)="this.repeat()">
+    Repeat task
+  </button>
+  </div>
+</div>
+  
 </form>

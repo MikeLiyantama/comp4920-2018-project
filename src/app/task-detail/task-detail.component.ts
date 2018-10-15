@@ -5,6 +5,11 @@ import { Task } from '../task.model';
 import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
 
+export interface Option {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
@@ -15,7 +20,13 @@ export class TaskDetailComponent implements OnInit {
   title: string;
   description: string;
   dueDate: string;
-
+  isChecked: boolean;
+  options: Option[] = [
+    {value: "daily-0", viewValue: "Daily for a week"},
+    {value: "weekly-1", viewValue: "Weekly for a month"},
+    {value: "monthly-2", viewValue: "Monthly for a year"}
+  ]
+  choice: string;
   constructor(
     private taskService: TaskService,
     private rightPaneService: RightPaneService,
@@ -56,9 +67,43 @@ export class TaskDetailComponent implements OnInit {
       this.taskService.addTask(<Task>newTask).subscribe(res => {      
         this.taskService.invalidateTaskListStatus();
 
-        // console.log(res);
+        console.log(res);
         // console.log(newTask);
       });
     });
+  }
+
+  async repeat() {
+    if (this.choice == "daily-0") {
+      this.repeatDaily();
+    } else if (this.choice == "weekly-1") {
+      this.repeatWeekly();
+    } else if (this.choice == "monthly-2") {
+      this.repeatMonthly();
+    } 
+  }
+
+  async repeatDaily() {
+    this.taskService.getTask(this.rightPaneService.task._id).subscribe(res => {
+      var i = 0;
+      //change date
+      while (i < 7) {
+        let newTask = Object.assign({}, res);
+        newTask["_id"] = undefined;
+
+        this.taskService.addTask(<Task>newTask).subscribe(res => {});
+          
+      }
+      
+      this.taskService.invalidateTaskListStatus();
+    });
+  }
+
+  async repeatWeekly() {
+
+  }
+
+  async repeatMonthly() {
+
   }
 }
