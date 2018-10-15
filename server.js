@@ -276,22 +276,22 @@ app.post('/api/list', passport.authenticate('jwt', {session: false}), function (
 });
 
 // Get all lists a user is a part of (created or added as a collaborator)
-app.get('/api/list' , passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/api/list' , passport.authenticate('jwt', { session: false }), function (req, res) {
   db.collection(LISTS_COLLECTION)
     .find({ 
       $or: [
-        { createdBy: ObjectID(req.user._id) },
-        { collaborators: { $in: [ req.user._id ] } },
+        { createdBy: req.user._id },
+        { collaborators: { $in: [ `${req.user._id}` ] } },
       ],
     })
     .sort({ important: -1, createdAt: 1 })
     .toArray(function (err, docs) {
-    if (err) {
-      returnError(res, err.message, "Failed to retieve lists");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
+      if (err) {
+        returnError(res, err.message, "Failed to retieve lists");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
 });
 
 // Get a list with specific id
