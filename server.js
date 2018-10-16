@@ -444,24 +444,45 @@ app.post('/api/task', passport.authenticate('jwt', { session: false }), function
 
 // Get all tasks owned by the user
 app.get('/api/task', passport.authenticate('jwt', { session: false }), function (req, res) {
-  const filterParams = { 
-    createdBy: ObjectID(req.user._id),
-    completed: { $in: [null, false] },
-    deleted: { $in: [null, false] },
-  };
+  let filterParams;
+  if (req.query.teamId){
+      filterParams = { 
+      teamId: req.query.teamId,
+      completed: { $in: [null, false] },
+      deleted: { $in: [null, false] },
+      };
+      
+      if (req.query.completed === 'true') {
+        filterParams.completed = true;
+      }
 
-  if (req.query.completed === 'true') {
-    filterParams.completed = true;
+      if (req.query.deleted === 'true') {
+        filterParams.deleted = true;
+      }
+
+      if (req.query.listId) {
+        filterParams.listId = req.query.listId === 'today' ? null : ObjectID(req.query.listId);
+      }
+  } else {
+      filterParams = { 
+        createdBy: ObjectID(req.user._id),
+        completed: { $in: [null, false] },
+        deleted: { $in: [null, false] },
+      };
+
+      if (req.query.completed === 'true') {
+        filterParams.completed = true;
+      }
+
+      if (req.query.deleted === 'true') {
+        filterParams.deleted = true;
+      }
+
+      if (req.query.listId) {
+        filterParams.listId = req.query.listId === 'today' ? null : ObjectID(req.query.listId);
+      }
   }
-
-  if (req.query.deleted === 'true') {
-    filterParams.deleted = true;
-  }
-
-  if (req.query.listId) {
-    filterParams.listId = req.query.listId === 'today' ? null : ObjectID(req.query.listId);
-  }
-
+  
   db.collection(TASKS_COLLECTION)
     .find(filterParams)
     .sort({ important: -1, orderDate: -1 })
