@@ -824,6 +824,7 @@ app.post('/api/messages/team/:id', passport.authenticate('jwt', {session: false}
   newMessage.createdAt = new Date();
   newMessage.createdBy = req.user._id;
   newMessage.teamID = ObjectID(req.params.id);
+
   db.collection(MESSAGES_COLLECTION).insertOne(newMessage, function (err, doc) {
     if (err) {
       returnError(res, err.message, "Failed to create new message");
@@ -838,11 +839,18 @@ app.get('/api/messages/team/:id', passport.authenticate('jwt', {session: false})
   db.collection(MESSAGES_COLLECTION)
     .find({ "teamID" : ObjectID(req.params.id) })
     .sort({ createdAt: 1 })
-    .toArray(function (err, docs) {
+    .toArray(function (err, messages) {
       if (err) {
         returnError(res, err.message, "Failed to retieve messages");
       } else {
-        res.status(200).json(docs);
+        const userIds = _.uniq(messages.map(message => ObjectID(message.createdBy)));
+        db.collection(USERS_COLLECTION).find({ _id: { "$in": userIds } }).toArray((err, users) => {        
+          let finalMessages = messages.map((message) => {
+            message.createdBy = users.find(user => ObjectID(message.createdBy).equals(user._id));
+            return message;
+          });          
+          res.status(200).json(finalMessages);
+        });
       }
     });
 });

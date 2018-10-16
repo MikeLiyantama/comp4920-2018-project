@@ -73,7 +73,12 @@
         </mat-tab>
         <mat-tab label="Discussion Board">
             <div class="tabContent">
-                <app-discussion [currentUser]="currentUser"></app-discussion>
+                <app-discussion 
+                    [loading]="loadingMessages"
+                    [messages]="messages"
+                    (messageInputted)="sendMessage($event)"
+                >
+                </app-discussion>
             </div>
         </mat-tab>
     </mat-tab-group>

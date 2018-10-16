@@ -1,9 +1,11 @@
 <div class="msg" [ngClass]="{'msgIsMine': mine}" role="listitem">
     <div class="msgTopLine">
-        <app-avatar *ngIf="!mine" [user]="message.author"></app-avatar>
+        <app-avatar *ngIf="!mine" [user]="message.createdBy"></app-avatar>
         <div class="msgContent">
             {{message.content}}
         </div>
     </div>
-    <div *ngIf="!mine" class="msgAuthor">{{message.author.username}}</div>
+    <div class="msgAuthor">
+        {{ formattedDate }}
+    </div>
 </div>

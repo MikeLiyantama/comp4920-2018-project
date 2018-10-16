@@ -1,19 +1,35 @@
-<form [formGroup]="commentFormGroup">
+<form>
     <mat-form-field appearance="outline" class="commentInput">
+        <mat-label>Message</mat-label>
         <input 
             matInput
-            (keydown.enter)="postComment();resetComment()"
-            formControlName="CommentCtrl"
+            (keydown.enter)="sendMessage();resetInput()"
+            [(ngModel)]="message"
+            name="message"
             placeholder="Type a message"
         >
-        <mat-icon 
+        <button 
             matSuffix
-            [color]="sendHighlight"
-            (mouseover)="sendHighlight='accent'"
-            (mouseout)="sendHighlight='primary'"
-            (click)="postComment();resetComment()">send</mat-icon>
+            mat-icon-button 
+            (click)="sendMessage();resetInput()"
+        >
+            <mat-icon
+                [color]="sendHighlight"
+                (mouseover)="sendHighlight='accent'"
+                (mouseout)="sendHighlight='primary'"
+            >
+                send
+            </mat-icon>
+        </button>
     </mat-form-field>
 </form>
-<div class="messages">
-    <app-message *ngFor="let msg of messagesToRender" [message]="msg"></app-message>
+<mat-spinner
+    *ngIf="loading"
+    class="loading"
+    color="primary"
+    diameter="40"
+    style="margin:0 auto">
+</mat-spinner>
+<div *ngIf="!loading" class="messages">
+    <app-message *ngFor="let message of messages" [message]="message"></app-message>
 </div>

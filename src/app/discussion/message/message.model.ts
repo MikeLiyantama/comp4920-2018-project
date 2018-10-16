@@ -1,10 +1,9 @@
 export class Message {
     public content;
-    public author;
-    public date;
-    constructor (content, author, date) {
+    public createdBy;
+    public createdAt;
+    
+    constructor (content) {
         this.content = content;
-        this.author = author;
-        this.date = date;
     }
 }
