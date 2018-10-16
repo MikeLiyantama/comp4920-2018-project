@@ -1,0 +1,38 @@
+.msg {
+    margin-bottom: 16px;
+}
+
+.msgTopLine {
+    align-items: center;
+    display: flex;
+}
+
+.msgIsMine .msgTopLine {
+    justify-content: flex-end;
+}
+
+.msgContent {
+    background-color: #e3e5e5;  
+    background-clip: padding-box;
+    border-radius: 20px;
+    margin-left: 16px;
+    padding: 10px 18px;
+}
+
+.msgIsMine .msgContent {
+    background-color: #f0e3fc;
+    border-top-right-radius: 0px;
+}
+
+.msgAuthor {
+    margin-top: 8px;
+    margin-left: 74px;
+    font-size: 12px;
+    color: grey;
+}
+
+.msgIsMine .msgAuthor {
+    margin-left: 0;
+    margin-right: 18px;
+    text-align: right;
+}

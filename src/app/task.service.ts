@@ -40,6 +40,9 @@ export class TaskService {
 
     getList(listId: string): Observable<List> {
         return this.http.get<List>(`${this.listsUrl}/${listId}`)
+            .pipe(
+                catchError(this.handleError)
+            )
     }
 
     getLists(): Observable<List[]> {

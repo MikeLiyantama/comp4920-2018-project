@@ -14,13 +14,13 @@ import { TeamService } from '../team.service';
 import { UserService } from '../../user.service';
 
 @Component({
-    selector: 'app-teamcreate',
-    templateUrl: './tcreate.component.html',
-    styleUrls: ['./tcreate.component.css'],
+    selector: 'app-create-team',
+    templateUrl: './create-team.component.html',
+    styleUrls: ['./create-team.component.css'],
     providers: [TeamService]
 })
 
-export class TeamCreateComponent implements OnInit {
+export class CreateTeamComponent implements OnInit {
 
     myControl = new FormControl (); 
     firstFormGroup: FormGroup;
