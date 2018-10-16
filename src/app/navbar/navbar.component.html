@@ -28,7 +28,8 @@
           <app-avatar [user]="currentUser"></app-avatar>
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-          <button mat-menu-item routerLink="/app/profile/{{currentUserId}}">Profile</button>
+          <button mat-menu-item routerLink="/app">Home</button>
+          <button mat-menu-item routerLink="/app/profile/{{currentUser._id}}">Profile</button>
           <button mat-menu-item routerLink="/app/settings">Settings</button>
           <button mat-menu-item (click)="logout()">Log Out</button>
         </mat-menu>
