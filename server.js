@@ -564,11 +564,25 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
       });
     }
 
-    db.collection(TEAMS_COLLECTION).insertOne(newTeam, function (err, doc) {
-      if (err) {
-        returnError(res, err.message, "Failed to create new team");
+    var newList = {
+      "title" : "Default List",
+      "createdAt" : new Date(),
+      "createdBy" : req.user._id
+    };
+
+    db.collection(TEAMS_COLLECTION).insertOne(newTeam, function (err1, doc1) {
+      if (err1) {
+        returnError(res, err1.message, "Failed to create new team");
       } else {
-        res.status(201).json(doc.ops[0]);
+        // Team created. Now create the default list
+        newList.teamID = doc1.ops[0]._id;
+        db.collection(LISTS_COLLECTION).insertOne(newList, function (err2, doc2) {
+          if (err2) {
+            returnError(res, err2.message, "Failed to create default list for new team");
+          } else {
+            res.status(201).json(doc1.ops[0]);
+          }
+        });
       }
     });
 });
