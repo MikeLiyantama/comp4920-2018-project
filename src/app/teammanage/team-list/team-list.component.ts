@@ -32,7 +32,7 @@ export class TeamListComponent implements OnInit {
     this.teamTaskService.getList(this.teamId)
         .subscribe(function(res){
             thisC.lists = res;
-            console.log("YEAH BOY LOADED")
+            //console.log("GET LIST SUCCESSFUL") //DEBUG
         })
   }
 
@@ -41,16 +41,16 @@ export class TeamListComponent implements OnInit {
     const newList = <List>{teamID : this.teamId, title: this.inputListField}
     this.teamTaskService.createList(newList)
         .subscribe(function(res){
-          console.log("YEAH BOY");
+          //console.log("YEAH");
           thisC.inputListField = '';
         })
   }
-
+  /*
   expandList(listId){
     let dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
-    dialogConfig.width = '99%';
-    dialogConfig.height = '99%';
+    dialogConfig.width = '100%';
+    dialogConfig.height = '100%';
     dialogConfig.data = {
        teamId: this.teamId,
        listId: listId
@@ -60,4 +60,5 @@ export class TeamListComponent implements OnInit {
       console.log(res);//DEBUG
     })
   }
+  */
 }

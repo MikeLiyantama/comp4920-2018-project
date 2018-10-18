@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -25,7 +25,8 @@ export class TaskListComponent {
 
   subscription: Subscription;
 
-  listId: string;
+  @Input() listId: string;
+  @Input() teamId: string;
   list: List;
   quickAddTask: string;
   loading: boolean = true;
@@ -34,6 +35,7 @@ export class TaskListComponent {
   completedTasks: Task[] = [];
   showCollaborationButton: boolean = false;
   collaborationPanelTitle: string = '';
+  @Input() isTeam : boolean;
 
   constructor(
     private authService: AuthService,
@@ -54,28 +56,28 @@ export class TaskListComponent {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.listId = params.get('listId');
-      this.loading = true;
+      this.route.paramMap.subscribe((params) => {
+        this.listId = params.get('listId');
+        this.loading = true;
 
-      if (!this.listId || this.listId === 'today') {
-        this.appbarService.setTitle('Today');
-        this.getTasks(this.listId, true);
-      } else {
-        this.getTasks(this.listId, false);
-        this.taskService.getList(this.listId).subscribe((list) => {
-          this.loading = false;
-          this.list = list;
-          this.appbarService.setTitle(list.title);
+        if (!this.listId || this.listId === 'today') {
+          this.appbarService.setTitle('Today');
+          this.getTasks(this.listId, true);
+        } else {
+          this.getTasks(this.listId, false);
+          this.taskService.getList(this.listId).subscribe((list) => {
+            this.loading = false;
+            this.list = list;
+            this.appbarService.setTitle(list.title);
 
-          const authedUser = this.authService.getDecodedToken();
-          this.showCollaborationButton = this.list.createdBy._id === authedUser._id;
-          this.collaborationPanelTitle = this.list.collaborators && this.list.collaborators.length > 0
-            ? 'Manage Collaboration'
-            : 'Add Collaborators';
-        });
-      }
-    });
+            const authedUser = this.authService.getDecodedToken();
+            this.showCollaborationButton = this.list.createdBy._id === authedUser._id;
+            this.collaborationPanelTitle = this.list.collaborators && this.list.collaborators.length > 0
+              ? 'Manage Collaboration'
+              : 'Add Collaborators';
+          });
+        }
+      });
   }
   
   getTasks(listId: string, setLoading?: boolean) {

@@ -18,6 +18,7 @@ export class TeamTasksService {
   }
 
   createList(list) : Observable<any>{
+    //console.log(list.teamID);
     return this.http.post(this.parentUrl + '/api/list', list);
   }
 

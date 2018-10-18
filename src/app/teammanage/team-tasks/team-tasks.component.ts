@@ -1,5 +1,6 @@
-import { Component, OnInit, Inject , Injectable} from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { Component, OnInit , Injectable} from '@angular/core';
+import {Router, ActivatedRoute, ParamMap} from '@angular/router';
+
 @Component({
   selector: 'app-team-tasks',
   templateUrl: './team-tasks.component.html',
@@ -8,18 +9,24 @@ import { MatDialog, MAT_DIALOG_DATA} from '@angular/material';
 @Injectable({
   providedIn: 'root'
 }
-
 )
 
 export class TeamTasksComponent implements OnInit {
   private teamId : string;
+  private listId : string;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data : any
+    private route: ActivatedRoute
+    
   ) { 
-    this.teamId = data.teamId;
+    
   }
 
   ngOnInit() {
+    let thisC = this;
+    this.route.paramMap.subscribe(function(params){
+      this.listId = params.get('listId');
+      this.teamId = params.get('teamId');
+    })
   }
 
 }

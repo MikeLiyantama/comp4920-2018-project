@@ -12,18 +12,18 @@
       <mat-icon matSuffix>add</mat-icon>
     </mat-form-field>  
   </form>
-  <h1>{{teamId}}</h1>
-  <a 
-    mat-list-item 
-    *ngFor="let list of lists"
-    class="taskList"
-    (click)="expandList(list._id)"
-  >
-    <mat-icon 
-      matListIcon
-    >
-      group_work
-    </mat-icon>
-    <h3 matLine>{{list.title}}</h3>
-  </a>
+  <mat-list>
+    <mat-list-item 
+      *ngFor="let list of lists"
+      class="taskList"
+      routerLink="/app/teams/{{teamId}}/lists/{{list._id}}">
+    
+      <mat-icon 
+        matListIcon
+      >
+        group_work
+      </mat-icon>
+      <h3 matLine>{{list.title}}</h3>
+    </mat-list-item>
+  </mat-list>
 </div>
