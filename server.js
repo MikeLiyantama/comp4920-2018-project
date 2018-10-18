@@ -107,7 +107,10 @@ app.post('/api/auth', function(req, res) {
         db.collection(USERS_COLLECTION).findOne({ email: req.body.email }, function (err, result) {
             if (result) {
                 if (req.body.password == result.password) {
-                  var token = jwt.sign(result, 'Johnson4920');
+                  var unsigned_token = result;
+                  unsigned_token.profile_picture = "";
+                  unsigned_token.password = "";
+                  var token = jwt.sign(unsigned_token, 'Johnson4920');
                   res.status(200).json({ success: true, token: token});
                 } else {
                   res.json({ success: false });
