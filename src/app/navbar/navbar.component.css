@@ -16,7 +16,7 @@
 }
 
 .sideMenuToggle {
-  position: absolute;
+  margin-right: 10px;
 }
 
 .sidenav {
@@ -32,9 +32,12 @@
   align-items: center;
   display: flex;
 }
-
+.navbar-item{
+  margin-left : 10px;
+}
 .profileIcon {
   margin-left: auto;
+  margin-right: 10px;
 }
 
 .rightPane {

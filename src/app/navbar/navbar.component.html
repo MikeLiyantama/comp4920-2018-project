@@ -22,9 +22,8 @@
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <div class="container">
-        <span>{{appbarService.title}}</span>
-        <button class="profileIcon" [matMenuTriggerFor]="profileMenu" mat-icon-button>
+        <span class="navbar-item">{{appbarService.title}}</span>
+        <button class="profileIcon navbar-item" [matMenuTriggerFor]="profileMenu" mat-icon-button>
           <app-avatar [user]="currentUser"></app-avatar>
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before" [overlapTrigger]="false">
@@ -33,7 +32,7 @@
           <button mat-menu-item routerLink="/app/settings">Settings</button>
           <button mat-menu-item (click)="logout()">Log Out</button>
         </mat-menu>
-      </div>
+      
     </mat-toolbar>
     <mat-sidenav-container hasBackdrop="false" class="content">
       <mat-sidenav [(opened)]="rightPaneService.opened" class="rightPane" mode="side" position="end">
