@@ -8,22 +8,20 @@
         </mat-spinner>
     
         <div *ngIf="!loading">
-            <div *ngIf="!editMode && isUser;else editCard">
-                <div layout="edit-button" layout-align="end center">
-                    <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
+            <div *ngIf="!editMode;else editCard">
+                <div *ngIf="isUser">
+                    <div layout="edit-button" layout-align="end center">
+                        <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
+                    </div>
+                </div>
+                <div *ngIf="profilePic">
+                        <img id="profilePic" [src]="profilePic" class="profile_picture">
                 </div>
                 <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
                 <h1 class="headline heading-component">{{this.name}}</h1>
                 <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
                 <h4 class="subheading-1">Profile: {{this.profile}}</h4>
             </div>
-            <div *ngIf="profilePic">
-                    <img id="profilePic" [src]="profilePic" class="profile_picture">
-            </div>
-            <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
-            <h1 class="headline heading-component">{{this.name}}</h1>
-            <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
-            <h4 class="subheading-1">Profile: {{this.profile}}</h4>
         </div>
     
         <ng-template #editCard>
