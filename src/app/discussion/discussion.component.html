@@ -1,0 +1,35 @@
+<form>
+    <mat-form-field appearance="outline" class="commentInput">
+        <mat-label>Message</mat-label>
+        <input 
+            matInput
+            (keydown.enter)="sendMessage();resetInput()"
+            [(ngModel)]="message"
+            name="message"
+            placeholder="Type a message"
+        >
+        <button 
+            matSuffix
+            mat-icon-button 
+            (click)="sendMessage();resetInput()"
+        >
+            <mat-icon
+                [color]="sendHighlight"
+                (mouseover)="sendHighlight='accent'"
+                (mouseout)="sendHighlight='primary'"
+            >
+                send
+            </mat-icon>
+        </button>
+    </mat-form-field>
+</form>
+<mat-spinner
+    *ngIf="loading"
+    class="loading"
+    color="primary"
+    diameter="40"
+    style="margin:0 auto">
+</mat-spinner>
+<div *ngIf="!loading" class="messages">
+    <app-message *ngFor="let message of messages" [message]="message"></app-message>
+</div>

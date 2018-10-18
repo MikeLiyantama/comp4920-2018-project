@@ -1,4 +1,4 @@
-import { User } from '../user/user.model';
+import { User } from '../user.model';
 export class TeamMember {
     public user: User;
     public isCreator;

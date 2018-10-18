@@ -3,19 +3,29 @@
     mat-list-item
     class="task"
     [class.selected]="rightPaneService.opened && rightPaneService.task._id === task._id"    
-    (click)="this.openDetailPane()"    
+    (click)="openDetailPane()"    
 >
     <ng-content select="[drag-handle]"></ng-content>
     <mat-checkbox
         class="task-checkbox"
-        (change)="this.toggleTaskCompleted($event)" 
+        (change)="toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
-    <span class="task-title">{{ task.title }}</span>
+    <div class="task-info">
+        <span matLine class="task-title">{{ task.title }}</span>
+        <span 
+            *ngIf="task.dueDate"
+            matLine 
+            class="task-duedate"
+            [ngClass]="{'task-duedate-close': isNearDueDate, 'task-duedate-past': isPastDueDate }"
+        >
+            {{ formattedDueDate }}
+        </span>
+    </div>
     <mat-icon
         *ngIf="!task.completed"
         class="task-important" 
-        (click)="this.toggleTaskImportance($event)"
+        (click)="toggleTaskImportance($event)"
     >
         {{ important ? 'star' : 'star_outline' }}
     </mat-icon>
@@ -26,7 +36,7 @@
     <mat-checkbox 
         checked="true"
         class="task-checkbox"
-        (change)="this.toggleTaskCompleted($event)" 
+        (change)="toggleTaskCompleted($event)" 
         (click)="$event.stopPropagation()"
     ></mat-checkbox>
     <span class="task-title completed">{{ task.title }}</span>

@@ -1,0 +1,30 @@
+.form-field {
+    display: block;
+}
+
+.image {
+    max-width: 400px;
+    margin-bottom: 24px;
+}
+
+.stepbuttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+
+.nextbutton {
+    margin-left: auto;
+}
+
+.teamcard {
+    margin: 0 auto;
+}
+
+.divider {
+    margin: 24px 0;
+}
+
+.center {
+    text-align: center;
+}

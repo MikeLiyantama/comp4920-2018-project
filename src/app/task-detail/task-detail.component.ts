@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs'
+import * as moment from 'moment';
 
 import { Task } from '../task.model';
 
 import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
+
+export interface Option {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-task-detail',
@@ -15,7 +22,14 @@ export class TaskDetailComponent implements OnInit {
   title: string;
   description: string;
   dueDate: string;
-
+  isChecked: boolean;
+  options: Option[] = [
+    { value: "daily", viewValue: "Daily for a week" },
+    { value: "weekly", viewValue: "Weekly for a month" },
+    { value: "monthly", viewValue: "Monthly for a year" }
+  ]
+  repeatChoice: string;
+  
   constructor(
     private taskService: TaskService,
     private rightPaneService: RightPaneService,
@@ -24,7 +38,7 @@ export class TaskDetailComponent implements OnInit {
   ngOnInit() {
   }
 
-  async maybeSaveAndClose() {
+  maybeSaveAndClose() {
     const editedTask = {
       _id: this.rightPaneService.task._id,
       title: this.title,
@@ -41,11 +55,65 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-  async maybeDeleteAndClose() {
+  maybeDeleteAndClose() {
     this.taskService.deleteTask(this.rightPaneService.task._id).subscribe(() => {
       this.taskService.invalidateTaskListStatus();
       this.rightPaneService.close();
     });
   }
 
+  copyTask() {
+    const newTask = {
+      ...this.rightPaneService.task,
+      _id: undefined,
+    };
+    this.taskService.addTask(newTask).subscribe(() => {      
+      this.taskService.invalidateTaskListStatus();
+    });
+  }
+
+  repeat() {
+    const dueDate = moment(this.rightPaneService.task.dueDate);
+    if (dueDate) {
+      let observables = [];
+      if (this.repeatChoice === "daily") {
+        let i = 0;
+        while (i < 7) {
+          const newTask = { 
+            ...this.rightPaneService.task,
+            _id: undefined,
+            dueDate: moment.utc(dueDate.add(1, 'day')).format(),
+          }
+          observables = [ ...observables, this.taskService.addTask(newTask) ];  
+          i += 1;
+        }
+      } else if (this.repeatChoice === "weekly") {
+        let i = 0;
+        while (i < 4) {
+          const newTask = { 
+            ...this.rightPaneService.task,
+            _id: undefined,
+            dueDate: moment.utc(dueDate.add(1, 'week')).format(),
+          }
+          observables = [ ...observables, this.taskService.addTask(newTask) ];   
+          i += 1;
+        }
+      } else if (this.repeatChoice === "monthly") {
+        let i = 0;
+        while (i < 12) {
+          const newTask = { 
+            ...this.rightPaneService.task,
+            _id: undefined,
+            dueDate: moment.utc(dueDate.add(1, 'month')).format(),
+          }
+          observables = [ ...observables, this.taskService.addTask(newTask) ];   
+          i += 1;  
+        }
+      }
+
+      if (observables.length > 0) {
+        forkJoin(observables).subscribe(() => { this.taskService.invalidateTaskListStatus(); });
+      }
+    }
+  }
 }

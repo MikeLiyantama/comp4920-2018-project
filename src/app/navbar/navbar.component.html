@@ -9,10 +9,9 @@
     [(opened)]="drawerOpened"
     >
     <h1 class="logo">Organise.me</h1>
-    <mat-divider></mat-divider>
     <app-left-sidebar (drawerCloseRequested)="onDrawerCloseRequested($event)"></app-left-sidebar>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content role="main">
     <mat-toolbar color="primary">
       <button
         class="sideMenuToggle"
@@ -26,13 +25,12 @@
       <div class="container">
         <span>{{appbarService.title}}</span>
         <button class="profileIcon" [matMenuTriggerFor]="profileMenu" mat-icon-button>
-          U
+          <app-avatar [user]="currentUser"></app-avatar>
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before" [overlapTrigger]="false">
           <button mat-menu-item routerLink="/app">Home</button>
-          <button mat-menu-item routerLink="/app/profile/{{currentUserId}}">Profile</button>
+          <button mat-menu-item routerLink="/app/profile/{{currentUser._id}}">Profile</button>
           <button mat-menu-item routerLink="/app/settings">Settings</button>
-          <button mat-menu-item>Help</button>
           <button mat-menu-item (click)="logout()">Log Out</button>
         </mat-menu>
       </div>

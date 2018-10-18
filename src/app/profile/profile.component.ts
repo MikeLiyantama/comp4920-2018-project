@@ -9,6 +9,7 @@ import { ProfileService } from '../profile.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  loading: boolean = true;
   isUser : boolean;
   editMode : boolean = false;
   id : String;
@@ -18,6 +19,13 @@ export class ProfileComponent implements OnInit {
   username : String;
   profilePic : any;
   email : String;
+
+  //For edit profile purpose
+  editName : String;
+  editBio : String;
+  editProfile : String;
+  editUsername : String;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private profileService: ProfileService,
@@ -46,6 +54,11 @@ export class ProfileComponent implements OnInit {
         thisC.email = response.email;
         thisC.profilePic = response.profile_picture;
 
+        thisC.editBio = response.bio;
+        thisC.editName = response.name;
+        thisC.editProfile = response.profile;
+        thisC.editUsername = response.username;
+
         thisC.profileService.getCurrentId()
         .subscribe(function(res){
             let response;
@@ -56,6 +69,7 @@ export class ProfileComponent implements OnInit {
             } else {
               thisC.isUser = false;
             }
+            thisC.loading = false;
         });
       }
     });
@@ -63,14 +77,23 @@ export class ProfileComponent implements OnInit {
 
   updateData(){
     let thisC = this;
+
     this.profileService.updateUserData(this.name, this.username, this.bio, this.profile, this.profilePic)
         .subscribe(function(res){
           let response;
           response = res;
           if(response.success){
+            thisC.name = thisC.editName;
+            thisC.bio = thisC.editBio;
+            thisC.username = thisC.editUsername;
+            thisC.profile = thisC.editProfile;
             thisC.leaveEditMode();
             thisC.snackBar.open("Profile Updated!", "Close", {duration:3000});
           }else{
+            this.editBio = this.bio;
+            this.editName = this.name;
+            this.editProfile = this.profile;
+            this.editUsername = this.username;
             thisC.snackBar.open("Error, Please Try again", "Close", {duration:3000});
           }
         })
@@ -89,6 +112,10 @@ export class ProfileComponent implements OnInit {
   }
 
   leaveEditMode(){
+    this.editBio = this.bio;
+    this.editName = this.name;
+    this.editProfile = this.profile;
+    this.editUsername = this.username;
     this.editMode = false;
   }
 }

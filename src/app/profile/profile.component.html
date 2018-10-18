@@ -1,7 +1,21 @@
 <div class="container">
-    <div *ngIf="!editMode && isUser;else editCard">
-        <div layout="edit-button" layout-align="end center">
-            <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
+    <mat-spinner
+        *ngIf="loading"
+        class="loading"
+        color="primary"
+        diameter="40"
+        style="margin:0 auto">
+    </mat-spinner>
+
+    <div *ngIf="!loading">
+        <div *ngIf="!editMode && isUser;else editCard">
+            <div layout="edit-button" layout-align="end center">
+                <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
+            </div>
+            <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
+            <h1 class="headline heading-component">{{this.name}}</h1>
+            <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
+            <h4 class="subheading-1">Profile: {{this.profile}}</h4>
         </div>
         <div *ngIf="profilePic">
                 <img id="profilePic" [src]="profilePic" class="profile_picture">

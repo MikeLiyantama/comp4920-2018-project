@@ -1,8 +1,0 @@
-<mat-grid-list *ngIf="gridTiles" cols="{{ gridTiles }}" rowHeight="600px">
-    <mat-grid-tile *ngFor="let t of teams">
-        <app-teamcard [team]="t" 
-            (detailsEmitter)="switchToDetails($event)" 
-            (teamEmitter)="deleteTeam($event)"></app-teamcard>
-    </mat-grid-tile>
-</mat-grid-list>
-

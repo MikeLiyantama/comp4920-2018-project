@@ -20,13 +20,21 @@
         </p>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-stroked-button
-                (click)="triggerDetails()"
-                id="detailsbutton"
-                color="primary">Details</button>
-        <button mat-stroked-button
-                (click)="triggerRemove()"
-                id="removebutton"
-                color="accent">Remove</button>
+        <a 
+            mat-stroked-button
+            routerLink="/app/teams/{{ team._id }}"
+            id="detailsbutton"
+            color="primary"
+        >
+            Details
+        </a>
+        <button 
+            mat-stroked-button
+            (click)="triggerRemove()"
+            id="removebutton"
+            color="accent"
+        >
+            Remove
+        </button>
     </mat-card-actions>
 </mat-card>

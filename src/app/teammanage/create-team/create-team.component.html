@@ -1,0 +1,124 @@
+<mat-horizontal-stepper #stepper class="container">
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Your team details</ng-template>
+            <mat-form-field appearance="outline" class="form-field" id="teamName">
+                <mat-label>Team name</mat-label>
+                <input
+                    matInput
+                    required
+                    placeholder="Philadelphia Eagles"
+                    formControlName="NameCtrl" 
+                    [(ngModel)]="enteredTeamName" 
+                >
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field" id="teamDescription">
+                <mat-label>Team description</mat-label>
+                <textarea 
+                    matInput 
+                    [(ngModel)]="enteredTeamDescription"
+                    placeholder="Superbowl LII Champions"
+                    formControlName="DescCtrl"
+                    matTextareaAutosize
+                    matAutosizeMinRows=3
+                >
+                </textarea>
+            </mat-form-field>
+            <img *ngIf="givenTeamBanner" class="form-field image" id="banner" [src]="givenTeamBanner">
+            <app-imgup 
+                class="form-field"
+                [buttonLine]="'Upload a team banner'" 
+                (imgEmitter)="setImage($event)"
+            >
+            </app-imgup>
+        </form>
+        <div class="stepbuttons">
+            <button mat-flat-button matStepperNext class="nextbutton">Next</button>
+        </div>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Add some members</ng-template>
+        <app-user-select
+            (userSelected)="addTeamMember($event)"
+            [excludedUsers]="usersToExcludeFromUserSelector"
+            [placeholder]="'Search for your team members'"
+        >
+        </app-user-select>
+        <div class="stepbuttons">
+            <button 
+                mat-flat-button
+                matStepperNext
+                class="nextbutton"
+                (click)="setSummaryTeam()"
+            >
+                Next
+            </button>
+        </div>
+        <mat-divider class="divider"></mat-divider>
+        <!-- display current team members from here -->
+        <!-- start first with the team leader -->
+        <mat-grid-list cols="3" gutterWidth="24px" rowHeight="200px">
+            <mat-grid-tile *ngIf="currentCreator">
+                <app-memcard 
+                    [teamMember]="currentCreator"
+                    [creatorDisabled]="true"
+                    [leaderDisabled]="true"
+                    [removeDisabled]="true"
+                    ></app-memcard>
+            </mat-grid-tile>
+            <mat-grid-tile *ngFor="let member of selectedTeamMembers">
+                <app-memcard
+                    [teamMember]="member"
+                    [creatorDisabled]="true"
+                    [leaderDisabled]="false"
+                    [removeDisabled]="false"
+                    (removeEmitter)="removeTeamMember($event)"
+                >
+                </app-memcard>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Team Summary</ng-template>
+        <div class="center">
+          <p>Does this look correct?</p>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-flat-button [disabled]="creating" (click)="createTeam()">Create</button>
+          </div>
+        </div>
+        <mat-divider class="divider"></mat-divider>
+        <div class="row">
+            <div class="col-md-5">
+                <h2>Team</h2>
+                <app-teamcard class="teamcard" [team]="summaryTeam"></app-teamcard>
+            </div>
+            <div class="col-md-7">
+                <h2>Members</h2>
+                <mat-grid-list cols="2" gutterSize="16px" rowHeight="200px">
+                    <mat-grid-tile *ngIf="currentCreator">
+                        <app-memcard 
+                            [teamMember]="currentCreator"
+                            [creatorDisabled]="true"
+                            [leaderDisabled]="true"
+                            [removeDisabled]="true"
+                        >
+                        </app-memcard>
+                    </mat-grid-tile>
+                    <mat-grid-tile *ngFor="let member of selectedTeamMembers">
+                        <app-memcard
+                            [teamMember]="member"
+                            [creatorDisabled]="true"
+                            [leaderDisabled]="true"
+                            [removeDisabled]="true"
+                            (removeEmitter)="removeTeamMember($event)"
+                        >
+                        </app-memcard>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>            
+        </div>
+    </mat-step>
+
+
+</mat-horizontal-stepper>

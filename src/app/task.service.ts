@@ -3,8 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/comm
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import omit from 'lodash/omit';
+
 import { List } from './list.model';
 import { Task } from './task.model';
+import { User } from './user.model';
 
 // Adapted from: https://devcenter.heroku.com/articles/mean-apps-restful-api#create-the-contact-service-to-make-requests-to-the-api-server
 @Injectable({
@@ -37,10 +40,27 @@ export class TaskService {
 
     getList(listId: string): Observable<List> {
         return this.http.get<List>(`${this.listsUrl}/${listId}`)
+            .pipe(
+                catchError(this.handleError)
+            )
     }
 
     getLists(): Observable<List[]> {
         return this.http.get<List[]>(this.listsUrl)
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
+    addUserToList(listId: string, userId: string): Observable<void> {
+        return this.http.post<void>(`${this.listsUrl}/${listId}/collaborators/${userId}`, {})
+            .pipe(
+                catchError(this.handleError)
+            )
+    }
+
+    removeUserFromList(listId: string, userId: string): Observable<void> {
+        return this.http.delete<void>(`${this.listsUrl}/${listId}/collaborators/${userId}`)
             .pipe(
                 catchError(this.handleError)
             )
@@ -67,14 +87,17 @@ export class TaskService {
             )
     }
 
+    // Get a specific task
+    getTask(id){
+        return this.http.get(this.tasksUrl + '/' + id)
+            .pipe(
+                catchError(this.handleError)
+            );
+
+    }
+
     editTask(editedTask): Observable<Task> {
-        return this.http.put<Task>(
-                `${this.tasksUrl}/${editedTask._id}`, 
-                { 
-                    title: editedTask.title, 
-                    description: editedTask.description,
-                }
-            )
+        return this.http.put<Task>(`${this.tasksUrl}/${editedTask._id}`, omit(editedTask, '_id'))
             .pipe(
                 catchError(this.handleError)
             )

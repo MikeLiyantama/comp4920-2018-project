@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -7,11 +7,13 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatBottomSheet } from '@angular/material';
 
 import { CompletedTaskListComponent } from '../completed-task-list/completed-task-list.component';
+import { ManageCollaboratorsComponent } from '../manage-collaborators/manage-collaborators.component';
 
 import { List } from '../list.model';
 import { Task } from '../task.model';
 
 import { AppbarService } from '../appbar.service';
+import { AuthService } from '../auth.service';
 import { TaskService } from '../task.service';
 
 @Component({
@@ -23,14 +25,20 @@ export class TaskListComponent {
 
   subscription: Subscription;
 
-  listId: string;
+  @Input() listId: string;
+  @Input() teamId: string;
+  list: List;
   quickAddTask: string;
   loading: boolean = true;
   tasks: Task[] = [];
   loadingCompletedTasks: boolean = false;
   completedTasks: Task[] = [];
+  showCollaborationButton: boolean = false;
+  collaborationPanelTitle: string = '';
+  @Input() isTeam : boolean;
 
   constructor(
+    private authService: AuthService,
     private appbarService: AppbarService,
     private taskService: TaskService,
     private bottomSheet: MatBottomSheet,
@@ -48,27 +56,43 @@ export class TaskListComponent {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.listId = params.get('listId');
-      if (this.listId === 'today') {
-        this.appbarService.setTitle('Today');
-      }
-      this.loading = true;
-      this.getTasks(this.listId);
-    });
+      this.route.paramMap.subscribe((params) => {
+        this.listId = params.get('listId');
+        this.loading = true;
+
+        if (!this.listId || this.listId === 'today') {
+          this.appbarService.setTitle('Today');
+          this.getTasks(this.listId, true);
+        } else {
+          this.getTasks(this.listId, false);
+          this.taskService.getList(this.listId).subscribe((list) => {
+            this.loading = false;
+            this.list = list;
+            this.appbarService.setTitle(list.title);
+
+            const authedUser = this.authService.getDecodedToken();
+            this.showCollaborationButton = this.list.createdBy._id === authedUser._id;
+            this.collaborationPanelTitle = this.list.collaborators && this.list.collaborators.length > 0
+              ? 'Manage Collaboration'
+              : 'Add Collaborators';
+          });
+        }
+      });
   }
   
-  getTasks(listId: string) {
-    const filters = { listId };
+  getTasks(listId: string, setLoading?: boolean) {
+    const filters = { listId: listId || 'today' };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
-      this.loading = false;
       this.tasks = tasks || [];
+      if (setLoading) {
+        this.loading = false;
+      }
     });
   }
 
   addTask() {
     const newTask = <Task>{ title: this.quickAddTask };    
-    if (this.listId !== 'today') {
+    if (this.listId && this.listId !== 'today') {
       newTask.listId = this.listId;
     }
     this.taskService.addTask(newTask).subscribe(() => {
@@ -103,6 +127,17 @@ export class TaskListComponent {
         data: { completedTasks: tasks },
       });
     });
+  }
+
+  openCollaborationDialog() {
+    this.bottomSheet.open(ManageCollaboratorsComponent, {
+      data: { 
+        collaborators: this.list.collaborators || [], 
+        createdBy: this.list.createdBy, 
+        listId: this.listId,
+        title: this.collaborationPanelTitle,
+      },
+    })
   }
 
   taskDrop(event: CdkDragDrop<string[]>) {

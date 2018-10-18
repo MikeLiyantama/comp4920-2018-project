@@ -1,0 +1,9 @@
+<img 
+  *ngIf="user.profile && user.profile !== ''" 
+  aria-hidden 
+  class="avatar image-avatar"
+  [src]="user.profile"
+/>
+<span *ngIf="!user.profile || user.profile === ''" aria-hidden class="avatar generated-avatar">
+  {{ user.username.charAt(0) }}
+</span>

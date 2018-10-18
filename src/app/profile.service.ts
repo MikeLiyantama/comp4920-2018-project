@@ -15,6 +15,7 @@ export class ProfileService {
     return this.http.get(this.userDataUrl + "/" + id);
   }
 
+
   updateUserData(name, username, bio, profile, profilePic){
     let obj = {
       name: name,

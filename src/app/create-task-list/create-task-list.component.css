@@ -1,0 +1,40 @@
+.container {
+  background: none;  
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.confirm-card {
+  max-width: 400px;
+  margin: 0 auto 24px;
+}
+
+.confirm-card-header {
+  margin-top: 0;
+}
+
+.faketask {
+  align-items: center;
+  display: flex;
+  padding: 8px 12px;
+}
+
+.faketask-checkbox {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #212121;
+  margin-right: 16px;
+}
+
+.faketask-title {
+  background: #212121;
+  flex: 1;
+  height: 14px;
+}
+
+.center {
+  text-align: center;
+}

@@ -109,7 +109,8 @@ POST /api/list
                 with { message: "Failed to create new list" }
 
 GET /api/list
-    Retrieve all lists the current user has created.
+    Get all lists a user is a part of (created or added as a collaborator).
+    Team lists are not included.
     Required Payload: Nothing.
     Return Value:
         200 - Success
@@ -239,8 +240,7 @@ DELETE /api/team/:id
 
 PUT /api/team/:id
     Update a team. 
-    Usually, only the name and the description should be updated.
-    But there is no restriction on what can be updated.
+    Only description, banner and name can be updated.
     Required Payload: A JSON containing "name" and/or "description" field.
     Return Value:
         204 - Success (No Content)
@@ -288,6 +288,15 @@ PUT /api/team/:id/list
         500 - Database error
                 with { message: "Failed to add list" }
 
+GET /api/team/:id/lists
+    Get all lists for a team.
+    Required Payload: None
+    Return Value:
+        200 - Success
+                with an array of relevant lists
+        500 - Database error
+                with { message: "Failed to retieve lists" }
+
 DELETE /api/team/:id/list
     Remove a list from a team.
     Required Payload: { "_id": ObjectId of the list }
@@ -298,6 +307,59 @@ DELETE /api/team/:id/list
                 with { message: "Incorrect team ID format" }
         500 - Database error
                 with { message: "Failed to delete list" }
+
+PUT /api/team/:id/leader
+    Set a team member as a leader.
+    Required Payload: { "_id": ObjectID of the member }
+    Return Value:
+        200 - Success
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
+        500 - Database error
+                with { message: "Failed to add leader" }
+
+DELETE /api/team/:id/leader
+    Remove leader status from a team leader.
+    Required Payload: { "_id": ObjectID of the leader }
+    Return Value:
+        200 - Success
+                with { message: "success" }
+        404 - Incorrect team ID format
+                with { message: "Incorrect team ID format" }
+        500 - Database error
+                with { message: "Failed to delete leader" }
+
+
+-------------------------------- MESSAGES --------------------------------
+
+POST /api/messages/team/:id
+    Create a new message
+    Required Payload: A JSON containing the message, e.g. { "content": "hello world" }
+    Return Value:
+        201 - New message created
+                with a JSON representing the message record
+        500 - Database error
+                with { message: "Failed to create new message" }
+
+GET /api/messages/team/:id
+    Get all messages for a team. Messages will be sorted in chronological order.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                an array of all messages
+        500 - Database error
+                with { message: "Failed to retieve messages" }
+
+DELETE /api/messages/:mid
+    Delete a message.
+    Required Payload: Nothing.
+    Return Value:
+        200 - Success
+                with { message: "success" }
+        500 - Database error
+                with { message: "Failed to delete message" }
+
 
 -------------------------------- SCHEMA --------------------------------
 
@@ -335,6 +397,14 @@ collection LISTS {
         createdAt: date,
         createdBy: ObjectId,
         tasks: array(ObjectId)
+}
+
+collection MESSAGES {
+    _id: ObjectId,
+    content: string,
+    createdAt: date,
+    createdBy: ObjectId,
+    team: ObjectId
 }
 
 class TeamMember {
