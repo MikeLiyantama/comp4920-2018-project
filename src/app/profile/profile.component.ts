@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   bio : String;
   profile : String;
   username : String;
-  profilePicUrl : String;
+  profilePic : any;
   email : String;
 
   //For edit profile purpose
@@ -52,6 +52,7 @@ export class ProfileComponent implements OnInit {
         thisC.bio = response.bio;
         thisC.profile = response.profile;
         thisC.email = response.email;
+        thisC.profilePic = response.profile_picture;
 
         thisC.editBio = response.bio;
         thisC.editName = response.name;
@@ -76,7 +77,8 @@ export class ProfileComponent implements OnInit {
 
   updateData(){
     let thisC = this;
-    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile, this.email)
+
+    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile, this.profilePic)
         .subscribe(function(res){
           let response;
           response = res;
@@ -96,6 +98,14 @@ export class ProfileComponent implements OnInit {
           }
         })
   }
+
+  setImage (givenFile) {
+    console.log ("Setting image");
+    this.profilePic = givenFile; 
+    if (this.profilePic) {
+        console.log ("image set");
+    }
+}
 
   enterEditMode(){
     this.editMode = true;

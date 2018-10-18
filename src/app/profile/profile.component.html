@@ -17,36 +17,53 @@
             <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
             <h4 class="subheading-1">Profile: {{this.profile}}</h4>
         </div>
-
-        <ng-template #editCard>
-            <mat-card>
-                <form class="form" (submit)="changeCredentials()">
-                    <mat-form-field class="form-group input-field">
-                        <mat-label>Name</mat-label>
-                        <input matInput [(ngModel)]="editName" placeholder="Full name" name="editName" type="text">
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field class="form-group input-field">
-                        <mat-label>Username</mat-label>
-                        <input matInput [(ngModel)]="editUsername" placeholder="User name" name="editUsername" type="text">
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field class="form-group input-field">
-                            <mat-label>Bio</mat-label>
-                            <input matInput [(ngModel)]="editBio" placeholder="Bio" name="editBio" type="text">
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field class="form-group input-field">
-                            <mat-label>Profile</mat-label>
-                            <input matInput [(ngModel)]="editProfile" placeholder="profile" name="editProfile" type="text">
-                    </mat-form-field>
-                    <br>
-                    <div class="form-group">
-                        <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>
-                        <button type="button" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
-                    </div>
-                </form>
-            </mat-card>
-        </ng-template>
+        <div *ngIf="profilePic">
+                <img id="profilePic" [src]="profilePic" class="profile_picture">
+        </div>
+        <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
+        <h1 class="headline heading-component">{{this.name}}</h1>
+        <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
+        <h4 class="subheading-1">Profile: {{this.profile}}</h4>
     </div>
+
+    <ng-template #editCard>
+        <mat-card>
+            <form class="form" (submit)="changeCredentials()">
+                <mat-form-field class="form-group input-field">
+                    <mat-label>Name</mat-label>
+                    <input matInput [(ngModel)]="name" placeholder="Full name" name="name" type="text">
+                </mat-form-field>
+                <br>
+                <mat-form-field class="form-group input-field">
+                    <mat-label>Username</mat-label>
+                    <input matInput [(ngModel)]="username" placeholder="User name" name="username" type="text">
+                </mat-form-field>
+                <br>
+                <mat-form-field class="form-group input-field">
+                        <mat-label>Bio</mat-label>
+                        <input matInput [(ngModel)]="bio" placeholder="Bio" name="bio" type="text">
+                </mat-form-field>
+                <br>
+                <mat-form-field class="form-group input-field">
+                        <mat-label>Profile</mat-label>
+                        <input matInput [(ngModel)]="profile" placeholder="profile" name="profile" type="text">
+                </mat-form-field>
+                <br>
+                <div class="form-group">
+                    <div *ngIf="profilePic">
+                            <img id="profilePic" [src]="profilePic">
+                    </div>
+                
+                    <app-profile-image-upload
+                        [buttonLine]="'Upload a profile picture'" 
+                        (imgEmitter)="setImage($event)">
+                    </app-profile-image-upload>
+                </div>
+                <div class="form-group">
+                    <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>
+                    <button type="button" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
+                </div>
+            </form>
+        </mat-card>
+    </ng-template>
 </div>

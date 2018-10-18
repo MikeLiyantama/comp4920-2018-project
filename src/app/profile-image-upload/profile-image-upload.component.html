@@ -1,8 +1,10 @@
-<form class="form" (submit)="uploadImage()">
-    <input class="ng-hide" id="input-file-id" multiple type="file" />
-    <button mat-raised-button type="button">Cancel</button>
-    <button mat-raised-button type="submit">Upload</button>
-</form>
+<input
+    style="display: none"
+    type="file"
+    (change)="fileChanged($event)"
+    #fileInput>
 
-
-
+<button mat-stroked-button 
+    color="primary" 
+    (click)="fileInput.click()"
+    type="button">{{ buttonLine }}</button>
