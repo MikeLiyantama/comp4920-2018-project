@@ -41,7 +41,7 @@ export class TeamListComponent implements OnInit {
     const newList = <List>{teamID : this.teamId, title: this.inputListField}
     this.teamTaskService.createList(newList)
         .subscribe(function(res){
-          //console.log("YEAH");
+          thisC.getList();
           thisC.inputListField = '';
         })
   }
