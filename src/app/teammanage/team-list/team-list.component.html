@@ -1,0 +1,34 @@
+<mat-spinner
+    *ngIf="loading"
+    class="loading"
+    color="primary"
+    diameter="40">
+  </mat-spinner>
+<div *ngIf="!loading">
+  <form (submit)="addTask()">
+    <mat-form-field class="quickAdd" appearance="outline">
+      <mat-label>Add New List</mat-label>
+      <input matInput [(ngModel)]="inputListField" name="inputListField">
+      <mat-icon matSuffix>add</mat-icon>
+    </mat-form-field>  
+  </form>
+  <h1>{{teamId}}</h1>
+  <a 
+    mat-list-item 
+    *ngFor="let taskList of taskLists"
+    class="taskList"
+    routerLink="/app/lists/{{taskList._id}}"
+    routerLinkActive="active-list-item"
+    (click)="requestDrawerClose()"
+  >
+    <mat-icon 
+      *ngIf="taskList.collaborators && taskList.collaborators.length > 0"
+      matListIcon
+      [matBadge]="taskList.collaborators.length"
+      matBadgeColor="primary"
+    >
+      group_work
+    </mat-icon>
+    <h3 matLine>{{taskList.title}}</h3>
+  </a>
+</div>

@@ -59,6 +59,7 @@ import { ManageCollaboratorsComponent } from './manage-collaborators/manage-coll
 import { AvatarComponent } from './avatar/avatar.component';
 import { DiscussionComponent } from './discussion/discussion.component';
 import { MessageComponent } from './discussion/message/message.component';
+import { TeamListComponent } from './teammanage/team-list/team-list.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -95,6 +96,7 @@ export function tokenGetter() {
     LeftSidebarComponent,
     DiscussionComponent,
     MessageComponent,
+    TeamListComponent,
   ],
   entryComponents: [
     CompletedTaskListComponent,
