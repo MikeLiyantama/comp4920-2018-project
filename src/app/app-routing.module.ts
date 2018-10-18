@@ -14,6 +14,7 @@ import { CreateTaskListComponent } from './create-task-list/create-task-list.com
 import { CreateTeamComponent } from './teammanage/create-team/create-team.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
 import { TeamDetailComponent } from './teammanage/teamdetail/teamdetail.component';
+import { TeamTasksComponent }from './teammanage/team-tasks/team-tasks.component'
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
@@ -32,6 +33,7 @@ const routes: Routes = [
     { path: 'today', component: TaskListComponent },
     { path: 'lists/create', component: CreateTaskListComponent },
     { path: 'lists/:listId', component: TaskListComponent },
+    { path: 'teams/:teamId/lists/:listId', component: TeamTasksComponent}
   ]}
 ];
 

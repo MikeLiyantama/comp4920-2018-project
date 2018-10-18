@@ -6,6 +6,14 @@
     diameter="40">
   </mat-spinner>
   <div *ngIf="!loading">
+    <div *ngIf="isTeam">
+        <button type="button" 
+        class="team-back-button" 
+        mat-raised-button 
+        color="primary"
+        routerLink="/app/teams/{{teamId}}">Back to Team</button>
+    </div>
+
     <form (submit)="addTask()">
       <mat-form-field class="quickAdd" appearance="outline">
         <mat-label>Add New Task</mat-label>

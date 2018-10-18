@@ -28,6 +28,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -59,6 +61,8 @@ import { ManageCollaboratorsComponent } from './manage-collaborators/manage-coll
 import { AvatarComponent } from './avatar/avatar.component';
 import { DiscussionComponent } from './discussion/discussion.component';
 import { MessageComponent } from './discussion/message/message.component';
+import { TeamListComponent } from './teammanage/team-list/team-list.component';
+import { TeamTasksComponent } from './teammanage/team-tasks/team-tasks.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -95,10 +99,13 @@ export function tokenGetter() {
     LeftSidebarComponent,
     DiscussionComponent,
     MessageComponent,
+    TeamListComponent,
+    TeamTasksComponent,
   ],
   entryComponents: [
     CompletedTaskListComponent,
     ManageCollaboratorsComponent,
+    TeamTasksComponent
   ],
   imports: [
     BrowserModule,
@@ -123,6 +130,7 @@ export function tokenGetter() {
     MatTabsModule,
     MatTooltipModule,
     MatDividerModule,
+    MatDialogModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
