@@ -7,7 +7,6 @@
     margin-right: 10px;
 }
 
-<<<<<<< HEAD
 #profilePic {
     max-width: 20%;
     max-height: 20%;
@@ -20,8 +19,6 @@
     align-items: center;
 }
 
-=======
->>>>>>> parent of e66b8cb... Merge pull request #89 from andrewnguyenism/profile_picture_comp
-.spinner {
+.mat-spinner {
     text-align: center;
 }
