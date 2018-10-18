@@ -1,6 +1,8 @@
-import { Component, OnInit , Input} from '@angular/core';
+import { Component, OnInit , Input, Inject, Injectable, InjectableProvider} from '@angular/core';
 import { TeamTasksService } from '../../team-tasks.service'
+import { MatDialog, MatDialogRef, MatDialogModule, MatDialogConfig} from '@angular/material'
 import { List } from '../../list.model'
+import {TeamTasksComponent} from '../team-tasks/team-tasks.component'
 
 @Component({
   selector: 'app-team-list',
@@ -14,7 +16,9 @@ export class TeamListComponent implements OnInit {
   private inputListField : string;
 
   constructor(
-    private teamTaskService : TeamTasksService
+    private teamTaskService : TeamTasksService,
+    private teamTask : TeamTasksComponent,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(
@@ -37,7 +41,23 @@ export class TeamListComponent implements OnInit {
     const newList = <List>{teamID : this.teamId, title: this.inputListField}
     this.teamTaskService.createList(newList)
         .subscribe(function(res){
+          console.log("YEAH BOY");
           thisC.inputListField = '';
         })
+  }
+
+  expandList(listId){
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '99%';
+    dialogConfig.height = '99%';
+    dialogConfig.data = {
+       teamId: this.teamId,
+       listId: listId
+    };
+    const dialog = this.dialog.open(TeamTasksComponent, dialogConfig);
+    dialog.afterClosed().subscribe(function(res){
+      console.log(res);//DEBUG
+    })
   }
 }

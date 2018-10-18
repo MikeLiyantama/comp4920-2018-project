@@ -8,4 +8,5 @@ export interface List {
     createdBy?: User;
     deleted?: boolean;
     collaborators?: string[] | User[];
+    teamID?: String;
 }

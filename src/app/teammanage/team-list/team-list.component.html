@@ -17,7 +17,7 @@
     mat-list-item 
     *ngFor="let list of lists"
     class="taskList"
-    (click)="requestDrawerClose()"
+    (click)="expandList(list._id)"
   >
     <mat-icon 
       matListIcon
