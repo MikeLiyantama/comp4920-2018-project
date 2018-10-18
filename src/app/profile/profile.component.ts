@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
         thisC.bio = response.bio;
         thisC.profile = response.profile;
         thisC.email = response.email;
-        thisC.profilePic = response.profilePic;
+        thisC.profilePic = response.profile_picture;
 
         thisC.profileService.getCurrentId()
         .subscribe(function(res){

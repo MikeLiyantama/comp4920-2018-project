@@ -4,7 +4,7 @@
             <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
         </div>
         <div *ngIf="profilePic">
-                <img id="profilePic" [src]="profilePic">
+                <img id="profilePic" [src]="profilePic" class="profile_picture">
         </div>
         <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
         <h1 class="headline heading-component">{{this.name}}</h1>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group">
                     <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>
-                    <button type="submit" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
+                    <button type="button" (click)="updateData()" mat-raised-button class="form-button" color="primary">Submit</button>
                 </div>
             </form>
         </mat-card>

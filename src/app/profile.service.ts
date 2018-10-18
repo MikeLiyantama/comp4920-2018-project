@@ -21,9 +21,9 @@ export class ProfileService {
       username: username,
       bio: bio,
       profile: profile,
-      profilePic : profilePic
+      profile_picture : profilePic
     }
-    return this.http.post(this.userDataUrl, obj);
+    return this.http.put(this.userDataUrl, obj);
   }
 
   getCurrentId(){
