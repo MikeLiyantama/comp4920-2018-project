@@ -66,11 +66,23 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
+  openCopyTaskDialog(): void {
+    const data = {
+      mode: 'copy',
+      currentListId: this.rightPaneService.task.listId,
+      task: this.rightPaneService.task,
+      teamId: this.rightPaneService.teamId, 
+    };
+
+    this.dialog.open(MoveTaskDialogComponent, { data, width: '200px' });
+  }
+
   openMoveTaskDialog(): void {
     const data = { 
+      mode: 'move',
       currentListId: this.rightPaneService.task.listId,
       taskId: this.rightPaneService.task._id,
-      teamId: this.rightPaneService.teamId || '', 
+      teamId: this.rightPaneService.teamId, 
     };
 
     const dialogRef = this.dialog.open(MoveTaskDialogComponent, { data, width: '200px' });
@@ -138,8 +150,10 @@ export class TaskDetailComponent implements OnInit {
 
 export interface DialogData {
   currentListId: string;
+  mode: string;
+  task: Task;
   taskId: string;
-  teamId: string;
+  teamId: string | void;
 }
 
 @Component({
@@ -161,23 +175,38 @@ export class MoveTaskDialogComponent {
   }
 
   ngOnInit() {
-    if (this.data.teamId === '') {      
+    if (this.data.teamId && this.data.teamId !== '') {
+      this.teamService.getTeamLists(this.data.teamId).subscribe((lists) => {
+        this.lists = lists;
+        if (this.data.mode === 'move') {
+          this.lists = lists.filter(list => list._id !== this.data.currentListId);
+        }
+        this.loading = false;
+      });
+    } else {
       this.taskService.getLists().subscribe((lists) => {
         this.lists = lists;
         this.loading = false;
-      });
-    } else {     
-      this.teamService.getTeamLists(this.data.teamId).subscribe((lists) => {
-        this.lists = lists.filter(list => list._id !== this.data.currentListId);
-        this.loading = false;
-      });
+      });  
     }
   }
 
   onListClick(listId: string) {
     this.loading = true;
-    this.taskService.moveTaskToList(this.data.taskId, this.data.currentListId).subscribe(() => {
-      this.dialogRef.close();
-    });
+
+    if (this.data.mode === 'move') {
+      this.taskService.moveTaskToList(this.data.taskId, listId).subscribe(() => {
+        this.dialogRef.close();
+      });
+    } else if (this.data.mode === 'copy') {
+      const newTask = {
+        ...this.data.task,
+        listId,
+        _id: undefined,
+      };
+      this.taskService.addTask(newTask).subscribe(() => {
+        this.dialogRef.close();
+      });
+    }
   }
 }
