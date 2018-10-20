@@ -33,11 +33,11 @@
           <form class="form" (submit)="changePassword()">
               <mat-form-field class="form-group input-field settings-item">
                 <mat-label>Current Email</mat-label>
-                <input matInput [(ngModel)]="newEmail" placeholder="Current Email" name="currEmail" type="password">
+                <input matInput [(ngModel)]="newEmail" placeholder="Current Email" name="currEmail" type="text">
               </mat-form-field>
               <mat-form-field class="form-group input-field settings-item">
                   <mat-label>New Password</mat-label>
-                  <input matInput [(ngModel)]="newPass" placeholder="New Password" name="newPass" type="text">
+                  <input matInput [(ngModel)]="newPass" placeholder="New Password" name="newPass" type="password">
               </mat-form-field>
               <div class="form-group">
                   <button type="submit" mat-raised-button>Submit</button>
