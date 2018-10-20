@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 var cors = require('cors');
 var path = require('path');
 var _ = require('lodash');
-
+var secure = require('ssl-express-www')
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
@@ -19,6 +19,7 @@ var nodemailer = require('nodemailer');
 var app = express();
 
 // Middleware
+app.use(secure);
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true, parameterLimit: 10000 }));
 
