@@ -2,19 +2,6 @@
     vertical-align: middle;
 }
 
-mat-card-title {
-    text-align: middle;
-}
-
-mat-icon {
-    display: block;
-    float: right!important;
-}
-
-#removebutton {
-    margin-left: 25px;
-}
-
-#detailsbutton {
-    margin-left: 35px;
+.details-button {
+    margin-right: 16px;
 }

@@ -628,9 +628,9 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
 });
 
 // Get all teams a user is in
-app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (req, res) {
+app.get('/api/team' , passport.authenticate('jwt', { session: false }), function (req, res) {
   db.collection(TEAMS_COLLECTION)
-    .find({"$or": [{ members: req.user._id}, { createdBy: req.user._id }]})
+    .find({ $or: [ { members: req.user._id}, { createdBy: req.user._id } ] })
     .toArray(function (err, teams) {
       if (err) {
         returnError(res, err.message, "Failed to retieve teams");
@@ -639,7 +639,7 @@ app.get('/api/team' , passport.authenticate('jwt', {session: false}), function (
         let teamMembers = [];
         teams.forEach((team) => {
           teamCreators.push(team.createdBy);
-          if(team.members) {
+          if (team.members) {
             teamMembers.push(team.members);
           }
         });
@@ -682,22 +682,23 @@ app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
           let users = _.concat(team.createdBy, teamMembers);
           users = _.uniq(users);
 
-          db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}, {_id:1}).toArray(function (err, users) {
-
-            team.creator = {
-              "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
-              "isCreator": true,
-              "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
-            };
-            if(team.members) {
-              team.members = team.members.map(member => member = {
-                "user": users.find(user => ObjectID(member).equals(user._id)),
-                "isCreator": false,
-                "isLeader": _.includes(team.leaders, member) ? true : false
-              });
-            }
-            res.status(200).json(team);
-          });
+          db.collection(USERS_COLLECTION)
+            .find({ _id: { "$in": users.map(user => ObjectID(user)) } })
+            .toArray(function (err, users) {
+              team.creator = {
+                "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
+                "isCreator": true,
+                "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
+              };
+              if (team.members) {
+                team.members = team.members.map(member => member = {
+                  "user": users.find(user => ObjectID(member).equals(user._id)),
+                  "isCreator": false,
+                  "isLeader": _.includes(team.leaders, member) ? true : false
+                });
+              }
+              res.status(200).json(team);
+            });
 
         } else {
           returnError(res, 'No team found', 'No team found', 404);

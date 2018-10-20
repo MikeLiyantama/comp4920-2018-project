@@ -14,7 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class TeamCardComponent implements OnInit {
 
     @Input() team: Team;
-    @Input() showActions: true;
+    @Input() showActions = true;
 
     // Emitter for team deletion
     @Output() teamEmitter = new EventEmitter <Team> ();
