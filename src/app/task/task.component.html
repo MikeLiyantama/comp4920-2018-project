@@ -19,7 +19,7 @@
         </span>
     </div>
     <div style="display:flex" mat-line>
-        <span *ngIf="task.list.team && showTeam" class="task-info">
+        <span *ngIf="task.list && task.list.team && showTeam" class="task-info">
             <mat-icon inline>group</mat-icon>
             {{ task.list.team.name }}
         </span>

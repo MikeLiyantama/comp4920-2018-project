@@ -496,10 +496,14 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
             });
                         
             const listIds = tasks.map(task => ObjectID(task.listId)).filter(val => val);
-            db.collection(LISTS_COLLECTION).find({ _id: { $in: listIds } })
+            db.collection(LISTS_COLLECTION)
+              .find({ _id: { $in: listIds } })
+              .project({ teamID: 1, title: 1 })
               .toArray((err, lists) => {
                 const teamIds = lists.map(list => ObjectID(list.teamID)).filter(val => val);
-                db.collection(TEAMS_COLLECTION).find({ _id: { $in: teamIds } })
+                db.collection(TEAMS_COLLECTION)
+                  .find({ _id: { $in: teamIds } })
+                  .project({ name: 1 })
                   .toArray((err, teams) => {                        
                     finalLists = lists.map(list => {
                       if (list.teamID) {
