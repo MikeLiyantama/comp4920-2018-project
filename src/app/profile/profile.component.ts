@@ -45,7 +45,6 @@ export class ProfileComponent implements OnInit {
     .subscribe(function(res) {
       let response;
       response = res;
-      console.log(res);
       if (response._id) {
         thisC.name = response.name;
         thisC.username = response.username;
@@ -100,10 +99,8 @@ export class ProfileComponent implements OnInit {
   }
 
   setImage (givenFile) {
-    console.log ('Setting image');
     this.profilePic = givenFile;
     if (this.profilePic) {
-        console.log ('image set');
     }
 }
 

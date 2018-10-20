@@ -3,11 +3,22 @@
 }
 
 .task-checkbox {
-    margin: 0 16px;
+    margin: 0 16px 0 0;
 }
 
 .task-title.completed {
     text-decoration: line-through;
+}
+
+.task-info {
+    align-items: center;
+    display: flex;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.task-info > mat-icon {
+    margin-right: 8px;
 }
 
 .task-duedate-close {
@@ -19,7 +30,8 @@
     text-decoration: line-through;
 }
 
-.assignee {
+.task-right {
+    align-items: center;
+    display: flex;
     margin-left: auto;
-    margin-right: 16px;
 }

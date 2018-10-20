@@ -29,7 +29,6 @@ export class RecoverComponent implements OnInit {
   }
 
   sendEmail() { ///api/account/email_verification
-    console.log(this.username);
     // send username to backend to check if user exists
     // if the user exists, send an email to the user with a code
 

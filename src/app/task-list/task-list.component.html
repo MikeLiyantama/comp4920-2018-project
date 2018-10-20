@@ -6,7 +6,7 @@
     diameter="40">
   </mat-spinner>
   <div *ngIf="!loading">
-    <form class="quickAddForm" (submit)="addTask()">
+    <form *ngIf="!isAssignedToMeList" class="quickAddForm" (submit)="addTask()">
       <a
         *ngIf="isTeam"
         mat-stroked-button
@@ -24,36 +24,49 @@
       </mat-form-field>  
     </form>
 
-    <mat-nav-list cdkDropList lockAxis="y" (cdkDropListDropped)="taskDrop($event)">
+    <mat-nav-list 
+      cdkDropList 
+      cdkDragLockAxis="y" 
+      (cdkDropListDropped)="taskDrop($event)"
+    >
       <app-task
         *ngFor="let task of tasks"
         cdkDrag
         class="task"
         [task]="task"
         [teamId]="teamId"
+        [showAssignee]="!isAssignedToMeList"
+        [showTeam]="isAssignedToMeList"
+        [showList]="isAssignedToMeList"
+        [showImportance]="!isAssignedToMeList"
         (markedAsComplete)="onTaskMarkedAsComplete($event)"
         (toggledImportance)="onTaskImportanceToggled($event)"
       >
-        <mat-icon cdkDragHandle drag-handle>drag_handle</mat-icon>
+        <mat-icon *ngIf="!isAssignedToMeList" cdkDragHandle drag-handle style="margin-right: 16px">drag_handle</mat-icon>
         <span *cdkDragPreview drag-preview class="task taskPreview">
           <mat-checkbox></mat-checkbox>
           {{ task.title }}
         </span>
       </app-task>
     </mat-nav-list>
-    <div class="bottompanel"> 
-      <button
-        mat-flat-button
-        color="primary"
-        [disabled]="loadingCompletedTasks"
-        (click)="openCompletedTasks()"
+    <div class="row bottompanel">
+      <div class="col-12 col-md-4 text-center text-md-left">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="loadingCompletedTasks"
+          (click)="openCompletedTasks()"
+        >
+          <mat-icon>
+            assignment_turned_in
+          </mat-icon>
+          View Completed Tasks
+        </button>
+      </div>
+      <div 
+        *ngIf="listId && listId !== 'today' && !isAssignedToMeList && !isTeam" 
+        class="collaboration col-12 col-md-4 offset-md-4 mt-4 mt-md-0 text-center text-md-right"
       >
-        <mat-icon>
-          assignment_turned_in
-        </mat-icon>
-        View Completed Tasks
-      </button>
-      <div *ngIf="listId && listId !== 'today' && !isTeam" class="collaboration">
         <button
           mat-stroked-button
           (click)="openCollaborationDialog()"
@@ -63,7 +76,7 @@
           </mat-icon>
           {{ collaborationPanelTitle }}
         </button>
-        <span *ngIf="list.collaborators" class="collaborators">          
+        <span *ngIf="list.collaborators" class="collaborators justify-content-center justify-content-md-end">          
           <app-avatar
             *ngFor="let collaborator of list.collaborators.slice(0, 4)"
             matListAvatar 

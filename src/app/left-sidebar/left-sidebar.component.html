@@ -8,6 +8,14 @@
   >
     Today
   </a>
+  <a 
+    mat-list-item 
+    routerLink="/app/me"
+    routerLinkActive="active-list-item"
+    (click)="changeAppTitle($event)"
+  >
+    Assigned To Me
+  </a>
   <mat-divider></mat-divider>
   <h3 matSubheader>Lists</h3>
   <a 

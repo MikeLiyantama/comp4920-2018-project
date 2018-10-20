@@ -466,8 +466,18 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
     filterParams.deleted = true;
   }
 
-  if (req.query.listId) {
-    filterParams.listId = req.query.listId === 'today' ? null : ObjectID(req.query.listId);
+  if (req.query.listId && req.query.listId !== 'today' && req.query.listId !== 'me') {
+    filterParams.listId = ObjectID(req.query.listId);
+  }
+
+  if (req.query.listId && req.query.listId === 'me') {
+    filterParams.assignee = ObjectID(req.user._id);
+  } else {
+    if (req.query.teamId) {
+      filterParams.teamId = req.query.teamID
+    } else {
+      filterParams.createdBy = ObjectID(req.user._id);
+    }
   }
   
   db.collection(TASKS_COLLECTION)
@@ -478,14 +488,35 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
         returnError(res, err.message, "Failed to retieve tasks");
       } else {
         const assignees = tasks.map(task => ObjectID(task.assignee)).filter(val => val);
-        db.collection(USERS_COLLECTION).find({ _id: { $in: assignees } }, {_id:1})
+        db.collection(USERS_COLLECTION).find({ _id: { $in: assignees } })
           .toArray((err, users) => {        
-          let finalTasks = tasks.map(task => {
-            task.assignee = users.find(user => ObjectID(task.assignee).equals(user._id));
-            return task;
-          });          
-          res.status(200).json(finalTasks);
-        });
+            let finalTasks = tasks.map(task => {
+              task.assignee = users.find(user => ObjectID(task.assignee).equals(user._id));
+              return task;
+            });
+                        
+            const listIds = tasks.map(task => ObjectID(task.listId)).filter(val => val);
+            db.collection(LISTS_COLLECTION).find({ _id: { $in: listIds } })
+              .toArray((err, lists) => {
+                const teamIds = lists.map(list => ObjectID(list.teamID)).filter(val => val);
+                db.collection(TEAMS_COLLECTION).find({ _id: { $in: teamIds } })
+                  .toArray((err, teams) => {                        
+                    finalLists = lists.map(list => {
+                      if (list.teamID) {
+                        list.team = teams.find(team => ObjectID(list.teamID).equals(team._id));
+                      }
+                      return list;
+                    });
+
+                    finalTasks = tasks.map(task => {
+                      task.list = finalLists.find(list => ObjectID(task.listId).equals(list._id));
+                      return task;
+                    });         
+
+                    res.status(200).json(finalTasks);
+                  });
+              });
+          });
       }
     });
 });

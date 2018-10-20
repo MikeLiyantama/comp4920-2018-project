@@ -35,6 +35,7 @@ const routes: Routes = [
     { path: 'lists/create', component: CreateTaskListComponent },
     { path: 'lists/:listId', component: TaskListComponent },
     { path: 'today', component: TaskListComponent },
+    { path: 'me', component: TaskListComponent },
   ]}
 ];
 

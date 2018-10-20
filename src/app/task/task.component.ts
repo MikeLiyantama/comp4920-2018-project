@@ -16,6 +16,11 @@ export class TaskComponent {
 
     @Input() task: Task;
     @Input() teamId: string;
+    @Input() showAssignee = false;
+    @Input() showTeam = false;
+    @Input() showList = false;
+    @Input() showImportance = true;
+
     @Output() markedAsComplete = new EventEmitter<string>();
     @Output() markedAsIncomplete = new EventEmitter<string>();
     @Output() toggledImportance = new EventEmitter<Task>();

@@ -7,7 +7,6 @@ import { List } from '../list.model';
 import { Task } from '../task.model';
 import { User } from "../user.model";
 
-import { AuthService } from '../auth.service';
 import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
 import { TeamService } from '../teammanage/team.service';
@@ -38,20 +37,18 @@ export class TaskDetailComponent implements OnInit {
   ];
   repeatChoice: string;
   canAssign = false;
-  usersToExcludeFromUserSelector: User[] = [];
 
   constructor(
     public dialog: MatDialog,
-    private authService: AuthService,
     private taskService: TaskService,
     private teamService: TeamService,
     private rightPaneService: RightPaneService,
   ) {
-    this.usersToExcludeFromUserSelector = [ authService.getDecodedToken() ];
     this.subscription = taskService.currentList$.subscribe(
       (currentList) => {
         if (currentList) {
-          this.canAssign = !!currentList.collaborators && currentList.collaborators.length > 1;
+          this.canAssign = (!!currentList.collaborators && currentList.collaborators.length > 1)
+            || (!!currentList.teamID && currentList.teamID !== '');
         }
       }
     );

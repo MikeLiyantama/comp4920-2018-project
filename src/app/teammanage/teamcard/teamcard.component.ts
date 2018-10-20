@@ -12,11 +12,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 
 export class TeamCardComponent implements OnInit {
-    @Input () team: Team;
+
+    @Input() team: Team;
+    @Input() showActions: true;
+
     // Emitter for team deletion
-    @Output () teamEmitter = new EventEmitter <Team> ();
+    @Output() teamEmitter = new EventEmitter <Team> ();
     // Emitter for team details
-    @Output () detailsEmitter = new EventEmitter <Team> ();
+    @Output() detailsEmitter = new EventEmitter <Team> ();
 
     constructor (iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
         iconRegistry.addSvgIcon (

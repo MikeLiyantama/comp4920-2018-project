@@ -28,6 +28,8 @@ export class TaskListComponent {
 
   @Input() listId: string;
   @Input() teamId: string;
+  @Input() isTeam: boolean;
+
   list: List;
   quickAddTask: string;
   loading = true;
@@ -36,7 +38,7 @@ export class TaskListComponent {
   completedTasks: Task[] = [];
   showCollaborationButton = false;
   collaborationPanelTitle = '';
-  @Input() isTeam: boolean;
+  isAssignedToMeList = false;
 
   constructor(
     private authService: AuthService,
@@ -58,17 +60,31 @@ export class TaskListComponent {
   }
 
   ngOnInit() {
-      this.route.paramMap.subscribe((params) => {
-        this.listId = params.get('listId');
-        this.teamId = params.get('teamId');
-        this.loading = true;
+    this.route.url.subscribe((routeParts) => {
+      this.isAssignedToMeList = false;
+      if (routeParts[0].path === 'today') {
+        this.listId = 'today';
+        this.appbarService.setTitle('Today');
+        this.getTasks('today');
+      } else if (routeParts[0].path === 'me') {
+        this.isAssignedToMeList = true;
+        this.listId = 'me';
+        this.appbarService.setTitle('Assigned To Me');
+        this.getTasks('me');
+      }
+    });
 
-        if (!this.listId || this.listId === 'today') {
-          this.appbarService.setTitle('Today');
-          this.getTasks(this.listId, true);
-        } else {
-          this.getTasks(this.listId, false);
-          this.taskService.getList(this.listId).subscribe((list) => {
+    this.route.paramMap.subscribe((params) => {
+      const listId = params.get('listId');
+      this.teamId = params.get('teamId');
+      this.loading = true;
+
+      if (listId) {
+        this.listId = listId;
+        this.taskService.getTasks({ listId }).subscribe((tasks: Task[]) => {
+          this.tasks = tasks || [];
+
+          this.taskService.getList(listId).subscribe((list) => {
             this.taskService.setCurrentList(list);
             this.list = list;
             this.appbarService.setTitle(list.title);
@@ -81,12 +97,13 @@ export class TaskListComponent {
 
             this.loading = false;
           });
-        }
-      });
+        });
+      }
+    });
   }
 
-  getTasks(listId: string, setLoading?: boolean) {
-    const filters = { listId: listId || 'today' };
+  getTasks(listId: string, setLoading: boolean = true) {
+    const filters = { listId };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
       this.tasks = tasks || [];
       if (setLoading) {
@@ -143,25 +160,27 @@ export class TaskListComponent {
   }
 
   taskDrop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
-    const movedTask = this.tasks[event.currentIndex];
+    if (!this.isAssignedToMeList) {
+      moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+      const movedTask = this.tasks[event.currentIndex];
 
-    const taskBefore = this.tasks[event.currentIndex - 1];
-    const taskAfter = this.tasks[event.currentIndex + 1];
-    const taskBeforeDate = taskBefore ? Date.parse(taskBefore.orderDate) : null;
-    const taskAfterDate = taskAfter ? Date.parse(taskAfter.orderDate) : null;
+      const taskBefore = this.tasks[event.currentIndex - 1];
+      const taskAfter = this.tasks[event.currentIndex + 1];
+      const taskBeforeDate = taskBefore ? Date.parse(taskBefore.orderDate) : null;
+      const taskAfterDate = taskAfter ? Date.parse(taskAfter.orderDate) : null;
 
-    let newOrderDate;
-    if (taskBeforeDate && !taskAfterDate) {
-      // bottom of the list
-      newOrderDate = (new Date(taskBeforeDate - 1));
-    } else if (taskAfterDate) {
-      // everywhere else (top of the list, or anywhere in the middle)
-      newOrderDate = (new Date(taskAfterDate + 1));
+      let newOrderDate;
+      if (taskBeforeDate && !taskAfterDate) {
+        // bottom of the list
+        newOrderDate = (new Date(taskBeforeDate - 1));
+      } else if (taskAfterDate) {
+        // everywhere else (top of the list, or anywhere in the middle)
+        newOrderDate = (new Date(taskAfterDate + 1));
+      }
+      this.taskService.updateTaskOrderDate(movedTask._id, newOrderDate).subscribe(() => {
+        this.taskService.invalidateTaskListStatus();
+      });
     }
-    this.taskService.updateTaskOrderDate(movedTask._id, newOrderDate).subscribe(() => {
-      this.taskService.invalidateTaskListStatus();
-    });
   }
 
   ngOnDestroy() {

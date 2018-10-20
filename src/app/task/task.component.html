@@ -5,31 +5,51 @@
     [class.selected]="rightPaneService.opened && rightPaneService.task._id === task._id"    
     (click)="openDetailPane()"    
 >
-    <ng-content select="[drag-handle]"></ng-content>
-    <mat-checkbox
-        class="task-checkbox"
-        (change)="toggleTaskCompleted($event)" 
-        (click)="$event.stopPropagation()"
-    ></mat-checkbox>
-    <div class="task-info">
-        <span matLine class="task-title">{{ task.title }}</span>
-        <span 
-            *ngIf="task.dueDate"
-            matLine 
-            class="task-duedate"
-            [ngClass]="{'task-duedate-close': isNearDueDate, 'task-duedate-past': isPastDueDate }"
-        >
-            {{ formattedDueDate }}
+    <div style="display: flex;order: -1;">
+        <ng-content select="[drag-handle]"></ng-content>
+        <mat-checkbox
+            class="task-checkbox"
+            (change)="toggleTaskCompleted($event)" 
+            (click)="$event.stopPropagation()"
+        ></mat-checkbox>
+    </div>
+    <div style="display:flex" mat-line>
+        <span matLine class="task-title">
+            {{ task.title }} 
         </span>
     </div>
-    <app-avatar class="assignee" *ngIf="task.assignee" [user]="task.assignee"></app-avatar>
-    <mat-icon
-        *ngIf="!task.completed"
-        class="task-important" 
-        (click)="toggleTaskImportance($event)"
-    >
-        {{ important ? 'star' : 'star_outline' }}
-    </mat-icon>
+    <div style="display:flex" mat-line>
+        <span *ngIf="task.list.team && showTeam" class="task-info">
+            <mat-icon inline>group</mat-icon>
+            {{ task.list.team.name }}
+        </span>
+        <span *ngIf="task.list && showList" class="task-info d-sm-none d-md-flex">
+            <mat-icon inline>list</mat-icon>
+            {{ task.list.title }}
+        </span>
+        <span *ngIf="task.assignee && showAssignee" class="task-info">
+            <mat-icon inline>person</mat-icon>
+            {{ task.assignee.username }}
+        </span> 
+        <span 
+            *ngIf="task.dueDate"
+            class="task-info task-duedate"
+            [ngClass]="{'task-duedate-close': isNearDueDate, 'task-duedate-past': isPastDueDate }"
+        >
+            <mat-icon inline>calendar_today</mat-icon>
+            {{ formattedDueDate }}
+        </span>    
+    </div>
+    <div class="task-right">
+        <button
+            *ngIf="!task.completed && showImportance"
+            mat-icon-button
+            class="task-important" 
+            (click)="toggleTaskImportance($event)"
+        >
+            <mat-icon>{{ important ? 'star' : 'star_outline' }}</mat-icon>
+        </button>
+    </div>
 </a>
 
 <mat-list-item *ngIf="completed" class="task">

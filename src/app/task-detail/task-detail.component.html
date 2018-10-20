@@ -43,7 +43,6 @@
     *ngIf="canAssign"
     [label]="'Assignee'"
     [placeholder]="'Search for a user'"
-    [excludedUsers]="usersToExcludeFromUserSelector"
     [noReset]="true"
     [initialValue]="!!rightPaneService.task && !!rightPaneService.task.assignee && rightPaneService.task.assignee.username"
     (userSelected)="onAssigneeSelected($event)"

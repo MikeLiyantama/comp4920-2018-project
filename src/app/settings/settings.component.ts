@@ -34,7 +34,6 @@ export class SettingsComponent implements OnInit {
         .subscribe(function(res) {
           let response;
           response = res;
-          console.log(res);
           if (response.success) {
             thisC.clearForm(true, 'Password Updated!', 'Close', {duration: 2000});
           } else {
@@ -60,7 +59,6 @@ export class SettingsComponent implements OnInit {
         .subscribe(function(res) {
           let response;
           response = res;
-          console.log(res);
           if (response.success) {
             if (response.success) {
               thisC.clearForm(true, 'Email Updated!', 'Close', {duration: 2000});

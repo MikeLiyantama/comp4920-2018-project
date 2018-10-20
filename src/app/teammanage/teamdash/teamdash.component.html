@@ -6,13 +6,13 @@
         diameter="40"
     >
     </mat-spinner>
-    <mat-grid-list *ngIf="gridTiles" cols="{{ gridTiles }}" rowHeight="600px">
-        <mat-grid-tile *ngFor="let team of teams">
-            <app-teamcard 
+    <div class="row">
+        <div *ngFor="let team of teams" class="col-12 col-sm-6 col-md-4 mb-4">
+            <app-teamcard                        
                 [team]="team"
                 (teamEmitter)="deleteTeam($event)"
             >
             </app-teamcard>
-        </mat-grid-tile>
-    </mat-grid-list>
+        </div>
+    </div>
 </main>
