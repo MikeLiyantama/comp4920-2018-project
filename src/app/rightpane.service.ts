@@ -9,6 +9,7 @@ export class RightPaneService {
 
   opened = false;
   task: Task;
+  teamId = '';
   type = '';
 
   constructor() { }
@@ -20,7 +21,7 @@ export class RightPaneService {
 
   close() {
     this.opened = false;
-    this.type = '';
+    this.reset();
   }
 
   toggle(pane: string) {
@@ -28,11 +29,18 @@ export class RightPaneService {
     this.type = this.opened ? pane : '';
   }
 
-  setTask(task: Task) {
+  setTask(task: Task, teamId: string = '') {
     this.task = task;
+    this.teamId = teamId;
   }
 
   clearTask() {
     this.task = null;
+  }
+
+  reset() {
+    this.task = null;
+    this.teamId = '';
+    this.type = '';
   }
 }

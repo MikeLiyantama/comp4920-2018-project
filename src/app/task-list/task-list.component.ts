@@ -14,6 +14,7 @@ import { Task } from '../task.model';
 
 import { AppbarService } from '../appbar.service';
 import { AuthService } from '../auth.service';
+import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
 
 @Component({
@@ -40,6 +41,7 @@ export class TaskListComponent {
   constructor(
     private authService: AuthService,
     private appbarService: AppbarService,
+    private rightPaneService: RightPaneService,
     private taskService: TaskService,
     private bottomSheet: MatBottomSheet,
     private route: ActivatedRoute,
@@ -163,6 +165,7 @@ export class TaskListComponent {
   ngOnDestroy() {
     // prevent memory leak when component destroyed
     this.subscription.unsubscribe();
+    this.rightPaneService.close();
   }
 
 }

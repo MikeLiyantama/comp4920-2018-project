@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { interval } from 'rxjs/internal/observable/interval';
 import { startWith, switchMap } from 'rxjs/operators';
 
@@ -27,6 +27,7 @@ import { TeamService } from '../team.service';
 export class TeamDetailComponent implements OnInit {
 
     subscription: Subscription;
+    messagePoller: Subscription;
 
     team: Team;
     teamId: string;
@@ -113,15 +114,16 @@ export class TeamDetailComponent implements OnInit {
     }
 
     initMessagePolling() {
-        interval(5000)
-            .pipe(
-                startWith(0),
-                switchMap(() => this.messageService.getMessagesForTeam(this.teamId))
-            )
-            .subscribe((messages) => {
-                this.messages = messages;
-                this.loadingMessages = false;
-            });
+        this.messagePoller = 
+            interval(5000)
+                .pipe(
+                    startWith(0),
+                    switchMap(() => this.messageService.getMessagesForTeam(this.teamId))
+                )
+                .subscribe((messages: Message[]) => {
+                    this.messages = messages;
+                    this.loadingMessages = false;
+                });
     }
 
     getMessages() {
@@ -183,5 +185,9 @@ export class TeamDetailComponent implements OnInit {
         }
 
         window.history.replaceState(null, null, `/app/teams/${this.teamId}${tab}`);
+    }
+
+    ngOnDestroy() {
+        this.messagePoller.unsubscribe();
     }
 }

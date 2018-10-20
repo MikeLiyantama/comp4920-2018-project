@@ -15,6 +15,7 @@ import { TaskService } from '../task.service';
 export class TaskComponent {
 
     @Input() task: Task;
+    @Input() teamId: string;
     @Output() markedAsComplete = new EventEmitter<string>();
     @Output() markedAsIncomplete = new EventEmitter<string>();
     @Output() toggledImportance = new EventEmitter<Task>();
@@ -46,7 +47,7 @@ export class TaskComponent {
     }
 
     openDetailPane() {
-        this.rightPaneService.setTask(this.task);
+        this.rightPaneService.setTask(this.task, this.teamId);
         this.rightPaneService.open('detail');
     }
 

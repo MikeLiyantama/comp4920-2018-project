@@ -7,7 +7,9 @@ import { List } from '../list.model';
 import { Team } from './team.model';
 import { User } from '../user.model';
 
-@Injectable ()
+@Injectable ({
+  providedIn: 'root'
+})
 export class TeamService {
 
     private teamsUrl = 'https://comp4920-organiser.herokuapp.com/api/team';

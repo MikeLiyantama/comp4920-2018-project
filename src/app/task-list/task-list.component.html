@@ -30,6 +30,7 @@
         cdkDrag
         class="task"
         [task]="task"
+        [teamId]="teamId"
         (markedAsComplete)="onTaskMarkedAsComplete($event)"
         (toggledImportance)="onTaskImportanceToggled($event)"
       >
@@ -52,7 +53,7 @@
         </mat-icon>
         View Completed Tasks
       </button>
-      <div *ngIf="listId && listId !== 'today'" class="collaboration">
+      <div *ngIf="listId && listId !== 'today' && !isTeam" class="collaboration">
         <button
           mat-stroked-button
           (click)="openCollaborationDialog()"

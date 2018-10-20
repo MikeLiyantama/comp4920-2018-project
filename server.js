@@ -505,9 +505,15 @@ app.get('/api/task/:id', passport.authenticate('jwt', { session: false }), funct
 app.put('/api/task/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
   if (ObjectID.isValid(req.params.id)) {
     const updatedTask = { ...req.body };
+
     if (req.body.orderDate) {
       updatedTask.orderDate = new Date(Date.parse(req.body.orderDate));
     }
+
+    if (req.body.listId) {
+      updatedTask.listId = ObjectID(req.body.listId);
+    }
+
     db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: updatedTask }, function (err, result) {
       if (err) {
         returnError(res, err.message, "Failed to update task");

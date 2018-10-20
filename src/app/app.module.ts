@@ -39,7 +39,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { TaskDetailComponent } from './task-detail/task-detail.component';
+import { TaskDetailComponent, MoveTaskDialogComponent } from './task-detail/task-detail.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskComponent } from './task/task.component';
 import { CompletedTaskListComponent } from './completed-task-list/completed-task-list.component';
@@ -77,6 +77,7 @@ export function tokenGetter() {
     AppLayoutComponent,
     AuthLayoutComponent,
     TaskDetailComponent,
+    MoveTaskDialogComponent,
     TaskListComponent,
     CompletedTaskListComponent,
     SettingsComponent,
@@ -103,7 +104,8 @@ export function tokenGetter() {
   entryComponents: [
     CompletedTaskListComponent,
     ManageCollaboratorsComponent,
-    TeamTasksComponent
+    TeamTasksComponent,
+    MoveTaskDialogComponent,
   ],
   imports: [
     BrowserModule,

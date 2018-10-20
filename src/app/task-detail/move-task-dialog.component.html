@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Move Task</h2>
+<div mat-dialog-content>
+  <mat-spinner
+    *ngIf="loading"
+    style="margin: 0 auto;"
+    color="primary"
+    diameter="40">
+  </mat-spinner>
+  <mat-nav-list *ngIf="!loading">
+    <mat-list-item
+      *ngFor="let list of lists"
+      (click)="onListClick(list._id)"
+    >
+      <h3 matLine>{{list.title}}</h3>
+    </mat-list-item>
+  </mat-nav-list>
+</div>

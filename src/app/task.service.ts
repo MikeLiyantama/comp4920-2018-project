@@ -93,7 +93,6 @@ export class TaskService {
             .pipe(
                 catchError(this.handleError)
             );
-
     }
 
     editTask(editedTask): Observable<Task> {
@@ -103,36 +102,43 @@ export class TaskService {
             );
     }
 
-    updateTaskImportance(taskId: string, important: boolean): Observable<any> {
-        return this.http.put(`${this.tasksUrl}/${taskId}`, { important })
+    updateTaskImportance(taskId: string, important: boolean): Observable<void> {
+        return this.http.put<void>(`${this.tasksUrl}/${taskId}`, { important })
             .pipe(
                 catchError(this.handleError)
             );
     }
 
-    updateTaskOrderDate(taskId: string, orderDate: string): Observable<any> {
-        return this.http.put(`${this.tasksUrl}/${taskId}`, { orderDate })
+    updateTaskOrderDate(taskId: string, orderDate: string): Observable<void> {
+        return this.http.put<void>(`${this.tasksUrl}/${taskId}`, { orderDate })
             .pipe(
                 catchError(this.handleError)
             );
     }
 
-    completeTask(taskId: string): Observable<any> {
-        return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: true })
+    completeTask(taskId: string): Observable<void> {
+        return this.http.put<void>(`${this.tasksUrl}/${taskId}`, { completed: true })
             .pipe(
                 catchError(this.handleError)
             );
     }
 
-    uncompleteTask(taskId: string): Observable<any> {
-        return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: false })
+    uncompleteTask(taskId: string): Observable<void> {
+        return this.http.put<void>(`${this.tasksUrl}/${taskId}`, { completed: false })
             .pipe(
                 catchError(this.handleError)
             );
     }
 
-    deleteTask(taskId: string): Observable<any> {
-        return this.http.put(`${this.tasksUrl}/${taskId}`, { deleted: true })
+    deleteTask(taskId: string): Observable<void> {
+        return this.http.put<void>(`${this.tasksUrl}/${taskId}`, { deleted: true })
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    moveTaskToList(taskId: string, listId: string): Observable<void> {
+        return this.http.put<void>(`${this.tasksUrl}/${taskId}`, { listId })
             .pipe(
                 catchError(this.handleError)
             );
