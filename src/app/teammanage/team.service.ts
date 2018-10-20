@@ -24,34 +24,34 @@ export class TeamService {
         return this.http.get<Team>(`${this.teamsUrl}/${teamId}`)
             .pipe(
                 catchError(this.handleObservableError)
-            )
+            );
     }
-    
+
     getAllTeams(): Observable<Team[]> {
         return this.http.get<Team[]>(this.teamsUrl)
             .pipe(
                 catchError(this.handleObservableError)
-            )
+            );
     }
 
     updateTeam(updatedTeam): Promise <any> {
         const httpOptions = {};
-        return this.http.put (this.teamsUrl + "/" + updatedTeam._id, updatedTeam, httpOptions)
+        return this.http.put (this.teamsUrl + '/' + updatedTeam._id, updatedTeam, httpOptions)
             .toPromise()
             .then()
             .catch(this.handleError);
     }
 
-    deleteTeam(teamToDelete: Team):Observable<void> {
+    deleteTeam(teamToDelete: Team): Observable<void> {
         return this.http.delete<void>(`${this.teamsUrl}/${teamToDelete._id}`)
             .pipe(
                 catchError(this.handleObservableError)
-            )
+            );
     }
 
     addMemberToTeam (userToAdd, team): Promise <any> {
         const httpOptions = {};
-        var url = this.teamsUrl + "/" + team._id + "/member";
+        const url = this.teamsUrl + '/' + team._id + '/member';
         return this.http.put (url, userToAdd, httpOptions)
             .toPromise()
             .then()
@@ -59,9 +59,9 @@ export class TeamService {
     }
 
     removeFromTeam (memberToRemove, team): Promise <any> {
-        var teamID = team._id;
-        var deleteUrl = this.teamsUrl + "/" + teamID + "/member";
-        const httpOptions = {}
+        const teamID = team._id;
+        const deleteUrl = this.teamsUrl + '/' + teamID + '/member';
+        const httpOptions = {};
         return this.http.request ('delete', deleteUrl, {body: memberToRemove.user})
             .toPromise()
             .then()
@@ -74,13 +74,13 @@ export class TeamService {
 
 
     private handleError (error: any) {
-        let errMsg = (error.message) ? error.message:
+        const errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
         console.error(errMsg);
     }
 
     private handleObservableError (error: any) {
-        let errMsg = (error.message) ? error.message:
+        const errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
         console.error(errMsg);
         // return an observable with a user-facing error message

@@ -6,7 +6,7 @@
         diameter="40"
     >
     </mat-spinner>
-    <mat-tab-group *ngIf="team">
+    <mat-tab-group *ngIf="team" mat-align-tabs="center">
         <mat-tab label="Team Details">
             <form class="tabContent" [formGroup]="detailsGroup">
                 <mat-form-field appearance="outline" class="form-field" id="teamName">
@@ -32,12 +32,12 @@
                     </textarea>
                 </mat-form-field>
                 <img class="form-field image" id="banner" [src]="team.banner">
-                <app-imgup 
+                <app-image-upload 
                     class="form-field"
                     [buttonLine]="'Upload a team banner'" 
                     (imgEmitter)="setImage($event)"
                 >
-                </app-imgup>
+                </app-image-upload>
             </form>
         </mat-tab>
         <mat-tab label="Add/Remove Members">

@@ -14,7 +14,7 @@ export class UserService {
 
   constructor (private http: HttpClient) { }
 
-  // Get request for all users  
+  // Get request for all users
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl)
       .pipe(
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   private handleError (error: any) {
-    let errMsg = (error.message) ? error.message:
+    const errMsg = (error.message) ? error.message :
     error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg);
     // return an observable with a user-facing error message

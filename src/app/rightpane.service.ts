@@ -6,10 +6,10 @@ import { Task } from './task.model';
   providedIn: 'root'
 })
 export class RightPaneService {
-  
-  opened: boolean = false;
+
+  opened = false;
   task: Task;
-  type: string = '';
+  type = '';
 
   constructor() { }
 

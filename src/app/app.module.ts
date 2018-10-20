@@ -45,12 +45,11 @@ import { TaskComponent } from './task/task.component';
 import { CompletedTaskListComponent } from './completed-task-list/completed-task-list.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ProfileImageUploadComponent } from './profile-image-upload/profile-image-upload.component';
+import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { RecoverComponent } from './recover/recover.component';
 import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
 import { CreateTeamComponent } from './teammanage/create-team/create-team.component';
 import { MemcardComponent } from './teammanage/memcard/memcard.component';
-import { ImageUploadComponent } from './teammanage/imgup/imgup.component';
 import { TeamCardComponent } from './teammanage/teamcard/teamcard.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
 import { TeamDetailComponent } from './teammanage/teamdetail/teamdetail.component';
@@ -82,7 +81,6 @@ export function tokenGetter() {
     CompletedTaskListComponent,
     SettingsComponent,
     ProfileComponent,
-    ProfileImageUploadComponent,
     RecoverComponent,
     TeamManagementComponent,
     CreateTeamComponent,

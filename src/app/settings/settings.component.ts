@@ -13,10 +13,10 @@ export class SettingsComponent implements OnInit {
 
   emailOpenState = false;
   passOpenState = false;
-  currPass : String;
-  newPass : String;
-  currEmail : String;
-  newEmail : String;
+  currPass: String;
+  newPass: String;
+  currEmail: String;
+  newEmail: String;
 
 
   constructor(
@@ -28,59 +28,59 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
   }
 
-  changePassword(){
-    let thisC = this;
+  changePassword() {
+    const thisC = this;
     this.auth.updatePassword(this.currEmail, this.newPass)
-        .subscribe(function(res){
+        .subscribe(function(res) {
           let response;
           response = res;
           console.log(res);
-          if(response.success){
-            thisC.clearForm(true,"Password Updated!", "Close", {duration: 2000});
+          if (response.success) {
+            thisC.clearForm(true, 'Password Updated!', 'Close', {duration: 2000});
           } else {
-            thisC.clearForm(false,"Error!", "Close", {duration: 2000});
+            thisC.clearForm(false, 'Error!', 'Close', {duration: 2000});
           }
-        })
+        });
   }
 
-  clearForm(closeBar: boolean, snakBarMessage, snakBarAction, duration){
-    if(closeBar){
+  clearForm(closeBar: boolean, snakBarMessage, snakBarAction, duration) {
+    if (closeBar) {
       this.emailOpenState = false;
       this.passOpenState = false;
     }
-    this.currEmail = "";
-    this.newEmail = "";
-    this.newPass = "";
+    this.currEmail = '';
+    this.newEmail = '';
+    this.newPass = '';
     this.snackBar.open(snakBarMessage, snakBarAction, {duration: duration});
   }
 
-  changeEmail(){
-    let thisC = this;
+  changeEmail() {
+    const thisC = this;
     this.auth.updateEmail(this.currEmail, this.newEmail)
-        .subscribe(function(res){
+        .subscribe(function(res) {
           let response;
           response = res;
           console.log(res);
-          if(response.success){
-            if(response.success){
-              thisC.clearForm(true,"Email Updated!", "Close", {duration: 2000});
+          if (response.success) {
+            if (response.success) {
+              thisC.clearForm(true, 'Email Updated!', 'Close', {duration: 2000});
             } else {
-              thisC.clearForm(false,"Error!", "Close", {duration: 2000});
+              thisC.clearForm(false, 'Error!', 'Close', {duration: 2000});
             }
           }
         });
   }
 
-  getNewToken(email, pass){
-    this.auth.authenticate(email,pass)
-        .subscribe(function(res){
+  getNewToken(email, pass) {
+    this.auth.authenticate(email, pass)
+        .subscribe(function(res) {
           let response;
           response = res;
-          if(res.success){
-            let token = res.token
+          if (res.success) {
+            const token = res.token;
             localStorage.removeItem('token');
             localStorage.setItem('token', res.token);
           }
-        })
+        });
   }
 }

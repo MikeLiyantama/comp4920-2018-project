@@ -17,11 +17,11 @@ export class LeftSidebarComponent implements OnInit {
 
   subscription: Subscription;
   taskLists: List[] = [];
-  showAddListInput: boolean = false;
+  showAddListInput = false;
   addListName: string;
-  addListDisabled: boolean = false;
+  addListDisabled = false;
 
-  constructor(private appbarService: AppbarService, private taskService: TaskService) { 
+  constructor(private appbarService: AppbarService, private taskService: TaskService) {
     this.subscription = taskService.taskListsValid$.subscribe(
       taskListValid => {
         if (!taskListValid) {
@@ -38,7 +38,7 @@ export class LeftSidebarComponent implements OnInit {
 
   getLists() {
     this.taskService.getLists().subscribe((lists: List[]) => {
-      this.taskLists = lists; 
+      this.taskLists = lists;
     });
   }
 
@@ -56,7 +56,7 @@ export class LeftSidebarComponent implements OnInit {
       this.taskService.invalidateTaskListsStatus();
       this.addListName = '';
       this.addListDisabled = false;
-    })
+    });
   }
 
   changeAppTitle(event) {

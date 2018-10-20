@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { interval } from "rxjs/internal/observable/interval";
-import { startWith, switchMap } from "rxjs/operators";
+import { interval } from 'rxjs/internal/observable/interval';
+import { startWith, switchMap } from 'rxjs/operators';
 
 import { Message } from '../../discussion/message/message.model';
 import { Team } from '../team.model';
@@ -29,8 +29,8 @@ export class TeamDetailComponent implements OnInit {
 
     team: Team;
     teamId: string;
-    loading: boolean = true;
-    loadingMessages: boolean = true;
+    loading = true;
+    loadingMessages = true;
 
     myControl = new FormControl ();
     allUsers: User[];
@@ -47,7 +47,7 @@ export class TeamDetailComponent implements OnInit {
         private messageService: MessageService,
         private teamService: TeamService,
         private route: ActivatedRoute,
-    ) { 
+    ) {
         this.subscription = messageService.messagesValid$.subscribe(
             messagesValid => {
                 if (messagesValid.teamId === this.teamId && !messagesValid.valid) {
@@ -73,7 +73,7 @@ export class TeamDetailComponent implements OnInit {
                 this.teamService.getTeam(this.teamId).subscribe((team) => {
                     this.team = team;
                     this.appbarService.setTitle(team.name);
-                    this.usersToExcludeFromUserSelector = [ 
+                    this.usersToExcludeFromUserSelector = [
                         this.authService.getDecodedToken(),
                         ...this.team.members.map(member => member.user),
                     ];
@@ -106,14 +106,14 @@ export class TeamDetailComponent implements OnInit {
             this.loadingMessages = false;
         });
     }
-    
+
     setImage (givenFile) {
-        this.team.banner = givenFile; 
+        this.team.banner = givenFile;
     }
 
     saveChanges () {
-        this.team.name = this.detailsGroup.controls["NameCtrl"].value;
-        this.team.description = this.detailsGroup.controls["DescCtrl"].value;
+        this.team.name = this.detailsGroup.controls['NameCtrl'].value;
+        this.team.description = this.detailsGroup.controls['DescCtrl'].value;
         this.teamService.updateTeam(this.team);
     }
 
@@ -127,7 +127,7 @@ export class TeamDetailComponent implements OnInit {
 
     removeFromTeam(event) {
         // event should be emitted member from memcard component
-        var n = this.team.members.indexOf(event);
+        const n = this.team.members.indexOf(event);
         this.team.members.splice (n, 1);
         this.teamService.removeFromTeam(event, this.team);
     }

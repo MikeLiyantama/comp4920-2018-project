@@ -35,35 +35,35 @@ export class TaskService {
         return this.http.post<List>(this.listsUrl, newList)
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     getList(listId: string): Observable<List> {
         return this.http.get<List>(`${this.listsUrl}/${listId}`)
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     getLists(): Observable<List[]> {
         return this.http.get<List[]>(this.listsUrl)
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     addUserToList(listId: string, userId: string): Observable<void> {
         return this.http.post<void>(`${this.listsUrl}/${listId}/collaborators/${userId}`, {})
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     removeUserFromList(listId: string, userId: string): Observable<void> {
         return this.http.delete<void>(`${this.listsUrl}/${listId}/collaborators/${userId}`)
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     // Post request for tasks
@@ -71,7 +71,7 @@ export class TaskService {
         return this.http.post<Task>(this.tasksUrl, newTask)
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     // Get request for tasks
@@ -84,11 +84,11 @@ export class TaskService {
         return this.http.get<Task []>(this.tasksUrl, options)
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     // Get a specific task
-    getTask(id){
+    getTask(id) {
         return this.http.get(this.tasksUrl + '/' + id)
             .pipe(
                 catchError(this.handleError)
@@ -100,42 +100,42 @@ export class TaskService {
         return this.http.put<Task>(`${this.tasksUrl}/${editedTask._id}`, omit(editedTask, '_id'))
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     updateTaskImportance(taskId: string, important: boolean): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { important })
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     updateTaskOrderDate(taskId: string, orderDate: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { orderDate })
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     completeTask(taskId: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: true })
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     uncompleteTask(taskId: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { completed: false })
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     deleteTask(taskId: string): Observable<any> {
         return this.http.put(`${this.tasksUrl}/${taskId}`, { deleted: true })
             .pipe(
                 catchError(this.handleError)
-            )
+            );
     }
 
     invalidateTaskListStatus() {
@@ -155,7 +155,7 @@ export class TaskService {
     }
 
     private handleError (error: any) {
-        let errMsg = (error.message) ? error.message:
+        const errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
         console.error(errMsg);
         // return an observable with a user-facing error message

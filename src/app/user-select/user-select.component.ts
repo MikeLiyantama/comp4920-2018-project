@@ -17,10 +17,10 @@ import { User } from '../user.model';
   styleUrls: ['./user-select.component.css']
 })
 export class UserSelectComponent implements OnInit {
-  
-  @Input() chips: boolean = false;
-  @Input() label: string = 'User Search';
-  @Input() placeholder: string = 'Search for a user';
+
+  @Input() chips = false;
+  @Input() label = 'User Search';
+  @Input() placeholder = 'Search for a user';
   @Output() userSelected = new EventEmitter<User>();
 
   private _excludedUsers: User[] = [];
@@ -48,7 +48,7 @@ export class UserSelectComponent implements OnInit {
         map((user: string | null) => user ? this._filterUsers(user) : this.users.slice())
       );
   }
-  
+
   ngOnInit() {
     this._getAllUsers();
   }
@@ -77,7 +77,7 @@ export class UserSelectComponent implements OnInit {
 
     const trimmedValue = (value || '').trim();
     if (trimmedValue) {
-      const user = this.users.find((user => user.username === trimmedValue));    
+      const user = this.users.find((user => user.username === trimmedValue));
       if (user) {
         this.selectedUsers = [ ...this.selectedUsers, user ];
         this.userSelected.emit(user);
@@ -98,7 +98,7 @@ export class UserSelectComponent implements OnInit {
 
   selectUser(event: MatAutocompleteSelectedEvent): void {
     const user = this.users.find(user => user.username === event.option.value);
-    this.selectedUsers = [ 
+    this.selectedUsers = [
       ...this.selectedUsers,
       user,
     ];

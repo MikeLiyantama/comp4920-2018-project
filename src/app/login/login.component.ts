@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   password: string;
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -21,12 +21,12 @@ export class LoginComponent implements OnInit {
   }
 
   checkAuth() {
-    var info = this.getInfo();
-    var user = info[0];
-    var pass = info[1];
+    const info = this.getInfo();
+    const user = info[0];
+    const pass = info[1];
 
-    var loginSuccess: number = 0;
-    var response;
+    const loginSuccess = 0;
+    let response;
 
     this.authService.authenticate(user, pass)
       .subscribe(res => {
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/app']);
           this.wrongpass = undefined;
         } else {
-          this.wrongpass = "not valid";
+          this.wrongpass = 'not valid';
         }
       });
 
@@ -43,11 +43,11 @@ export class LoginComponent implements OnInit {
   }
 
   getInfo() {
-    var user = this.username;
-    var pass = this.password;
+    const user = this.username;
+    const pass = this.password;
 
-    var info = [user, pass];
-    
+    const info = [user, pass];
+
     return info;
   }
 }

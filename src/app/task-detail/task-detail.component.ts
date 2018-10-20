@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs'
+import { forkJoin } from 'rxjs';
 import * as moment from 'moment';
 
 import { Task } from '../task.model';
@@ -18,18 +18,18 @@ export interface Option {
   styleUrls: ['./task-detail.component.css']
 })
 export class TaskDetailComponent implements OnInit {
-  
+
   title: string;
   description: string;
   dueDate: string;
   isChecked: boolean;
   options: Option[] = [
-    { value: "daily", viewValue: "Daily for a week" },
-    { value: "weekly", viewValue: "Weekly for a month" },
-    { value: "monthly", viewValue: "Monthly for a year" }
-  ]
+    { value: 'daily', viewValue: 'Daily for a week' },
+    { value: 'weekly', viewValue: 'Weekly for a month' },
+    { value: 'monthly', viewValue: 'Monthly for a year' }
+  ];
   repeatChoice: string;
-  
+
   constructor(
     private taskService: TaskService,
     private rightPaneService: RightPaneService,
@@ -67,7 +67,7 @@ export class TaskDetailComponent implements OnInit {
       ...this.rightPaneService.task,
       _id: undefined,
     };
-    this.taskService.addTask(newTask).subscribe(() => {      
+    this.taskService.addTask(newTask).subscribe(() => {
       this.taskService.invalidateTaskListStatus();
     });
   }
@@ -76,38 +76,38 @@ export class TaskDetailComponent implements OnInit {
     const dueDate = moment(this.rightPaneService.task.dueDate);
     if (dueDate) {
       let observables = [];
-      if (this.repeatChoice === "daily") {
+      if (this.repeatChoice === 'daily') {
         let i = 0;
         while (i < 7) {
-          const newTask = { 
+          const newTask = {
             ...this.rightPaneService.task,
             _id: undefined,
             dueDate: moment.utc(dueDate.add(1, 'day')).format(),
-          }
-          observables = [ ...observables, this.taskService.addTask(newTask) ];  
+          };
+          observables = [ ...observables, this.taskService.addTask(newTask) ];
           i += 1;
         }
-      } else if (this.repeatChoice === "weekly") {
+      } else if (this.repeatChoice === 'weekly') {
         let i = 0;
         while (i < 4) {
-          const newTask = { 
+          const newTask = {
             ...this.rightPaneService.task,
             _id: undefined,
             dueDate: moment.utc(dueDate.add(1, 'week')).format(),
-          }
-          observables = [ ...observables, this.taskService.addTask(newTask) ];   
+          };
+          observables = [ ...observables, this.taskService.addTask(newTask) ];
           i += 1;
         }
-      } else if (this.repeatChoice === "monthly") {
+      } else if (this.repeatChoice === 'monthly') {
         let i = 0;
         while (i < 12) {
-          const newTask = { 
+          const newTask = {
             ...this.rightPaneService.task,
             _id: undefined,
             dueDate: moment.utc(dueDate.add(1, 'month')).format(),
-          }
-          observables = [ ...observables, this.taskService.addTask(newTask) ];   
-          i += 1;  
+          };
+          observables = [ ...observables, this.taskService.addTask(newTask) ];
+          i += 1;
         }
       }
 

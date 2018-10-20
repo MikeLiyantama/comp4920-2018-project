@@ -5,7 +5,7 @@ export class Team {
     public members; // Leaders are listed amongst members
     public creator; // Always has full set of privileges
     public banner;
-    
+
     constructor (name, description, creator, members, banner) {
         this.name = name;
         this.description = description;

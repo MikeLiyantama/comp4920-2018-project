@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service'
+import { AuthService } from '../auth.service';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class RecoverComponent implements OnInit {
   codeCorrect: boolean; // set to true if serverCode and userCode are the same
   newPassword: string; // new password input by the user
   errorMessage: string;
-  success: boolean = false;
+  success = false;
 
   constructor(
     private router: Router,
@@ -30,10 +30,10 @@ export class RecoverComponent implements OnInit {
 
   sendEmail() { ///api/account/email_verification
     console.log(this.username);
-    // send username to backend to check if user exists 
+    // send username to backend to check if user exists
     // if the user exists, send an email to the user with a code
 
-    var response;
+    let response;
 
     this.authService.checkEmail(this.username).subscribe(res => {
       response = res;
@@ -47,7 +47,7 @@ export class RecoverComponent implements OnInit {
         this.error = true;
       }
 
-    })
+    });
   }
 
   checkCode() {
@@ -62,7 +62,7 @@ export class RecoverComponent implements OnInit {
   }
 
   verifyEmail() {
-    var response;
+    let response;
 
     this.authService.validate(this.username).subscribe(res => {
       response = res;
@@ -80,7 +80,7 @@ export class RecoverComponent implements OnInit {
         this.errorMessage = undefined;
       }
 
-    })
+    });
 
   }
 
@@ -88,23 +88,23 @@ export class RecoverComponent implements OnInit {
   newPass(event) {
     // this.error = true;
     event.preventDefault();
-    var response;
+    let response;
 
     this.authService.changeEmail(this.username, this.newPassword).subscribe(res => {
       response = res;
 
-      
-      if (response.success) { // if successful 
+
+      if (response.success) { // if successful
         this.error = false;
         this.success = true;
         // this.router.navigate(['/login']);
       } else {
         this.error = true;
         this.errorMessage = response.error;
-      
+
       }
-    })
-    
+    });
+
   }
 
 }

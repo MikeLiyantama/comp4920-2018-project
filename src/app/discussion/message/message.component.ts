@@ -15,7 +15,7 @@ import { AuthService } from '../../auth.service';
 export class MessageComponent {
 
     @Input() message: Message;
-    mine: boolean = false;
+    mine = false;
     currentUser: User;
     formattedDate: string;
 

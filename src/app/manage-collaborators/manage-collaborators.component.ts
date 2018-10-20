@@ -36,9 +36,9 @@ export class ManageCollaboratorsComponent implements OnInit {
     });
   }
 
-  removeCollaborator(collaboratorIdToRemove) {    
+  removeCollaborator(collaboratorIdToRemove) {
     this.taskService.removeUserFromList(this.data.listId, collaboratorIdToRemove).subscribe(() => {
-      this.data.collaborators = this.data.collaborators.filter(collaborator => 
+      this.data.collaborators = this.data.collaborators.filter(collaborator =>
         collaborator._id !== collaboratorIdToRemove
       );
       this.changeDetectorRef.markForCheck();

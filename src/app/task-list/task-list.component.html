@@ -1,4 +1,4 @@
-<mat-nav-list class="container">
+<main class="container">
   <mat-spinner
     *ngIf="loading"
     class="loading"
@@ -21,7 +21,7 @@
         <mat-icon matSuffix>add</mat-icon>
       </mat-form-field>  
     </form>
-    <cdk-drop lockAxis="y" (dropped)="taskDrop($event)">
+    <mat-nav-list cdkDropList lockAxis="y" (cdkDropListDropped)="taskDrop($event)">
       <app-task
         *ngFor="let task of tasks"
         cdkDrag
@@ -36,10 +36,11 @@
           {{ task.title }}
         </span>
       </app-task>
-    </cdk-drop>
+    </mat-nav-list>
     <div class="bottompanel"> 
       <button
         mat-flat-button
+        color="primary"
         [disabled]="loadingCompletedTasks"
         (click)="openCompletedTasks()"
       >
@@ -68,4 +69,4 @@
       </div>
     </div>
   </div>
-</mat-nav-list>
+</main>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MatSnackBar } from '@angular/material'
+import { MatSnackBar } from '@angular/material';
 import { ProfileService } from '../profile.service';
 
 @Component({
@@ -9,44 +9,44 @@ import { ProfileService } from '../profile.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  loading: boolean = true;
-  isUser : boolean;
-  editMode : boolean = false;
-  id : String;
-  name : String;
-  bio : String;
-  profile : String;
-  username : String;
-  profilePic : any;
-  email : String;
+  loading = true;
+  isUser: boolean;
+  editMode = false;
+  id: String;
+  name: String;
+  bio: String;
+  profile: String;
+  username: String;
+  profilePic: any;
+  email: String;
 
   //For edit profile purpose
-  editName : String;
-  editBio : String;
-  editProfile : String;
-  editUsername : String;
+  editName: String;
+  editBio: String;
+  editProfile: String;
+  editUsername: String;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private profileService: ProfileService,
     private snackBar: MatSnackBar
-  ) { 
-    
+  ) {
+
   }
 
   ngOnInit() {
-    let thisC = this;
+    const thisC = this;
 
     //Get ID from URL
-    this.id = thisC.activatedRoute.snapshot.paramMap.get('profileID')
+    this.id = thisC.activatedRoute.snapshot.paramMap.get('profileID');
 
     //Get Data for id
     thisC.profileService.getUserData(this.id)
-    .subscribe(function(res){
+    .subscribe(function(res) {
       let response;
       response = res;
       console.log(res);
-      if(response._id){
+      if (response._id) {
         thisC.name = response.name;
         thisC.username = response.username;
         thisC.bio = response.bio;
@@ -60,11 +60,11 @@ export class ProfileComponent implements OnInit {
         thisC.editUsername = response.username;
 
         thisC.profileService.getCurrentId()
-        .subscribe(function(res){
+        .subscribe(function(res) {
             let response;
             response = res;
-            let currentUserId = response.currUser;
-            if(currentUserId == thisC.id){
+            const currentUserId = response.currUser;
+            if (currentUserId == thisC.id) {
               thisC.isUser = true;
             } else {
               thisC.isUser = false;
@@ -75,43 +75,43 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  updateData(){
-    let thisC = this;
+  updateData() {
+    const thisC = this;
 
     this.profileService.updateUserData(this.name, this.username, this.bio, this.profile, this.profilePic)
-        .subscribe(function(res){
+        .subscribe(function(res) {
           let response;
           response = res;
-          if(response.success){
+          if (response.success) {
             thisC.name = thisC.editName;
             thisC.bio = thisC.editBio;
             thisC.username = thisC.editUsername;
             thisC.profile = thisC.editProfile;
             thisC.leaveEditMode();
-            thisC.snackBar.open("Profile Updated!", "Close", {duration:3000});
-          }else{
+            thisC.snackBar.open('Profile Updated!', 'Close', {duration: 3000});
+          } else {
             this.editBio = this.bio;
             this.editName = this.name;
             this.editProfile = this.profile;
             this.editUsername = this.username;
-            thisC.snackBar.open("Error, Please Try again", "Close", {duration:3000});
+            thisC.snackBar.open('Error, Please Try again', 'Close', {duration: 3000});
           }
-        })
+        });
   }
 
   setImage (givenFile) {
-    console.log ("Setting image");
-    this.profilePic = givenFile; 
+    console.log ('Setting image');
+    this.profilePic = givenFile;
     if (this.profilePic) {
-        console.log ("image set");
+        console.log ('image set');
     }
 }
 
-  enterEditMode(){
+  enterEditMode() {
     this.editMode = true;
   }
 
-  leaveEditMode(){
+  leaveEditMode() {
     this.editBio = this.bio;
     this.editName = this.name;
     this.editProfile = this.profile;

@@ -6,28 +6,28 @@ import {Observable, of} from 'rxjs';
   providedIn: 'root'
 })
 export class ProfileService {
-  private userDataUrl = "https://comp4920-organiser.herokuapp.com/api/account/data";
+  private userDataUrl = 'https://comp4920-organiser.herokuapp.com/api/account/data';
   constructor(
     private http: HttpClient
   ) { }
 
   getUserData(id) {
-    return this.http.get(this.userDataUrl + "/" + id);
+    return this.http.get(this.userDataUrl + '/' + id);
   }
 
 
-  updateUserData(name, username, bio, profile, profilePic){
-    let obj = {
+  updateUserData(name, username, bio, profile, profilePic) {
+    const obj = {
       name: name,
       username: username,
       bio: bio,
       profile: profile,
       profile_picture : profilePic
-    }
+    };
     return this.http.put(this.userDataUrl, obj);
   }
 
-  getCurrentId(){
-    return this.http.get("https://comp4920-organiser.herokuapp.com/api/me")
+  getCurrentId() {
+    return this.http.get('https://comp4920-organiser.herokuapp.com/api/me');
   }
 }

@@ -22,7 +22,7 @@ import { UserService } from '../../user.service';
 
 export class CreateTeamComponent implements OnInit {
 
-    myControl = new FormControl (); 
+    myControl = new FormControl ();
     firstFormGroup: FormGroup;
     secondFormGroup: FormGroup;
     filteredUsers: Observable <User[]>;
@@ -33,7 +33,7 @@ export class CreateTeamComponent implements OnInit {
     currentCreator: TeamMember;
     summaryTeam: Team;
     usersToExcludeFromUserSelector: User[] = [];
-    creating: boolean = false;
+    creating = false;
 
     constructor (
         private _formBuilder: FormBuilder,
@@ -61,7 +61,7 @@ export class CreateTeamComponent implements OnInit {
         this.creating = true;
         this.teamService.writeTeam(this.summaryTeam).then((resp) => {
             this.creating = false;
-            this.router.navigate(['app/teams']); 
+            this.router.navigate(['app/teams']);
         });
     }
 
@@ -70,7 +70,7 @@ export class CreateTeamComponent implements OnInit {
             ...this.selectedTeamMembers,
             new TeamMember(user, false, false),
         ];
-        this.usersToExcludeFromUserSelector = [ 
+        this.usersToExcludeFromUserSelector = [
             ...this.usersToExcludeFromUserSelector,
             user,
         ];
@@ -85,7 +85,7 @@ export class CreateTeamComponent implements OnInit {
     setSummaryTeam() {
         this.summaryTeam = new Team (
             this.firstFormGroup.value.NameCtrl,
-            this.firstFormGroup.value.DescCtrl, 
+            this.firstFormGroup.value.DescCtrl,
             this.currentCreator,
             this.selectedTeamMembers,
             this.givenTeamBanner,

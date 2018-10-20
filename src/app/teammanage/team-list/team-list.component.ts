@@ -1,8 +1,8 @@
 import { Component, OnInit , Input, Inject, Injectable, InjectableProvider} from '@angular/core';
-import { TeamTasksService } from '../../team-tasks.service'
-import { MatDialog, MatDialogRef, MatDialogModule, MatDialogConfig} from '@angular/material'
-import { List } from '../../list.model'
-import {TeamTasksComponent} from '../team-tasks/team-tasks.component'
+import { TeamTasksService } from '../../team-tasks.service';
+import { MatDialog, MatDialogRef, MatDialogModule, MatDialogConfig} from '@angular/material';
+import { List } from '../../list.model';
+import {TeamTasksComponent} from '../team-tasks/team-tasks.component';
 
 @Component({
   selector: 'app-team-list',
@@ -10,40 +10,40 @@ import {TeamTasksComponent} from '../team-tasks/team-tasks.component'
   styleUrls: ['./team-list.component.css']
 })
 export class TeamListComponent implements OnInit {
-  @Input() teamId : String;
-  private lists : List[] = [];
-  private loading : boolean = false;
-  private inputListField : string;
+  @Input() teamId: String;
+  private lists: List[] = [];
+  private loading = false;
+  private inputListField: string;
 
   constructor(
-    private teamTaskService : TeamTasksService,
-    private teamTask : TeamTasksComponent,
+    private teamTaskService: TeamTasksService,
+    private teamTask: TeamTasksComponent,
     private dialog: MatDialog
   ) { }
 
   ngOnInit(
-    
+
   ) {
     this.getList();
   }
 
-  getList(){
-    let thisC = this;
+  getList() {
+    const thisC = this;
     this.teamTaskService.getList(this.teamId)
-        .subscribe(function(res){
+        .subscribe(function(res) {
             thisC.lists = res;
             //console.log("GET LIST SUCCESSFUL") //DEBUG
-        })
+        });
   }
 
-  createList(){
-    let thisC = this;
-    const newList = <List>{teamID : this.teamId, title: this.inputListField}
+  createList() {
+    const thisC = this;
+    const newList = <List>{teamID : this.teamId, title: this.inputListField};
     this.teamTaskService.createList(newList)
-        .subscribe(function(res){
+        .subscribe(function(res) {
           thisC.getList();
           thisC.inputListField = '';
-        })
+        });
   }
   /*
   expandList(listId){

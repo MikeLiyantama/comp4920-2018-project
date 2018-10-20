@@ -16,7 +16,7 @@ export class SignupComponent implements OnInit {
   password: string;
   confirmPassword: string;
   invalid: string;
-  exists: boolean = false;
+  exists = false;
 
   constructor(
     private router: Router,
@@ -24,18 +24,18 @@ export class SignupComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  } 
+  }
 
   signup() {
-    var info = this.getInfo();
-    var user = info[0];
-    var pass = info[1];
-    var cpass = info[2];
-    var name = info[3];
-    var email = info[4];
+    const info = this.getInfo();
+    const user = info[0];
+    const pass = info[1];
+    const cpass = info[2];
+    const name = info[3];
+    const email = info[4];
     // name, username, email, pw, bio, profile
-    var newUser = new User (name, user, email, pass, '', ''); 
-    var response;
+    const newUser = new User (name, user, email, pass, '', '');
+    let response;
 
     if (this.checkValid(user, pass, cpass)) {
       this.invalid = undefined;
@@ -45,23 +45,23 @@ export class SignupComponent implements OnInit {
           if (response.success) {
             localStorage.setItem('token', res.token);
             this.router.navigate(['/app']);
-            this.exists = false;            
+            this.exists = false;
           } else {
             this.exists = true;
           }
-        
-        })
+
+        });
 
     } else {
-      this.invalid = "invalid inputs";
+      this.invalid = 'invalid inputs';
     }
 
-    
+
   }
 
-  checkValid(user, pass, cpass) { 
-    var valid: boolean = true;
-    if (user === "" || pass === "" || cpass === "") {
+  checkValid(user, pass, cpass) {
+    let valid = true;
+    if (user === '' || pass === '' || cpass === '') {
       valid = false;
     }
     if (pass != cpass) {
@@ -71,14 +71,14 @@ export class SignupComponent implements OnInit {
   }
 
   getInfo() {
-    var name = this.name;
-    var email = this.email;
-    var user = this.username;
-    var pass = this.password;
-    var cpass = this.confirmPassword;
-    
-    var info = [user, pass, cpass, name, email];
-    
+    const name = this.name;
+    const email = this.email;
+    const user = this.username;
+    const pass = this.password;
+    const cpass = this.confirmPassword;
+
+    const info = [user, pass, cpass, name, email];
+
     return info;
   }
 }

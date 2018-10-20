@@ -22,18 +22,18 @@ export class MessageService {
     return this.http.get<Message[]>(`${this.messagesUrl}/team/${teamId}`)
       .pipe(
         catchError(this.handleError),
-      )
+      );
   }
 
   sendMessageToTeam(message: string, teamId: string): Observable<void> {
     return this.http.post<void>(`${this.messagesUrl}/team/${teamId}`, new Message(message))
       .pipe(
         catchError(this.handleError),
-      )
+      );
   }
 
   private handleError (error: any) {
-    let errMsg = (error.message) ? error.message:
+    const errMsg = (error.message) ? error.message :
     error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg);
     // return an observable with a user-facing error message

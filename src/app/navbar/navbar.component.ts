@@ -19,14 +19,14 @@ import { User } from '../user.model';
 export class NavbarComponent {
 
   currentUser: User;
-  drawerOpened: boolean = false;
-  title: string = '';
+  drawerOpened = false;
+  title = '';
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
     );
-    
+
   constructor(
     private appbarService: AppbarService,
     private breakpointObserver: BreakpointObserver,

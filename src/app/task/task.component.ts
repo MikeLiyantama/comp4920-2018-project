@@ -19,14 +19,14 @@ export class TaskComponent {
     @Output() markedAsIncomplete = new EventEmitter<string>();
     @Output() toggledImportance = new EventEmitter<Task>();
 
-    completed: boolean = false;
-    formattedDueDate: string = '';
-    isNearDueDate: boolean = false;
-    isPastDueDate: boolean = false;
-    important: boolean = false;
-    importantIcon: string = 'star_outline';
+    completed = false;
+    formattedDueDate = '';
+    isNearDueDate = false;
+    isPastDueDate = false;
+    important = false;
+    importantIcon = 'star_outline';
 
-    constructor (    
+    constructor (
         private rightPaneService: RightPaneService,
         private taskService: TaskService,
     ) {
@@ -37,9 +37,9 @@ export class TaskComponent {
         this.important = !!this.task.important;
 
         if (this.task.dueDate) {
-            this.formattedDueDate = moment(this.task.dueDate).format("DD-MM-YYYY");
+            this.formattedDueDate = moment(this.task.dueDate).format('DD-MM-YYYY');
             this.isPastDueDate = moment(this.task.dueDate).isSameOrBefore(moment());
-            if (!this.isPastDueDate) {                
+            if (!this.isPastDueDate) {
                 this.isNearDueDate = moment(this.task.dueDate).diff(moment(), 'days') <= 7;
             }
         }

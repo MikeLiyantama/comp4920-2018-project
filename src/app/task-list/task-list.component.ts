@@ -29,13 +29,13 @@ export class TaskListComponent {
   @Input() teamId: string;
   list: List;
   quickAddTask: string;
-  loading: boolean = true;
+  loading = true;
   tasks: Task[] = [];
-  loadingCompletedTasks: boolean = false;
+  loadingCompletedTasks = false;
   completedTasks: Task[] = [];
-  showCollaborationButton: boolean = false;
-  collaborationPanelTitle: string = '';
-  @Input() isTeam : boolean;
+  showCollaborationButton = false;
+  collaborationPanelTitle = '';
+  @Input() isTeam: boolean;
 
   constructor(
     private authService: AuthService,
@@ -44,7 +44,7 @@ export class TaskListComponent {
     private bottomSheet: MatBottomSheet,
     private route: ActivatedRoute,
     private router: Router,
-    ) { 
+    ) {
     this.subscription = taskService.taskListValid$.subscribe(
       taskListValid => {
         if (!taskListValid) {
@@ -52,7 +52,7 @@ export class TaskListComponent {
           this.getTasks(this.listId);
         }
       }
-    )
+    );
   }
 
   ngOnInit() {
@@ -79,7 +79,7 @@ export class TaskListComponent {
         }
       });
   }
-  
+
   getTasks(listId: string, setLoading?: boolean) {
     const filters = { listId: listId || 'today' };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
@@ -91,14 +91,14 @@ export class TaskListComponent {
   }
 
   addTask() {
-    const newTask = <Task>{ title: this.quickAddTask };    
+    const newTask = <Task>{ title: this.quickAddTask };
     if (this.listId && this.listId !== 'today') {
       newTask.listId = this.listId;
     }
     this.taskService.addTask(newTask).subscribe(() => {
       this.taskService.invalidateTaskListStatus();
       this.quickAddTask = '';
-    }) 
+    });
   }
 
   onTaskMarkedAsComplete(taskId: string) {
@@ -117,10 +117,7 @@ export class TaskListComponent {
   openCompletedTasks() {
     this.loadingCompletedTasks = true;
 
-    const filters = <any>{ completed: true };
-    if (this.listId !== 'today') {
-      filters.listId = this.listId;
-    }
+    const filters = { completed: true, listId: this.listId || 'today' };
     this.taskService.getTasks(filters).subscribe((tasks: Task[]) => {
       this.loadingCompletedTasks = false;
       this.bottomSheet.open(CompletedTaskListComponent, {
@@ -131,19 +128,19 @@ export class TaskListComponent {
 
   openCollaborationDialog() {
     this.bottomSheet.open(ManageCollaboratorsComponent, {
-      data: { 
-        collaborators: this.list.collaborators || [], 
-        createdBy: this.list.createdBy, 
+      data: {
+        collaborators: this.list.collaborators || [],
+        createdBy: this.list.createdBy,
         listId: this.listId,
         title: this.collaborationPanelTitle,
       },
-    })
+    });
   }
 
   taskDrop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
     const movedTask = this.tasks[event.currentIndex];
-    
+
     const taskBefore = this.tasks[event.currentIndex - 1];
     const taskAfter = this.tasks[event.currentIndex + 1];
     const taskBeforeDate = taskBefore ? Date.parse(taskBefore.orderDate) : null;
@@ -161,7 +158,7 @@ export class TaskListComponent {
       this.taskService.invalidateTaskListStatus();
     });
   }
-  
+
   ngOnDestroy() {
     // prevent memory leak when component destroyed
     this.subscription.unsubscribe();

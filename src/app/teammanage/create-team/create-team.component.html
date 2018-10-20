@@ -25,12 +25,12 @@
                 </textarea>
             </mat-form-field>
             <img *ngIf="givenTeamBanner" class="form-field image" id="banner" [src]="givenTeamBanner">
-            <app-imgup 
+            <app-image-upload
                 class="form-field"
                 [buttonLine]="'Upload a team banner'" 
                 (imgEmitter)="setImage($event)"
             >
-            </app-imgup>
+            </app-image-upload>
         </form>
         <div class="stepbuttons">
             <button mat-flat-button matStepperNext class="nextbutton">Next</button>

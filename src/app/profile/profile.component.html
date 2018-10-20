@@ -52,10 +52,10 @@
                                 <img id="profilePic" [src]="profilePic">
                         </div>
                     
-                        <app-profile-image-upload
+                        <app-image-upload
                             [buttonLine]="'Upload a profile picture'" 
                             (imgEmitter)="setImage($event)">
-                        </app-profile-image-upload>
+                        </app-image-upload>
                     </div>
                     <div class="form-group">
                         <button type="button" (click)="leaveEditMode()" mat-raised-button class="form-button">Cancel</button>

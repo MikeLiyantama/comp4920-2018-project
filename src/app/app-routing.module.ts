@@ -14,7 +14,7 @@ import { CreateTaskListComponent } from './create-task-list/create-task-list.com
 import { CreateTeamComponent } from './teammanage/create-team/create-team.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
 import { TeamDetailComponent } from './teammanage/teamdetail/teamdetail.component';
-import { TeamTasksComponent }from './teammanage/team-tasks/team-tasks.component'
+import { TeamTasksComponent }from './teammanage/team-tasks/team-tasks.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },

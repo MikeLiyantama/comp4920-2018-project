@@ -12,21 +12,21 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 )
 
 export class TeamTasksComponent implements OnInit {
-  private teamId : string;
-  private listId : string;
+  private teamId: string;
+  private listId: string;
   constructor(
     private route: ActivatedRoute
-    
-  ) { 
-    
+
+  ) {
+
   }
 
   ngOnInit() {
-    let thisC = this;
-    this.route.paramMap.subscribe(function(params){
+    const thisC = this;
+    this.route.paramMap.subscribe(function(params) {
       this.listId = params.get('listId');
       this.teamId = params.get('teamId');
-    })
+    });
   }
 
 }

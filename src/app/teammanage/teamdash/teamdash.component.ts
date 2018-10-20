@@ -16,7 +16,7 @@ import { TeamService } from '../team.service';
 
 export class TeamDashComponent implements OnInit {
 
-    loading: boolean = true;
+    loading = true;
     teams: Team[];
     numTeams = 0;
     gridTiles = 0;
@@ -24,8 +24,8 @@ export class TeamDashComponent implements OnInit {
     constructor (private appbarService: AppbarService, private teamService: TeamService) {}
 
     ngOnInit () {
-        this.teamService.getAllTeams().subscribe((teams) => { 
-            this.teams = teams; 
+        this.teamService.getAllTeams().subscribe((teams) => {
+            this.teams = teams;
             this.gridTiles = this.getNumGridTiles();
             this.loading = false;
         });

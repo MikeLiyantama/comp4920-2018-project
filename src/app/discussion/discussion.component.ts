@@ -17,13 +17,13 @@ export class DiscussionComponent implements OnInit {
     @Input() messages: Message[];
     @Input() loading: boolean;
     @Output() messageInputted = new EventEmitter<string>();
-    sendHighlight="primary"
+    sendHighlight = 'primary';
     message: string;
 
     constructor (
         private _formBuilder: FormBuilder,
         private authService: AuthService,
-    ) {    
+    ) {
     }
 
     ngOnInit () {
@@ -38,7 +38,7 @@ export class DiscussionComponent implements OnInit {
             // Disregard empty comments
             this.messageInputted.emit(this.message);
         }
-        
+
     }
 
 }
