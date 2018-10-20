@@ -860,7 +860,7 @@ app.post('/api/messages/team/:id', passport.authenticate('jwt', {session: false}
 app.get('/api/messages/team/:id', passport.authenticate('jwt', {session: false}), function (req, res) {
   db.collection(MESSAGES_COLLECTION)
     .find({ "teamID" : ObjectID(req.params.id) })
-    .sort({ createdAt: 1 })
+    .sort({ createdAt: -1 })
     .toArray(function (err, messages) {
       if (err) {
         returnError(res, err.message, "Failed to retieve messages");
