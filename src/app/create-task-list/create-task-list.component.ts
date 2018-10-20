@@ -50,7 +50,7 @@ export class CreateTaskListComponent implements OnInit {
       title: this.detailsFormGroup.value.listName,
       collaborators: this.collaborators.map(user => user._id),
     }).subscribe((newList) => {
-      this.router.navigate([`/app/lists/${newList._id}`]);
+      this.router.navigate([`/app//lists/${newList._id}`]);
     });
   }
 }

@@ -1,5 +1,16 @@
-.quickAdd {
-  width: 100%;
+.quickAddForm {
+  display: flex;
+  align-items: center;
+}
+
+.backToTeam {
+  margin-bottom: 19px;
+  margin-right: 16px;
+}
+
+.quickAdd { 
+  margin-left: auto;
+  flex: 1;
 }
 
 .loading {
@@ -72,9 +83,4 @@
 /* Animate an item that has been dropped. */
 .cdk-drag-animating {
   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.team-back-button{
-  float: right;
-  margin: 10px;
 }

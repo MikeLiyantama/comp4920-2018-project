@@ -6,7 +6,17 @@
         diameter="40"
     >
     </mat-spinner>
-    <mat-tab-group *ngIf="team" mat-align-tabs="center">
+    <mat-tab-group 
+        *ngIf="team" 
+        mat-align-tabs="center" 
+        [selectedIndex]="initialTab"
+        (selectedTabChange)="onTabSelected($event)"
+    >
+        <mat-tab label="Task Lists">
+            <div class="tabContent">
+                <app-team-list [teamId]="teamId"></app-team-list>
+            </div>
+        </mat-tab>
         <mat-tab label="Team Details">
             <form class="tabContent" [formGroup]="detailsGroup">
                 <mat-form-field appearance="outline" class="form-field" id="teamName">
@@ -48,27 +58,25 @@
                 >
                 </app-user-select>
                 <mat-divider></mat-divider>
-                <mat-grid-list cols="3" rowHeight="200px">
-                    <mat-grid-tile>
-                        <app-memcard
-                            [teamMember]="team.creator"
-                            [creatorDisabled]="true"
-                            [leaderDisabled]="true"
-                            [removeDisabled]="true"
-                        >
-                        </app-memcard>
-                    </mat-grid-tile>
-                    <mat-grid-tile *ngFor="let member of team.members">
-                        <app-memcard 
-                            [teamMember]="member"
-                            [creatorDisabled]="true"
-                            [leaderDisabled]="false"
-                            [removeDisabled]="false"
-                            (removeEmitter)="removeFromTeam($event)"
-                        >
-                    </app-memcard>
-                    </mat-grid-tile>
-                </mat-grid-list>
+                <mat-list>
+                    <app-team-member-list-item
+                        [teamMember]="team.creator"
+                        [creatorDisabled]="true"
+                        [leaderDisabled]="true"
+                        [removeDisabled]="true"
+                    >
+                    </app-team-member-list-item>
+                    <mat-divider></mat-divider>
+                    <app-team-member-list-item
+                        *ngFor="let member of team.members"
+                        [teamMember]="member"
+                        [creatorDisabled]="true"
+                        [leaderDisabled]="false"
+                        [removeDisabled]="false"
+                        (removeEmitter)="removeFromTeam($event)"
+                    >
+                    </app-team-member-list-item>
+                </mat-list>
             </div>
         </mat-tab>
         <mat-tab label="Discussion Board">
@@ -79,14 +87,6 @@
                     (messageInputted)="sendMessage($event)"
                 >
                 </app-discussion>
-            </div>
-        </mat-tab>
-        <mat-tab label="Task Board">
-            <div class="tabContent">
-                <app-team-list
-                    [teamId]="teamId">
-
-                </app-team-list>
             </div>
         </mat-tab>
     </mat-tab-group>

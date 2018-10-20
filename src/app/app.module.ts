@@ -49,7 +49,7 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { RecoverComponent } from './recover/recover.component';
 import { TeamManagementComponent } from './teammanage/tmanage/tmanager.component';
 import { CreateTeamComponent } from './teammanage/create-team/create-team.component';
-import { MemcardComponent } from './teammanage/memcard/memcard.component';
+import { TeamMemberListItemComponent } from './teammanage/team-member-list-item/team-member-list-item.component';
 import { TeamCardComponent } from './teammanage/teamcard/teamcard.component';
 import { TeamDashComponent } from './teammanage/teamdash/teamdash.component';
 import { TeamDetailComponent } from './teammanage/teamdetail/teamdetail.component';
@@ -84,7 +84,7 @@ export function tokenGetter() {
     RecoverComponent,
     TeamManagementComponent,
     CreateTeamComponent,
-    MemcardComponent,
+    TeamMemberListItemComponent,
     ImageUploadComponent,
     TeamCardComponent,
     TeamDashComponent,

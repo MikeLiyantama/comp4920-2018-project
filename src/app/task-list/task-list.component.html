@@ -6,21 +6,24 @@
     diameter="40">
   </mat-spinner>
   <div *ngIf="!loading">
-    <div *ngIf="isTeam">
-        <button type="button" 
-        class="team-back-button" 
-        mat-raised-button 
-        color="primary"
-        routerLink="/app/teams/{{teamId}}">Back to Team</button>
-    </div>
-
-    <form (submit)="addTask()">
+    <form class="quickAddForm" (submit)="addTask()">
+      <a
+        *ngIf="isTeam"
+        mat-stroked-button
+        role="button"
+        class="backToTeam"
+        routerLink="/app/teams/{{teamId}}/tasks"
+      >
+        <mat-icon>arrow_back</mat-icon>
+        Back to Team
+      </a>
       <mat-form-field class="quickAdd" appearance="outline">
         <mat-label>Add New Task</mat-label>
         <input matInput [(ngModel)]="quickAddTask" name="quickAddTask">
         <mat-icon matSuffix>add</mat-icon>
       </mat-form-field>  
     </form>
+
     <mat-nav-list cdkDropList lockAxis="y" (cdkDropListDropped)="taskDrop($event)">
       <app-task
         *ngFor="let task of tasks"

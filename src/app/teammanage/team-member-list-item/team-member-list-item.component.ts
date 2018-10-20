@@ -3,12 +3,13 @@ import { TeamMember } from '../teammember.model';
 import { User } from '../../user.model';
 
 @Component ({
-    selector: 'app-memcard',
-    templateUrl: './memcard.component.html',
-    styleUrls: ['./memcard.component.css']
+    selector: 'app-team-member-list-item',
+    templateUrl: './team-member-list-item.component.html',
+    styleUrls: ['./team-member-list-item.component.css']
 })
 
-export class MemcardComponent implements OnInit {
+export class TeamMemberListItemComponent implements OnInit {
+    
     @Input () teamMember: TeamMember;
     @Input () creatorDisabled: boolean;
     @Input () leaderDisabled: boolean;

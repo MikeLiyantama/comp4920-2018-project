@@ -1,0 +1,10 @@
+.actions {
+    align-items: center;
+    display: flex;
+    flex: 400px;
+    justify-content: space-between;
+}
+
+.actions > * {
+    margin-left: 16px;
+}

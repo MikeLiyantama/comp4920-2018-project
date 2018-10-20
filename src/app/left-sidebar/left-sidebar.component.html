@@ -14,7 +14,7 @@
     mat-list-item 
     *ngFor="let taskList of taskLists"
     class="taskList"
-    routerLink="/app/lists/{{taskList._id}}"
+    routerLink="/app//lists/{{taskList._id}}"
     routerLinkActive="active-list-item"
     (click)="requestDrawerClose()"
   >
@@ -30,7 +30,7 @@
   </a>
   <a 
     mat-list-item 
-    routerLink="/app/lists/create"
+    routerLink="/app//lists/create"
     routerLinkActive="active-list-item"
     (click)="changeAppTitle($event)"
   >

@@ -1,3 +1,7 @@
 .mat-form-field {
     width: 100%;
 }
+
+.list-item:hover {
+    text-decoration: none;
+}

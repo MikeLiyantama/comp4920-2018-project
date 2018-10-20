@@ -1,3 +1,7 @@
 .fullwidth {
   width: 100%;
 }
+
+.avatar {
+  margin-right: 16px;
+}

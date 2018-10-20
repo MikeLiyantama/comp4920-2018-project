@@ -36,7 +36,7 @@
       *ngFor="let user of filteredUsers | async"
       [value]="user.username"      
     >
-      <app-avatar aria-hidden [user]="user"></app-avatar> 
+      <app-avatar aria-hidden class="avatar" [user]="user"></app-avatar> 
       <span>{{ user.username }} </span>
     </mat-option>
   </mat-autocomplete>

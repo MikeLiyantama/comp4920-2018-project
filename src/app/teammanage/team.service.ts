@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { List } from '../list.model';
 import { Team } from './team.model';
 import { User } from '../user.model';
 
@@ -72,6 +73,12 @@ export class TeamService {
         //    .catch(this.handleError);
     }
 
+    getTeamLists(teamId: string): Observable<List[]> {
+        return this.http.get<List[]>(`${this.teamsUrl}/${teamId}/lists`)
+            .pipe(
+                catchError(this.handleObservableError)
+            );
+    }
 
     private handleError (error: any) {
         const errMsg = (error.message) ? error.message :

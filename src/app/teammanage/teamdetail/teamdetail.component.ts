@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { interval } from 'rxjs/internal/observable/interval';
@@ -31,6 +32,7 @@ export class TeamDetailComponent implements OnInit {
     teamId: string;
     loading = true;
     loadingMessages = true;
+    initialTab = 0;
 
     myControl = new FormControl ();
     allUsers: User[];
@@ -69,6 +71,28 @@ export class TeamDetailComponent implements OnInit {
 
         this.route.paramMap.subscribe((params) => {
             this.teamId = params.get('teamId');
+
+            const tabParam = params.get('tab')
+            if (tabParam) {
+                switch(tabParam) {
+                    case 'details': {
+                        this.initialTab = 1;
+                        break;
+                    }
+                    case 'members': {
+                        this.initialTab = 2;
+                        break;
+                    }
+                    case 'discussion': {
+                        this.initialTab = 3;
+                        break;
+                    }
+                    default: {
+                        this.initialTab = 0;
+                    }
+                }
+            }
+
             if (this.teamId) {
                 this.teamService.getTeam(this.teamId).subscribe((team) => {
                     this.team = team;
@@ -136,5 +160,28 @@ export class TeamDetailComponent implements OnInit {
         this.messageService.sendMessageToTeam(message, this.teamId).subscribe(() => {
             this.messageService.invalidateMessagesForTeam(this.teamId);
         });
+    }
+
+    onTabSelected(event: MatTabChangeEvent) {
+        let tab;
+        switch(event.index) {
+            case 1: {
+                tab = '/details';
+                break;
+            }
+            case 2: {
+                tab = '/members';
+                break;
+            }
+            case 3: {
+                tab = '/discussion';
+                break;
+            }
+            default: {
+                tab = '';
+            }
+        }
+
+        window.history.replaceState(null, null, `/app/teams/${this.teamId}${tab}`);
     }
 }

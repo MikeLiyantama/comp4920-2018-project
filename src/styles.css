@@ -5,6 +5,11 @@ body {
     height: 100%;
 }
 
+a,
+a:hover {
+    text-decoration: none;
+}
+
 /* customise material checkbox for task list item */
 .task .mat-checkbox .mat-checkbox-layout {
     margin-bottom: 0;

@@ -58,6 +58,7 @@ export class TaskListComponent {
   ngOnInit() {
       this.route.paramMap.subscribe((params) => {
         this.listId = params.get('listId');
+        this.teamId = params.get('teamId');
         this.loading = true;
 
         if (!this.listId || this.listId === 'today') {

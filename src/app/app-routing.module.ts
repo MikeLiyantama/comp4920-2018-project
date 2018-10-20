@@ -25,15 +25,16 @@ const routes: Routes = [
   ]},
   { path: 'app', component: AppLayoutComponent, children: [
     { path: '', redirectTo: '/app/today', pathMatch: 'full' },
-    { path: 'settings', component: SettingsComponent},
-    { path: 'profile/:profileID', component: ProfileComponent},
+    { path: 'settings', component: SettingsComponent },
+    { path: 'profile/:profileID', component: ProfileComponent },
     { path: 'teams/create', component: CreateTeamComponent },
-    { path: 'teams', component: TeamDashComponent, runGuardsAndResolvers: 'always' },
+    { path: 'teams/:teamId/lists/:listId', component: TeamTasksComponent },
+    { path: 'teams/:teamId/:tab', component: TeamDetailComponent },
     { path: 'teams/:teamId', component: TeamDetailComponent },
-    { path: 'today', component: TaskListComponent },
+    { path: 'teams', component: TeamDashComponent, runGuardsAndResolvers: 'always' },
     { path: 'lists/create', component: CreateTaskListComponent },
     { path: 'lists/:listId', component: TaskListComponent },
-    { path: 'teams/:teamId/lists/:listId', component: TeamTasksComponent}
+    { path: 'today', component: TaskListComponent },
   ]}
 ];
 
