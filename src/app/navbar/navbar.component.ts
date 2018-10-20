@@ -28,9 +28,9 @@ export class NavbarComponent {
     );
 
   constructor(
-    private appbarService: AppbarService,
+    public appbarService: AppbarService,
     private breakpointObserver: BreakpointObserver,
-    private rightPaneService: RightPaneService,
+    public rightPaneService: RightPaneService,
     private authService: AuthService,
     private router: Router,
   ) { }

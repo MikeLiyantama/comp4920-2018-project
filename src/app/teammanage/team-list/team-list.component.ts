@@ -14,8 +14,9 @@ import { TaskService } from '../../task.service';
 export class TeamListComponent implements OnInit {
 
   @Input() teamId: string;
+  
+  loading = false;
   private lists: List[] = [];
-  private loading = false;
   private inputListField: string;
 
   constructor(

@@ -42,7 +42,7 @@ export class TaskDetailComponent implements OnInit {
     public dialog: MatDialog,
     private taskService: TaskService,
     private teamService: TeamService,
-    private rightPaneService: RightPaneService,
+    public rightPaneService: RightPaneService,
   ) {
     this.subscription = taskService.currentList$.subscribe(
       (currentList) => {

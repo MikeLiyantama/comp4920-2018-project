@@ -6,27 +6,18 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
   templateUrl: './team-tasks.component.html',
   styleUrls: ['./team-tasks.component.css']
 })
-@Injectable({
-  providedIn: 'root'
-}
-)
-
 export class TeamTasksComponent implements OnInit {
-  private teamId: string;
-  private listId: string;
-  constructor(
-    private route: ActivatedRoute
 
-  ) {
+  teamId: string;
+  listId: string;
 
+  constructor(private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    const thisC = this;
     this.route.paramMap.subscribe(function(params) {
       this.listId = params.get('listId');
       this.teamId = params.get('teamId');
     });
   }
-
 }

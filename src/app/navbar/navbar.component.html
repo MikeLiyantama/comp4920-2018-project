@@ -4,8 +4,8 @@
     position="start"
     class="sidenav"
     fixedInViewport="false"
+    mode="over"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="over"
     [(opened)]="drawerOpened"
     >
     <h1 class="logo">Organise.me</h1>
