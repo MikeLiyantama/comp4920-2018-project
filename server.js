@@ -455,7 +455,7 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
   if (req.query.teamId) {
     filterParams.teamId = req.query.teamID
   } else {
-    filterParams.createdBy = ObjectID(req.user._id),
+    filterParams.createdBy = ObjectID(req.user._id);
   }
 
   if (req.query.completed === 'true') {
