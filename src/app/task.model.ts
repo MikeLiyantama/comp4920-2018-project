@@ -10,4 +10,5 @@ export interface Task {
     completed?: boolean;
     deleted?: boolean;
     listId?: string;
+    assignee?: string;
 }

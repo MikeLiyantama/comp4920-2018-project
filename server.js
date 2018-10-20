@@ -473,11 +473,19 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
   db.collection(TASKS_COLLECTION)
     .find(filterParams)
     .sort({ important: -1, orderDate: -1 })
-    .toArray(function (err, docs) {
+    .toArray(function (err, tasks) {
       if (err) {
         returnError(res, err.message, "Failed to retieve tasks");
       } else {
-        res.status(200).json(docs);
+        const assignees = tasks.map(task => ObjectID(task.assignee)).filter(val => val);
+        db.collection(USERS_COLLECTION).find({ _id: { $in: assignees } }, {_id:1})
+          .toArray((err, users) => {        
+          let finalTasks = tasks.map(task => {
+            task.assignee = users.find(user => ObjectID(task.assignee).equals(user._id));
+            return task;
+          });          
+          res.status(200).json(finalTasks);
+        });
       }
     });
 });
@@ -512,6 +520,10 @@ app.put('/api/task/:id', passport.authenticate('jwt', { session: false }), funct
 
     if (req.body.listId) {
       updatedTask.listId = ObjectID(req.body.listId);
+    }
+
+    if (req.body.assignee) {
+      updatedTask.assignee = ObjectID(req.body.assignee);
     }
 
     db.collection(TASKS_COLLECTION).updateOne({ _id: ObjectID(req.params.id) }, { $set: updatedTask }, function (err, result) {

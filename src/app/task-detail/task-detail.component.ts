@@ -1,11 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import * as moment from 'moment';
 
 import { List } from '../list.model';
 import { Task } from '../task.model';
+import { User } from "../user.model";
 
+import { AuthService } from '../auth.service';
 import { RightPaneService } from '../rightpane.service';
 import { TaskService } from '../task.service';
 import { TeamService } from '../teammanage/team.service';
@@ -22,7 +24,10 @@ export interface Option {
 })
 export class TaskDetailComponent implements OnInit {
 
+  subscription: Subscription;
+
   title: string;
+  assignee: string;
   description: string;
   dueDate: string;
   isChecked: boolean;
@@ -32,24 +37,42 @@ export class TaskDetailComponent implements OnInit {
     { value: 'monthly', viewValue: 'Monthly for a year' }
   ];
   repeatChoice: string;
+  canAssign = false;
+  usersToExcludeFromUserSelector: User[] = [];
 
   constructor(
     public dialog: MatDialog,
+    private authService: AuthService,
     private taskService: TaskService,
+    private teamService: TeamService,
     private rightPaneService: RightPaneService,
-  ) { }
+  ) {
+    this.usersToExcludeFromUserSelector = [ authService.getDecodedToken() ];
+    this.subscription = taskService.currentList$.subscribe(
+      (currentList) => {
+        if (currentList) {
+          this.canAssign = !!currentList.collaborators && currentList.collaborators.length > 1;
+        }
+      }
+    );
+  }
 
   ngOnInit() {
   }
 
   maybeSaveAndClose() {
-    const editedTask = {
+    const editedTask: Task = {
       _id: this.rightPaneService.task._id,
       title: this.title,
       description: this.description,
       dueDate: this.dueDate,
     };
-    if (this.title || this.description || this.dueDate) {
+
+    if (this.assignee) {
+      editedTask.assignee = this.assignee;
+    }
+
+    if (this.title || this.description || this.dueDate || this.assignee) {
       this.taskService.editTask(editedTask).subscribe(() => {
         this.taskService.invalidateTaskListStatus();
         this.rightPaneService.close();
@@ -145,6 +168,15 @@ export class TaskDetailComponent implements OnInit {
         forkJoin(observables).subscribe(() => { this.taskService.invalidateTaskListStatus(); });
       }
     }
+  }
+
+  onAssigneeSelected(user: User) {
+    this.assignee = user._id;
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.subscription.unsubscribe();
   }
 }
 

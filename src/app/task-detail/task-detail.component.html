@@ -38,10 +38,23 @@
     <mat-label>Title</mat-label>
     <input matInput [(ngModel)]="title" value="{{ rightPaneService.task && rightPaneService.task.title || '' }}" name="title" type="text">
   </mat-form-field>
+
+  <app-user-select 
+    *ngIf="canAssign"
+    [label]="'Assignee'"
+    [placeholder]="'Search for a user'"
+    [excludedUsers]="usersToExcludeFromUserSelector"
+    [noReset]="true"
+    [initialValue]="!!rightPaneService.task && !!rightPaneService.task.assignee && rightPaneService.task.assignee.username"
+    (userSelected)="onAssigneeSelected($event)"
+  >
+  </app-user-select>
+
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Notes</mat-label>
     <textarea matInput [(ngModel)]="description" value="{{ rightPaneService.task && rightPaneService.task.description || '' }}" name="description"></textarea>
   </mat-form-field>
+
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Due Date</mat-label>
     <input matInput [(ngModel)]="dueDate" [matDatepicker]="datepicker" name="dueDate" value="{{ rightPaneService.task && rightPaneService.task.dueDate }}">

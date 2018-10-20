@@ -21,6 +21,8 @@ export class UserSelectComponent implements OnInit {
   @Input() chips = false;
   @Input() label = 'User Search';
   @Input() placeholder = 'Search for a user';
+  @Input() initialValue = '';
+  @Input() noReset = false;
   @Output() userSelected = new EventEmitter<User>();
 
   private _excludedUsers: User[] = [];
@@ -28,6 +30,7 @@ export class UserSelectComponent implements OnInit {
   userCtrl = new FormControl();
   separatorKeysCodes = [ENTER];
   loading = true;
+  currentValue: string;
 
   users: User[] = [];
   filteredUsers: Observable<User[]>;
@@ -103,7 +106,8 @@ export class UserSelectComponent implements OnInit {
       user,
     ];
     this.userSelected.emit(user);
-    this.resetInput();
+
+    if (!this.noReset) this.resetInput();
   }
 
 }

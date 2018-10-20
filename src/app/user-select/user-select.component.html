@@ -30,6 +30,7 @@
     aria-label="Username"
     [formControl]="userCtrl"
     [matAutocomplete]="auto"
+    [value]="initialValue"
   >
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectUser($event)">
     <mat-option 

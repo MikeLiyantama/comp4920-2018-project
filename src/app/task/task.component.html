@@ -22,6 +22,7 @@
             {{ formattedDueDate }}
         </span>
     </div>
+    <app-avatar class="assignee" *ngIf="task.assignee" [user]="task.assignee"></app-avatar>
     <mat-icon
         *ngIf="!task.completed"
         class="task-important" 

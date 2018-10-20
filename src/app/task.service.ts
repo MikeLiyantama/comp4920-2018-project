@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import omit from 'lodash/omit';
@@ -15,7 +15,7 @@ import { User } from './user.model';
 })
 export class TaskService {
 
-    private tasksUrl = 'https://comp4920-organiser.herokuapp.com/api/task';
+    private tasksUrl = 'http://localhost:8080/api/task';
 
     private listsUrl = 'https://comp4920-organiser.herokuapp.com/api/list';
 
@@ -27,7 +27,9 @@ export class TaskService {
 
     taskListsValid$ = this.taskListsValidSource.asObservable();
 
-    currentList: List;
+    private currentListSource = new BehaviorSubject<List | void>(undefined);
+
+    currentList$ = this.currentListSource;
 
     constructor (private http: HttpClient) {}
 
@@ -158,6 +160,10 @@ export class TaskService {
 
     validateTaskListsStatus() {
         this.taskListsValidSource.next(true);
+    }
+
+    setCurrentList(list: List) {
+        this.currentListSource.next(list);
     }
 
     private handleError (error: any) {

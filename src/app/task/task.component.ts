@@ -47,7 +47,7 @@ export class TaskComponent {
     }
 
     openDetailPane() {
-        this.rightPaneService.setTask(this.task, this.teamId);
+        this.rightPaneService.setTask(this.task, { teamId: this.teamId });
         this.rightPaneService.open('detail');
     }
 

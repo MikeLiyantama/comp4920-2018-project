@@ -48,7 +48,7 @@ export class TaskListComponent {
     private router: Router,
     ) {
     this.subscription = taskService.taskListValid$.subscribe(
-      taskListValid => {
+      (taskListValid) => {
         if (!taskListValid) {
           taskService.validateTaskListStatus();
           this.getTasks(this.listId);
@@ -69,7 +69,7 @@ export class TaskListComponent {
         } else {
           this.getTasks(this.listId, false);
           this.taskService.getList(this.listId).subscribe((list) => {
-            this.loading = false;
+            this.taskService.setCurrentList(list);
             this.list = list;
             this.appbarService.setTitle(list.title);
 
@@ -78,6 +78,8 @@ export class TaskListComponent {
             this.collaborationPanelTitle = this.list.collaborators && this.list.collaborators.length > 0
               ? 'Manage Collaboration'
               : 'Add Collaborators';
+
+            this.loading = false;
           });
         }
       });
