@@ -8,6 +8,12 @@ export interface TaskExtras {
   collaborators?: User[];  
 }
 
+export interface Options {  
+  move?: boolean;
+  copy?: boolean;
+  repeat?: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,12 +25,14 @@ export class RightPaneService {
   canAssign = false;
   collaborators: User[];
   type = '';
+  options: Options;
 
   constructor() { }
 
-  open(pane: string) {
+  open(pane: string, options: Options = null) {
     this.opened = true;
     this.type = pane;
+    this.options = options;
   }
 
   close() {
@@ -51,5 +59,6 @@ export class RightPaneService {
     this.task = null;
     this.teamId = '';
     this.type = '';
+    this.options = {};
   }
 }

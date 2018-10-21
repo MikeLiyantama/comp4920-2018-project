@@ -467,8 +467,16 @@ app.get('/api/task', passport.authenticate('jwt', { session: false }), function 
     filterParams.deleted = true;
   }
 
-  if (req.query.listId && req.query.listId !== 'today' && req.query.listId !== 'me') {
+  if (req.query.listId && ['today', 'me', 'upcoming'].indexOf(req.query.listId) === -1) {
     filterParams.listId = ObjectID(req.query.listId);
+  }
+
+  if (req.query.listId && req.query.listId === 'upcoming') {
+    filterParams.$or = [
+      { assignee: ObjectID(req.user._id) },
+      { createdBy: ObjectID(req.user._id) },
+    ];
+    filterParams.dueDate = { $exists: true };
   }
 
   if (req.query.listId && req.query.listId === 'me') {

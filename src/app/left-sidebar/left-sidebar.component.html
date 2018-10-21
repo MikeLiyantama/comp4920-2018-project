@@ -16,6 +16,14 @@
   >
     Assigned To Me
   </a>
+  <a 
+    mat-list-item 
+    routerLink="/app/upcoming"
+    routerLinkActive="active-list-item"
+    (click)="changeAppTitle($event)"
+  >
+    My Upcoming
+  </a>
   <mat-divider></mat-divider>
   <h3 matSubheader>Lists</h3>
   <a 

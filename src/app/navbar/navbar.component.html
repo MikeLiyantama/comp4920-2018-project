@@ -34,8 +34,8 @@
         </mat-menu>
       
     </mat-toolbar>
-    <mat-sidenav-container hasBackdrop="false" class="content">
-      <mat-sidenav [(opened)]="rightPaneService.opened" class="rightPane" mode="side" position="end">
+    <mat-sidenav-container class="content">
+      <mat-sidenav [(opened)]="rightPaneService.opened" class="rightPane" mode="push" position="end">
         <app-task-detail></app-task-detail>        
       </mat-sidenav>
       <ng-content></ng-content>

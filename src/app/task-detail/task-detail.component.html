@@ -9,24 +9,30 @@
     <mat-icon aria-label="Close pane">arrow_back</mat-icon>
   </button>
   <button 
-    style="margin-left:auto"
-    type="button"
+    *ngIf="this.rightPaneService.options ? this.rightPaneService.options.move : true"
     mat-icon-button
+    type="button"
+    aria-label="Move Task"
+    style="margin-left: auto"
     (click)="openMoveTaskDialog()"
   >
     <mat-icon>list</mat-icon>
   </button>
   <button 
-    type="button"
+    *ngIf="this.rightPaneService.options ? this.rightPaneService.options.copy : true"
     mat-icon-button
+    type="button"
+    aria-label="Copy Task"
+    style="margin-left: auto"
     (click)="openCopyTaskDialog()"
   >
     <mat-icon>content_copy</mat-icon>
   </button>
   <button
+    mat-icon-button
     type="button"
     aria-label="Delete Task"
-    mat-icon-button
+    style="margin-left: auto"
     (click)="maybeDeleteAndClose()"
   >
     <mat-icon aria-label="Delete task">delete</mat-icon>
@@ -53,7 +59,6 @@
     <mat-label>Notes</mat-label>
     <textarea matInput [(ngModel)]="description" value="{{ rightPaneService.task && rightPaneService.task.description || '' }}" name="description"></textarea>
   </mat-form-field>
-
   <mat-form-field appearance="outline" class="form-field">
     <mat-label>Due Date</mat-label>
     <input matInput [(ngModel)]="dueDate" [matDatepicker]="datepicker" name="dueDate" value="{{ rightPaneService.task && rightPaneService.task.dueDate }}">
@@ -61,7 +66,7 @@
     <mat-datepicker #datepicker></mat-datepicker>
   </mat-form-field>
   
-  <div *ngIf="(rightPaneService.task && rightPaneService.task.dueDate) || dueDate">
+  <div *ngIf="((rightPaneService.task && rightPaneService.task.dueDate) || dueDate) && this.rightPaneService.options ? this.rightPaneService.options.repeat : true">
     <mat-checkbox (click)="isChecked = !isChecked" color="primary">
       <mat-label>Repeat this task</mat-label>
     </mat-checkbox>
@@ -69,7 +74,7 @@
     <mat-form-field class="form-group form-field">
       <mat-select placeholder="Choose an option" [(ngModel)]="repeatChoice" name="repeatChoice">
         <mat-option *ngFor="let option of options" [value]="option.value">
-          {{option.viewValue}}
+          {{ option.viewValue }}
         </mat-option>
       </mat-select>
     </mat-form-field>

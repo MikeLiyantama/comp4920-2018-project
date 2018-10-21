@@ -30,6 +30,15 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material';
 
+import {
+  CalendarDateFormatter,
+  CalendarModule,
+  CalendarMomentDateFormatter,
+  DateAdapter,
+  MOMENT
+} from 'angular-calendar';
+import * as moment from 'moment';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -62,9 +71,14 @@ import { DiscussionComponent } from './discussion/discussion.component';
 import { MessageComponent } from './discussion/message/message.component';
 import { TeamListComponent } from './teammanage/team-list/team-list.component';
 import { TeamTasksComponent } from './teammanage/team-tasks/team-tasks.component';
+import { UpcomingTasksComponent } from './upcoming-tasks/upcoming-tasks.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
+}
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
 }
 
 @NgModule({
@@ -100,6 +114,7 @@ export function tokenGetter() {
     MessageComponent,
     TeamListComponent,
     TeamTasksComponent,
+    UpcomingTasksComponent,
   ],
   entryComponents: [
     CompletedTaskListComponent,
@@ -117,6 +132,18 @@ export function tokenGetter() {
         whitelistedDomains: ['localhost:8080', 'comp4920-organiser.herokuapp.com']
       }
     }),
+    CalendarModule.forRoot(
+      {
+        provide: DateAdapter,
+        useFactory: momentAdapterFactory,
+      },
+      {
+        dateFormatter: {
+          provide: CalendarDateFormatter,
+          useClass: CalendarMomentDateFormatter
+        }
+      }
+    ),
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -151,7 +178,12 @@ export function tokenGetter() {
     MatChipsModule,
     MatPaginatorModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MOMENT,
+      useValue: moment
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

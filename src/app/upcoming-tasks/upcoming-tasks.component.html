@@ -1,0 +1,38 @@
+<main class="container">
+    <mat-spinner
+        *ngIf="loading"
+        color="primary"
+        diameter="40"
+        style="margin:0 auto">
+    </mat-spinner>
+    <div *ngIf="!loading">
+      <div class="d-flex justify-content-between mb-4">
+        <button 
+          mat-flat-button
+          mwlCalendarPreviousView
+          color="primary"
+          [view]="view"
+          [(viewDate)]="viewDate"
+        >
+          Last Month
+        </button>
+        <h2>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h2>
+        <button 
+          mat-flat-button
+          mwlCalendarNextView
+          color="primary"
+          [view]="view"
+          [(viewDate)]="viewDate"
+        >
+          Next Month
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <mwl-calendar-month-view
+        [viewDate]="viewDate"
+        [events]="tasks"
+        (eventClicked)="onTaskClick($event.event)"
+      >
+      </mwl-calendar-month-view>
+    </div>
+</main>
