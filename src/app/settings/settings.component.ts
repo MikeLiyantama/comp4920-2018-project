@@ -13,11 +13,10 @@ export class SettingsComponent implements OnInit {
 
   emailOpenState = false;
   passOpenState = false;
-  currPass: String;
+  currEmailForPass: String;
   newPass: String;
   currEmail: String;
   newEmail: String;
-
 
   constructor(
     private router: Router,
@@ -30,7 +29,7 @@ export class SettingsComponent implements OnInit {
 
   changePassword() {
     const thisC = this;
-    this.auth.updatePassword(this.currEmail, this.newPass)
+    this.auth.updatePassword(this.currEmailForPass, this.newPass)
         .subscribe(function(res) {
           let response;
           response = res;
