@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit {
   updateData() {
     const thisC = this;
 
-    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile)
+    this.profileService.updateUserData(this.editName, this.editUsername, this.editBio, this.editProfile)
         .subscribe(function(res) {
           let response;
           response = res;
