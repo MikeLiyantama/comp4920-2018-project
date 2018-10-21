@@ -37,11 +37,11 @@ export class TeamDetailComponent implements OnInit {
 
     myControl = new FormControl ();
     allUsers: User[];
-    currentUser;
     detailsGroup: FormGroup;
     membersGroup: FormGroup;
     usersToExcludeFromUserSelector: User[] = [];
     messages: Message[] = [];
+    canUserManageMembers = false;
 
     constructor (
         private _formBuilder: FormBuilder,
@@ -96,12 +96,16 @@ export class TeamDetailComponent implements OnInit {
 
             if (this.teamId) {
                 this.teamService.getTeam(this.teamId).subscribe((team) => {
+                    const currentUser = this.authService.getDecodedToken();
                     this.team = team;
                     this.appbarService.setTitle(team.name);
                     this.usersToExcludeFromUserSelector = [
-                        this.authService.getDecodedToken(),
+                        currentUser,
                         ...this.team.members.map(member => member.user),
                     ];
+                    this.canUserManageMembers = 
+                        !!this.team.leaders.find(leader => leader === currentUser._id)
+                        || this.team.createdBy === currentUser._id;                
                     this.loading = false;
 
                     this.loadingMessages = true;

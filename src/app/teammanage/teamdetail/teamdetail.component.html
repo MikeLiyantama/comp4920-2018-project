@@ -50,15 +50,16 @@
                 </app-image-upload>
             </form>
         </mat-tab>
-        <mat-tab label="Add/Remove Members">
+        <mat-tab label="Manage Members">
             <div class="tabContent">
                 <app-user-select
+                    *ngIf="canUserManageMembers"
                     (userSelected)="addToTeam($event)"
                     [excludedUsers]="usersToExcludeFromUserSelector"
                 >
                 </app-user-select>
                 <mat-list>
-                    <mat-divider></mat-divider>
+                    <mat-divider *ngIf="canUserManageMembers"></mat-divider>
                     <app-team-member-list-item
                         [teamMember]="team.creator"
                     >
@@ -67,6 +68,8 @@
                     <app-team-member-list-item
                         *ngFor="let member of team.members"
                         [teamMember]="member"
+                        [disableLeader]="!canUserManageMembers"
+                        [showRemove]="canUserManageMembers"
                         (removed)="removeFromTeam($event)"
                         (addedLeader)="addLeader($event)"
                         (removedLeader)="removeLeader($event)"

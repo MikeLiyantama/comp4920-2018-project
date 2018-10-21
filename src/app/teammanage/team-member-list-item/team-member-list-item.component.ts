@@ -13,7 +13,7 @@ export class TeamMemberListItemComponent implements OnInit {
     
     @Input() teamMember: TeamMember;
     @Input() disableLeader = false;
-    @Input() disableRemove = false;
+    @Input() showRemove = false;
 
     @Output() removed = new EventEmitter<TeamMember>();
     @Output() addedLeader = new EventEmitter<TeamMember>();

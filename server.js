@@ -291,7 +291,7 @@ app.get('/api/list' , passport.authenticate('jwt', { session: false }), function
         {
           $or: [
             { createdBy: req.user._id },
-            { collaborators: { $in: [ `${req.user._id}` ] } },
+            { collaborators: { $in: [ req.user._id ] } },
           ]
         }
       ]
@@ -626,8 +626,13 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
 // Get all teams a user is in
 app.get('/api/team' , passport.authenticate('jwt', { session: false }), function (req, res) {
   db.collection(TEAMS_COLLECTION)
-    .find({ $or: [ { members: req.user._id}, { createdBy: req.user._id } ] })
-    .toArray(function (err, teams) {
+    .find({ 
+      $or: [
+        { members: { $in: [ req.user._id, `${req.user._id}` ] } },
+        { createdBy: { $in : [ req.user._id, `${req.user._id}` ] } },
+      ],
+    })
+    .toArray((err, teams) => {
       if (err) {
         returnError(res, err.message, "Failed to retieve teams");
       } else {
@@ -649,7 +654,7 @@ app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
 
           db.collection(USERS_COLLECTION)
             .find({ _id: { $in: users.map(user => ObjectID(user)) } })
-            .toArray(function (err, users) {
+            .toArray((err, users) => {
               team.creator = {
                 user: users.find(user => ObjectID(team.createdBy).equals(user._id)),
                 isCreator: true,
@@ -732,21 +737,27 @@ app.put('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
 app.put('/api/team/:id/member', passport.authenticate('jwt', {session: false}), function(req, res){
   if (ObjectID.isValid(req.params.id)) {
     if("_id" in req.body) {
-      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{members : ObjectID(req.body._id)}}, function(err, doc){
-        if (err){
-          returnError(res, err.message, "Failed to add member");
-        } else{
-          res.status(200).json({ "message": "success" });
-        }
-      });
+      db.collection(TEAMS_COLLECTION).updateOne(
+        { _id: ObjectID(req.params.id) }, 
+        { $push: { members: ObjectID(req.body._id) } },
+          (err, doc) => {
+          if (err){
+            returnError(res, err.message, "Failed to add member");
+          } else{
+            res.status(200).json({ "message": "success" });
+          }
+        });
     } else {
-      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$push :{members : ObjectID(req.user._id)}}, function(err, doc){
-        if (err){
-          returnError(res, err.message, "Failed to add member");
-        } else{
-          res.status(200).json({ "message": "success" });
-        }
-      });
+      db.collection(TEAMS_COLLECTION).updateOne(
+        { _id: ObjectID(req.params.id) },
+        { $push: { members: ObjectID(req.user._id) } },
+        (err, doc) => {
+          if (err){
+            returnError(res, err.message, "Failed to add member");
+          } else{
+            res.status(200).json({ "message": "success" });
+          }
+        });
     }
     
   } else {
@@ -931,7 +942,7 @@ app.get('/api/messages/team/:id', passport.authenticate('jwt', {session: false})
         returnError(res, err.message, "Failed to retieve messages");
       } else {
         const userIds = _.uniq(messages.map(message => ObjectID(message.createdBy)));
-        db.collection(USERS_COLLECTION).find({ _id: { "$in": userIds } }).toArray((err, users) => {        
+        db.collection(USERS_COLLECTION).find({ _id: { $in: userIds } }).toArray((err, users) => {        
           let finalMessages = messages.map((message) => {
             message.createdBy = users.find(user => ObjectID(message.createdBy).equals(user._id));
             return message;

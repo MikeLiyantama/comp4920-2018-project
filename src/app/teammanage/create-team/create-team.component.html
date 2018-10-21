@@ -67,6 +67,7 @@
             <app-team-member-list-item
                 *ngFor="let member of selectedTeamMembers"
                 [teamMember]="member"
+                [showRemove]="true"
                 (removed)="removeTeamMember($event)"
             ></app-team-member-list-item>
         </mat-list>
@@ -100,14 +101,12 @@
                         *ngIf="currentCreator"
                         [teamMember]="currentCreator"
                         [disableLeader]="true"
-                        [disableRemove]="true"
                     ></app-team-member-list-item>
                     <mat-divider></mat-divider>
                     <app-team-member-list-item
                         *ngFor="let member of selectedTeamMembers"
                         [teamMember]="member"
                         [disableLeader]="true"
-                        [disableRemove]="true"
                     ></app-team-member-list-item>
                 </mat-list>
             </div>            

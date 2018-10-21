@@ -16,9 +16,8 @@
             Leader
         </mat-checkbox>
         <button
-            *ngIf="!teamMember.isCreator"
+            *ngIf="!teamMember.isCreator && showRemove"
             mat-icon-button
-            [disabled]="disableRemove"
             (click)="removeMember()"
             color="accent"
         >
