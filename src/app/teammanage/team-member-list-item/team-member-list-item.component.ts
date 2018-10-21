@@ -12,7 +12,7 @@ import { User } from '../../user.model';
 export class TeamMemberListItemComponent implements OnInit {
     
     @Input() teamMember: TeamMember;
-    @Input() disableLeader = false;
+    @Input() showLeaderToggle = false;
     @Input() showRemove = false;
 
     @Output() removed = new EventEmitter<TeamMember>();

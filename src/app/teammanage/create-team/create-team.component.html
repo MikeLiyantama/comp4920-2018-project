@@ -100,13 +100,11 @@
                     <app-team-member-list-item
                         *ngIf="currentCreator"
                         [teamMember]="currentCreator"
-                        [disableLeader]="true"
                     ></app-team-member-list-item>
                     <mat-divider></mat-divider>
                     <app-team-member-list-item
                         *ngFor="let member of selectedTeamMembers"
                         [teamMember]="member"
-                        [disableLeader]="true"
                     ></app-team-member-list-item>
                 </mat-list>
             </div>            

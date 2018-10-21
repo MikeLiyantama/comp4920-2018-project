@@ -8,9 +8,8 @@
     </p>
     <div class="actions">
         <mat-checkbox
-            *ngIf="!teamMember.isCreator"
+            *ngIf="!teamMember.isCreator && showLeaderToggle"
             [checked]="teamMember.isLeader"
-            [disabled]="disableLeader" 
             (change)="changeLeadership()"
         >
             Leader
@@ -24,8 +23,11 @@
             <mat-icon>remove_circle</mat-icon>
         </button>
     </div>
-    <div *ngIf="teamMember.isCreator" class="creator">
+    <div *ngIf="teamMember.isCreator">
         Creator
+    </div>
+    <div *ngIf="!teamMember.isCreator && teamMember.isLeader && !showLeaderToggle">
+        Leader
     </div>
 </mat-list-item>
 

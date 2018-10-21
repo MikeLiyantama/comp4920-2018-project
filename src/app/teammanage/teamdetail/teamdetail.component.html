@@ -68,7 +68,7 @@
                     <app-team-member-list-item
                         *ngFor="let member of team.members"
                         [teamMember]="member"
-                        [disableLeader]="!canUserManageMembers"
+                        [showLeaderToggle]="canUserManageMembers"
                         [showRemove]="canUserManageMembers"
                         (removed)="removeFromTeam($event)"
                         (addedLeader)="addLeader($event)"
