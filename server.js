@@ -109,7 +109,7 @@ app.post('/api/auth', function(req, res) {
             if (result) {
                 if (req.body.password == result.password) {
                   var unsigned_token = result;
-                  unsigned_token.profile_picture = "";
+                  unsigned_token.profile = "";
                   unsigned_token.password = "";
                   var token = jwt.sign(unsigned_token, 'Johnson4920');
                   res.status(200).json({ success: true, token: token});
