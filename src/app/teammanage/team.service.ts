@@ -16,7 +16,7 @@ export class TeamService {
 
     constructor (private http: HttpClient) {}
 
-    writeTeam (newTeam: Team): Promise <void | Team> {
+    addTeam(newTeam: Team): Promise <void | Team> {
         return this.http.post (this.teamsUrl, newTeam)
             .toPromise()
             .then(response => response as Team)
@@ -52,13 +52,27 @@ export class TeamService {
             );
     }
 
-    addMemberToTeam (userToAdd, team): Promise <any> {
+    addMemberToTeam(userToAdd, team): Promise <any> {
         const httpOptions = {};
         const url = this.teamsUrl + '/' + team._id + '/member';
         return this.http.put (url, userToAdd, httpOptions)
             .toPromise()
             .then()
             .catch(this.handleError);
+    }
+
+    addLeaderToTeam(teamId, userId): Observable<void> {
+        return this.http.put<void>(`${this.teamsUrl}/${teamId}/leader/${userId}`, {})
+            .pipe(
+                catchError(this.handleObservableError)
+            );
+    }
+
+    removeLeaderFromTeam(teamId, userId): Observable<void> {
+        return this.http.delete<void>(`${this.teamsUrl}/${teamId}/leader/${userId}`)
+            .pipe(
+                catchError(this.handleObservableError)
+            );
     }
 
     removeFromTeam (memberToRemove, team): Promise <any> {

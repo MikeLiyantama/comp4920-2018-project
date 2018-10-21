@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+
 import { TeamMember } from '../teammember.model';
 import { User } from '../../user.model';
 
@@ -10,11 +11,14 @@ import { User } from '../../user.model';
 
 export class TeamMemberListItemComponent implements OnInit {
     
-    @Input () teamMember: TeamMember;
-    @Input () creatorDisabled: boolean;
-    @Input () leaderDisabled: boolean;
-    @Input () removeDisabled: boolean;
-    @Output () removeEmitter = new EventEmitter <TeamMember> ();
+    @Input() teamMember: TeamMember;
+    @Input() creatorDisabled: boolean;
+    @Input() leaderDisabled: boolean;
+    @Input() removeDisabled: boolean;
+
+    @Output() removeEmitter = new EventEmitter<TeamMember>();
+    @Output() addedLeader = new EventEmitter<TeamMember>();
+    @Output() removedLeader = new EventEmitter<TeamMember>();
 
     constructor() {
     }
@@ -23,14 +27,16 @@ export class TeamMemberListItemComponent implements OnInit {
     }
 
     removeMember() {
-        this.removeEmitter.emit (this.teamMember);
+        this.removeEmitter.emit(this.teamMember);
     }
 
     changeLeadership() {
         if (this.teamMember.isLeader) {
             this.teamMember.isLeader = false;
+            this.removedLeader.emit(this.teamMember);
         } else {
             this.teamMember.isLeader = true;
+            this.addedLeader.emit(this.teamMember);
         }
     }
 

@@ -187,6 +187,14 @@ export class TeamDetailComponent implements OnInit {
         window.history.replaceState(null, null, `/app/teams/${this.teamId}${tab}`);
     }
 
+    addLeader(member: TeamMember) {
+        this.teamService.addLeaderToTeam(this.teamId, member.user._id).subscribe(() => {});
+    }
+
+    removeLeader(member: TeamMember) {
+        this.teamService.removeLeaderFromTeam(this.teamId, member.user._id).subscribe(() => {});
+    }
+
     ngOnDestroy() {
         this.messagePoller.unsubscribe();
     }

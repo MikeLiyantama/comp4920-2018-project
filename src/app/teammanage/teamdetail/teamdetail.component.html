@@ -57,8 +57,8 @@
                     [excludedUsers]="usersToExcludeFromUserSelector"
                 >
                 </app-user-select>
-                <mat-divider></mat-divider>
                 <mat-list>
+                    <mat-divider></mat-divider>
                     <app-team-member-list-item
                         [teamMember]="team.creator"
                         [creatorDisabled]="true"
@@ -74,6 +74,8 @@
                         [leaderDisabled]="false"
                         [removeDisabled]="false"
                         (removeEmitter)="removeFromTeam($event)"
+                        (addedLeader)="addLeader($event)"
+                        (removedLeader)="removeLeader($event)"
                     >
                     </app-team-member-list-item>
                 </mat-list>

@@ -59,7 +59,7 @@ export class CreateTeamComponent implements OnInit {
 
     createTeam() {
         this.creating = true;
-        this.teamService.writeTeam(this.summaryTeam).then((resp) => {
+        this.teamService.addTeam(this.summaryTeam).then((resp) => {
             this.creating = false;
             this.router.navigate(['app/teams']);
         });

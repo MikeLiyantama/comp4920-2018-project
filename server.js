@@ -588,20 +588,15 @@ app.post('/api/team', passport.authenticate('jwt', {session: false}), function (
     newTeam.createdAt = new Date();
     newTeam.createdBy = req.user._id;
     newTeam.leaders = [];
-    if(newTeam.creator) {
-      if(newTeam.creator.isLeader) {
-        newTeam.leaders.push(newTeam.creator.user._id);
-      }
-    }
+    newTeam.leaders.push(req.user._id);
 
     if(newTeam.members) {
       // Non empty team initialisation
       newTeam.members = newTeam.members.map((member) => {
-        if(member.isLeader) {
-          newTeam.leaders.push(member.user._id);
+        if (member.isLeader) {
+          newTeam.leaders.push(ObjectID(member.user._id));
         }
-        member = member.user._id;
-        return member;
+        return ObjectID(member.user._id);
       });
     }
 
@@ -636,36 +631,7 @@ app.get('/api/team' , passport.authenticate('jwt', { session: false }), function
       if (err) {
         returnError(res, err.message, "Failed to retieve teams");
       } else {
-        let teamCreators = [];
-        let teamMembers = [];
-        teams.forEach((team) => {
-          teamCreators.push(team.createdBy);
-          if (team.members) {
-            teamMembers.push(team.members);
-          }
-        });
-        teamMembers = _.flatten(teamMembers);
-        let users = _.concat(teamCreators, teamMembers);
-        users = _.uniq(users);
-
-        db.collection(USERS_COLLECTION).find({_id: { "$in": users.map(user => ObjectID(user))}}, {_id:1}).toArray(function (err, users) {        
-          let finalTeams = teams.map(team => {
-            team.creator = {
-              "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
-              "isCreator": true,
-              "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
-            };
-            if(team.members) {
-              team.members = team.members.map(member => member = {
-                "user": users.find(user => ObjectID(member).equals(user._id)),
-                "isCreator": false,
-                "isLeader": _.includes(team.leaders, member) ? true : false
-              });
-            }
-            return team;
-          });          
-          res.status(200).json(finalTeams);
-        });
+        res.status(200).json(teams);
       }
     });
 });
@@ -679,24 +645,23 @@ app.get('/api/team/:id', passport.authenticate('jwt', {session: false}), functio
       } else {
         if (team) {
           let teamMembers = team.members;
-          teamMembers = _.flatten(teamMembers);
-          let users = _.concat(team.createdBy, teamMembers);
-          users = _.uniq(users);
+          let users = _.uniq(_.concat(team.createdBy, teamMembers));
 
           db.collection(USERS_COLLECTION)
-            .find({ _id: { "$in": users.map(user => ObjectID(user)) } })
+            .find({ _id: { $in: users.map(user => ObjectID(user)) } })
             .toArray(function (err, users) {
               team.creator = {
-                "user": users.find(user => ObjectID(team.createdBy).equals(user._id)),
-                "isCreator": true,
-                "isLeader": _.includes(team.leaders, team.createdBy.toString()) ? true : false
+                user: users.find(user => ObjectID(team.createdBy).equals(user._id)),
+                isCreator: true,
+                isLeader: true,
               };
+              
               if (team.members) {
-                team.members = team.members.map(member => member = {
-                  "user": users.find(user => ObjectID(member).equals(user._id)),
-                  "isCreator": false,
-                  "isLeader": _.includes(team.leaders, member) ? true : false
-                });
+                team.members = team.members.map(memberId => ({
+                  user: users.find(user => ObjectID(memberId).equals(user._id)),
+                  isCreator: false,
+                  isLeader: !!team.leaders.find(leader => ObjectID(memberId).equals(leader)),
+                }));
               }
               res.status(200).json(team);
             });
@@ -793,23 +758,68 @@ app.put('/api/team/:id/member', passport.authenticate('jwt', {session: false}), 
 app.delete('/api/team/:id/member', passport.authenticate('jwt', {session: false}), function(req, res){
   if (ObjectID.isValid(req.params.id)) {
     if("_id" in req.body) {
-      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{members : ObjectID(req.body._id)}}, function(err, doc){
-        if (err){
-          returnError(res, err.message, "Failed to delete member");
-        } else{
-          res.status(200).json({ "message": "success" });
-        }
-      });
+      db.collection(TEAMS_COLLECTION)
+        .updateOne(
+          { _id : ObjectID(req.params.id) },
+          { $pull: { members: ObjectID(req.body._id) } }, 
+          (err, doc) => {
+            if (err){
+              returnError(res, err.message, "Failed to delete member");
+            } else{
+              res.status(200).json({ "message": "success" });
+            }
+          });
     } else {
-      db.collection(TEAMS_COLLECTION).updateOne({_id : ObjectID(req.params.id)}, {$pull :{members : ObjectID(req.user._id)}}, function(err, doc){
-        if (err){
-          returnError(res, err.message, "Failed to delete member");
-        } else{
-          res.status(200).json({ "message": "success" });
-        }
-      });
+      db.collection(TEAMS_COLLECTION).updateOne(
+        { _id: ObjectID(req.params.id)},
+        { $pull: { members: ObjectID(req.user._id) } },
+        (err, doc) => {
+          if (err){
+            returnError(res, err.message, "Failed to delete member");
+          } else{
+            res.status(200).json({ "message": "success" });
+          }
+        });
     }
     
+  } else {
+    returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
+  }
+});
+
+// Add the current user, or a specific user to a team
+app.put('/api/team/:id/leader/:userId', passport.authenticate('jwt', { session: false }), function(req, res){
+  if (ObjectID.isValid(req.params.userId)) {
+    db.collection(TEAMS_COLLECTION)
+      .updateOne(
+        { _id: ObjectID(req.params.id)}, 
+        { $push: { leaders: ObjectID(req.params.userId) } }, 
+        (err, doc) => {
+          if (err){
+            returnError(res, err.message, "Failed to add member");
+          } else {
+            res.status(200).json({ "message": "success" });
+          }
+        });
+  } else {
+    returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
+  }
+});
+
+// Remove the current user, or a specific member from a team
+app.delete('/api/team/:id/leader/:userId', passport.authenticate('jwt', {session: false}), function(req, res){
+  if (ObjectID.isValid(req.params.id)) {
+    db.collection(TEAMS_COLLECTION)
+      .updateOne(
+        { _id: ObjectID(req.params.id) }, 
+        { $pull: { leaders: ObjectID(req.params.userId) } },
+        (err, doc) => {
+          if (err){
+            returnError(res, err.message, "Failed to delete member");
+          } else{
+            res.status(200).json({ "message": "success" });
+          }
+        });
   } else {
     returnError(res, 'Incorrect team ID format', 'Incorrect team ID format', 404);
   }
