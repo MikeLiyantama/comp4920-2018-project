@@ -62,18 +62,12 @@
             <app-team-member-list-item
                 *ngIf="currentCreator"
                 [teamMember]="currentCreator"
-                [creatorDisabled]="true"
-                [leaderDisabled]="true"
-                [removeDisabled]="true"
             ></app-team-member-list-item>
             <mat-divider></mat-divider>
             <app-team-member-list-item
                 *ngFor="let member of selectedTeamMembers"
                 [teamMember]="member"
-                [creatorDisabled]="true"
-                [leaderDisabled]="false"
-                [removeDisabled]="false"
-                (removeEmitter)="removeTeamMember($event)"
+                (removed)="removeTeamMember($event)"
             ></app-team-member-list-item>
         </mat-list>
     </mat-step>
@@ -105,17 +99,15 @@
                     <app-team-member-list-item
                         *ngIf="currentCreator"
                         [teamMember]="currentCreator"
-                        [creatorDisabled]="true"
-                        [leaderDisabled]="true"
-                        [removeDisabled]="true"
+                        [disableLeader]="true"
+                        [disableRemove]="true"
                     ></app-team-member-list-item>
                     <mat-divider></mat-divider>
                     <app-team-member-list-item
                         *ngFor="let member of selectedTeamMembers"
                         [teamMember]="member"
-                        [creatorDisabled]="true"
-                        [leaderDisabled]="true"
-                        [removeDisabled]="true"
+                        [disableLeader]="true"
+                        [disableRemove]="true"
                     ></app-team-member-list-item>
                 </mat-list>
             </div>            

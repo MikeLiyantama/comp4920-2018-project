@@ -61,19 +61,13 @@
                     <mat-divider></mat-divider>
                     <app-team-member-list-item
                         [teamMember]="team.creator"
-                        [creatorDisabled]="true"
-                        [leaderDisabled]="true"
-                        [removeDisabled]="true"
                     >
                     </app-team-member-list-item>
                     <mat-divider></mat-divider>
                     <app-team-member-list-item
                         *ngFor="let member of team.members"
                         [teamMember]="member"
-                        [creatorDisabled]="true"
-                        [leaderDisabled]="false"
-                        [removeDisabled]="false"
-                        (removeEmitter)="removeFromTeam($event)"
+                        (removed)="removeFromTeam($event)"
                         (addedLeader)="addLeader($event)"
                         (removedLeader)="removeLeader($event)"
                     >

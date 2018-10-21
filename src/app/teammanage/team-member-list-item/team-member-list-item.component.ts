@@ -12,11 +12,10 @@ import { User } from '../../user.model';
 export class TeamMemberListItemComponent implements OnInit {
     
     @Input() teamMember: TeamMember;
-    @Input() creatorDisabled: boolean;
-    @Input() leaderDisabled: boolean;
-    @Input() removeDisabled: boolean;
+    @Input() disableLeader = false;
+    @Input() disableRemove = false;
 
-    @Output() removeEmitter = new EventEmitter<TeamMember>();
+    @Output() removed = new EventEmitter<TeamMember>();
     @Output() addedLeader = new EventEmitter<TeamMember>();
     @Output() removedLeader = new EventEmitter<TeamMember>();
 
@@ -27,7 +26,7 @@ export class TeamMemberListItemComponent implements OnInit {
     }
 
     removeMember() {
-        this.removeEmitter.emit(this.teamMember);
+        this.removed.emit(this.teamMember);
     }
 
     changeLeadership() {

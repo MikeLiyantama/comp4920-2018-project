@@ -9,27 +9,20 @@
     <div class="actions">
         <mat-checkbox
             *ngIf="!teamMember.isCreator"
-            [checked]="teamMember.isCreator"
-            [disabled]="creatorDisabled" 
-        >
-            Creator
-        </mat-checkbox>
-        <mat-checkbox
-            *ngIf="!teamMember.isCreator"
             [checked]="teamMember.isLeader"
-            [disabled]="leaderDisabled" 
+            [disabled]="disableLeader" 
             (change)="changeLeadership()"
         >
             Leader
         </mat-checkbox>
-        <button 
+        <button
             *ngIf="!teamMember.isCreator"
-            mat-stroked-button 
-            [disabled]="removeDisabled"
+            mat-icon-button
+            [disabled]="disableRemove"
             (click)="removeMember()"
             color="accent"
         >
-            Remove
+            <mat-icon>remove_circle</mat-icon>
         </button>
     </div>
     <div *ngIf="teamMember.isCreator" class="creator">
