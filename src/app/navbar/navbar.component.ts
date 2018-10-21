@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { AppbarService } from '../appbar.service';
 import { RightPaneService } from '../rightpane.service';
 import { AuthService } from '../auth.service';
+import { ProfileService}  from '../profile.service';
 
 import { User } from '../user.model';
 
@@ -33,10 +34,18 @@ export class NavbarComponent {
     public rightPaneService: RightPaneService,
     private authService: AuthService,
     private router: Router,
+    private profileService: ProfileService
   ) { }
 
   ngOnInit() {
+    let thisC = this;
     this.currentUser = this.authService.getDecodedToken();
+    this.profileService.getUserData(this.currentUser._id)
+        .subscribe(function(res){
+            let response; 
+            response = res;
+            thisC.currentUser.profile = response.profile;
+        })
   }
 
   logout() {

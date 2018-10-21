@@ -15,15 +15,14 @@ export class ProfileComponent implements OnInit {
   id: String;
   name: String;
   bio: String;
-  profile: String;
+  profile: any;
   username: String;
-  profilePic: any;
   email: String;
 
   //For edit profile purpose
   editName: String;
   editBio: String;
-  editProfile: String;
+  editProfile: any;
   editUsername: String;
 
   constructor(
@@ -51,7 +50,6 @@ export class ProfileComponent implements OnInit {
         thisC.bio = response.bio;
         thisC.profile = response.profile;
         thisC.email = response.email;
-        thisC.profilePic = response.profile_picture;
 
         thisC.editBio = response.bio;
         thisC.editName = response.name;
@@ -77,7 +75,7 @@ export class ProfileComponent implements OnInit {
   updateData() {
     const thisC = this;
 
-    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile, this.profilePic)
+    this.profileService.updateUserData(this.name, this.username, this.bio, this.profile)
         .subscribe(function(res) {
           let response;
           response = res;
@@ -86,21 +84,22 @@ export class ProfileComponent implements OnInit {
             thisC.bio = thisC.editBio;
             thisC.username = thisC.editUsername;
             thisC.profile = thisC.editProfile;
-            thisC.leaveEditMode();
+            thisC.editMode = false;
             thisC.snackBar.open('Profile Updated!', 'Close', {duration: 3000});
           } else {
             this.editBio = this.bio;
             this.editName = this.name;
             this.editProfile = this.profile;
             this.editUsername = this.username;
+            thisC.editMode = false;
             thisC.snackBar.open('Error, Please Try again', 'Close', {duration: 3000});
           }
         });
   }
 
   setImage (givenFile) {
-    this.profilePic = givenFile;
-    if (this.profilePic) {
+    this.profile = givenFile;
+    if (this.profile) {
     }
 }
 

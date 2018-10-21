@@ -16,13 +16,12 @@ export class ProfileService {
   }
 
 
-  updateUserData(name, username, bio, profile, profilePic) {
+  updateUserData(name, username, bio, profile) {
     const obj = {
       name: name,
       username: username,
       bio: bio,
       profile: profile,
-      profile_picture : profilePic
     };
     return this.http.put(this.userDataUrl, obj);
   }

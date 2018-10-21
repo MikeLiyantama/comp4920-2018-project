@@ -14,13 +14,12 @@
                         <button mat-raised-button (click)="enterEditMode()">Edit Profile</button>
                     </div>
                 </div>
-                <div *ngIf="profilePic">
-                        <img id="profilePic" [src]="profilePic" class="profile_picture">
+                <div *ngIf="profile">
+                        <img id="profile" [src]="this.profile" class="profile_picture">
                 </div>
                 <h3 class="subheading-2 heading-component">@{{this.username}}</h3>
                 <h1 class="headline heading-component">{{this.name}}</h1>
                 <h4 class="subheading-1 heading-component">{{this.bio}}</h4>
-                <h4 class="subheading-1">Profile: {{this.profile}}</h4>
             </div>
         </div>
     
@@ -29,27 +28,23 @@
                 <form class="form" (submit)="changeCredentials()">
                     <mat-form-field class="form-group input-field">
                         <mat-label>Name</mat-label>
-                        <input matInput [(ngModel)]="name" placeholder="Full name" name="name" type="text">
+                        <input matInput [(ngModel)]="editName" placeholder="Full name" name="name" type="text">
                     </mat-form-field>
                     <br>
                     <mat-form-field class="form-group input-field">
                         <mat-label>Username</mat-label>
-                        <input matInput [(ngModel)]="username" placeholder="User name" name="username" type="text">
+                        <input matInput [(ngModel)]="editUsername" placeholder="User name" name="username" type="text">
                     </mat-form-field>
                     <br>
                     <mat-form-field class="form-group input-field">
                             <mat-label>Bio</mat-label>
-                            <input matInput [(ngModel)]="bio" placeholder="Bio" name="bio" type="text">
+                            <input matInput [(ngModel)]="editBio" placeholder="Bio" name="bio" type="text">
                     </mat-form-field>
                     <br>
-                    <mat-form-field class="form-group input-field">
-                            <mat-label>Profile</mat-label>
-                            <input matInput [(ngModel)]="profile" placeholder="profile" name="profile" type="text">
-                    </mat-form-field>
                     <br>
                     <div class="form-group">
-                        <div *ngIf="profilePic">
-                                <img id="profilePic" [src]="profilePic">
+                        <div *ngIf="profile">
+                                <img id="profile" [src]="this.editProfile">
                         </div>
                     
                         <app-image-upload
