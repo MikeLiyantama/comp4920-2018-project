@@ -1,10 +1,16 @@
 # Comp4920Organiser
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.5.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.0.
+
+## Getting Started
+
+Run `npm i` to install all node modules required to run the app. A script will run after installation to compile all project code. The app will be compiled into 'dist' foldler.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+You can also use http-server to run the app. To install http-server, type `npm i http-server` in the terminal / Command Prompt. Run `http-server dist/` to start the app server.
 
 ## Code scaffolding
 
