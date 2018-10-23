@@ -98,8 +98,8 @@ export class ProfileComponent implements OnInit {
   }
 
   setImage (givenFile) {
-    this.profile = givenFile;
-    if (this.profile) {
+    this.editProfile = givenFile;
+    if (this.editProfile) {
     }
 }
 
